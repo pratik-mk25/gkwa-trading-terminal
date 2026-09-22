@@ -16,7 +16,7 @@ from app.database import (
     get_sectors_summary,
     get_universes_summary
 )
-from app.market_simulator import market_sim
+from app.market_simulator import market_sim, get_ist_now
 from app.signals import (
     generate_options_trades,
     generate_intraday_trades,
@@ -232,7 +232,7 @@ async def api_dashboard_gap_summary():
 @app.get("/dashboard/Dashboard_Last_Refresh_Datetime/")
 @app.get("/dashboard/Dashboard_Last_Refresh_Datetime")
 async def api_dashboard_refresh_time():
-    now = datetime.now()
+    now = get_ist_now()
     now_iso = now.strftime("%Y-%m-%d %H:%M:%S")
     now_dmy = now.strftime("%d-%b-%Y %H:%M:%S")
     return [{"ATTRIBUTE_KEY": now_iso, "LAST_DATETIME": now_iso, "formatted": now_dmy}]

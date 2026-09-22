@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import random
-from app.market_simulator import market_sim
+from app.market_simulator import market_sim, get_ist_now
 
 def generate_options_trades():
     return [
@@ -408,7 +408,7 @@ def generate_changed_now():
             "symbol": sym,
             "ltp": st["ltp"],
             "event": "Crossed Above H4 Camarilla Level",
-            "time": datetime.now().strftime("%H:%M:%S"),
+            "time": get_ist_now().strftime("%H:%M:%S"),
             "action": "FRESH BUY TRIGGERED"
         })
     return results
@@ -421,12 +421,12 @@ def get_market_trend_regime():
         "MARKET_TREND": trend,
         "NIFTY_PCT": pct,
         "VIX": market_sim.stocks.get("INDIA VIX", {}).get("ltp", 13.5),
-        "TIMESTAMP": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "TIMESTAMP": get_ist_now().strftime("%Y-%m-%d %H:%M:%S")
     }]
 
 def generate_active_stocks():
     market_sim.update_ticks()
-    now_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_ts = get_ist_now().strftime("%Y-%m-%d %H:%M:%S")
     
     bull_items = [
         {"SYMBOL": "HDFCLIFE", "SCORE": 3, "SCORE_OLD": 2, "PCT_CHG": 2.45, "BULL_BEAR": 1, "ASTRIKE_COUNT": 3, "CHANGE_COLOUR": 0, "TRENDED_FLIP": 1, "bull_t1": 685.0, "bull_t2": 698.0, "bull_sl": 662.0},

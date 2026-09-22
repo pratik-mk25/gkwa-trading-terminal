@@ -1,7 +1,13 @@
 import os
 import random
 import math
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def get_ist_now() -> datetime:
+    """Always returns current time in Indian Standard Time (IST, UTC+5:30)"""
+    return datetime.now(timezone.utc).astimezone(IST)
 
 # ==============================================================================
 # GKWA COMPLETE 185 NSE F&O STOCKS DATASET + BENCHMARK INDICES
@@ -342,7 +348,7 @@ class MarketSimulator:
                 "is_fno": 1 if data["type"] != "INDEX" else 0,
                 "is_nifty50": 1 if sym in UNIVERSE_MAP.get("NIFTY 50", []) else 0,
                 "volume": random.randint(350000, 8500000),
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                "timestamp": get_ist_now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
         # 2. Load all 2,559+ active NSE companies from SQLite DB if available
@@ -387,7 +393,7 @@ class MarketSimulator:
                             "is_nifty100": r["is_nifty100"],
                             "is_nifty500": r["is_nifty500"],
                             "volume": random.randint(50000, 2500000),
-                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            "timestamp": get_ist_now().strftime("%Y-%m-%d %H:%M:%S")
                         }
                     else:
                         self.stocks[sym]["is_nifty100"] = r["is_nifty100"]
@@ -421,7 +427,7 @@ class MarketSimulator:
         - Calculates dynamic breadth.
         - Returns live delta packet.
         """
-        now = datetime.now()
+        now = get_ist_now()
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         changed_stocks = []
 
@@ -834,7 +840,7 @@ class MarketSimulator:
 
         active_list = configs.get(tab, configs["well_set_bull"])
         items = []
-        now_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_ts = get_ist_now().strftime("%Y-%m-%d %H:%M:%S")
 
         for sym, score, old_score, pct_chg, bb, strikes, col_chg, trend_fl, t1, t2, sl in active_list:
             st = self.stocks.get(sym, {})
@@ -927,7 +933,7 @@ class MarketSimulator:
         """Generates ATM Straddle and Options Alert strikes based on current spot prices"""
         options_data = []
         underlyings = ["NIFTY 50", "BANK NIFTY", "RELIANCE", "HDFCBANK", "INFY", "TCS", "TATAMOTORS"]
-        now = datetime.now()
+        now = get_ist_now()
         
         for idx, sym in enumerate(underlyings, start=1):
             st = self.stocks.get(sym)
