@@ -58,6 +58,20 @@ os.makedirs(TEMPLATES_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
+@app.middleware("http")
+async def handle_vercel_rewrites(request: Request, call_next):
+    raw_path = request.scope.get("path", "")
+    # If Vercel rewrote the request path to /api/index.py or /api/index
+    if raw_path in ("/api/index.py", "/api/index", "/api/index.py/"):
+        matched = request.headers.get("x-matched-path") or request.headers.get("x-vercel-matched-path")
+        if matched and not matched.startswith("/api/index"):
+            request.scope["path"] = matched
+        else:
+            request.scope["path"] = "/"
+    elif raw_path.startswith("/api/index.py/"):
+        request.scope["path"] = raw_path[len("/api/index.py"):]
+    return await call_next(request)
+
 # --- REAL-TIME STREAMING & DATA PIPELINE ENGINE ---
 
 class LiveFeedManager:
@@ -108,6 +122,9 @@ async def run_continuous_ticker():
 # --- MARKETING & ROOT ROUTE ---
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/api/index.py", response_class=HTMLResponse)
+@app.get("/api/index.py/", response_class=HTMLResponse)
+@app.get("/api/index", response_class=HTMLResponse)
 async def home_page(request: Request):
     """GKWA Public Marketing Landing Page"""
     ticker_data = market_sim.get_indices_ticker()
