@@ -1,0 +1,38 @@
+
+.fadeit {
+    opacity: 1;
+}
+.fadeit.ng-enter {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+/* The finishing CSS styles for the enter animation */
+.fadeit.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.fadeit.ng-leave {
+  transition:0.5s linear all;
+  opacity:1;
+}
+.fadeit.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+.coming-soon{
+background-color: #34bfa3;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 900'%3E%3Cpath fill='%2336a3f7' d='M0 504 0 899 1600 899 1600 120z'/%3E%3Cpath fill='%236f42c1' d='M1600 567 1600 899 0 899 0 165z'/%3E%3Cpath fill='%23007bff' d='M0 680 0 899 1600 899 1600 300z'/%3E%3Cpath fill='%23ffc107' d='M1600 719 1600 899 0 899 0 353z'/%3E%3Cpath fill='%23f8f9fa' d='M0 788 0 899 1600 899 1600 625z'/%3E%3C/svg%3E");
+background-attachment: fixed;
+background-size: cover;
+}
+
+.ticker_animation
+{
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+
+
+

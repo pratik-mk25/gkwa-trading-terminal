@@ -1,0 +1,32 @@
+# Virtual Environment
+.venv/
+env/
+venv/
+
+# Binaries
+uv
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs & temp
+*.log
+scratch/
+
+# Vercel artifacts
+.vercel/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Heavy source PDFs and extracted intermediate dumps
+*.pdf
+dashboard_source.html
+dashboard_extracted.html
+dashboard_pdf_text.txt
+pdf_img-*.png
+dashboard_source_files/
+real html/

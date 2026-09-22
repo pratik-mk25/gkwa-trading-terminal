@@ -1,0 +1,583 @@
+
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Sector View
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Sector View
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="/index/dashboard/" ng-click="clear()">
+						<span class="m-nav__link-text">
+							Dashboard
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					<b>Using realtime data </b>, Page refreshes every 15 seconds.
+				</h5>
+			</span>
+		</div>
+	</div>
+
+	<div>
+	<div class="m-content">
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link"  href="/index/sector_analysis_view/" ng-click="clear()">
+							  Sector Analysis
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link active show" data-toggle="tab" href="#m_widget4_tab3_content" target="_self" role="tab" aria-selected="true">
+								Sector View
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link"  href="/index/market_stats/" ng-click="clear()">
+								Market Stats
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link"  href="/index/market_replay/" ng-click="clear()">
+								Market Replay
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="m-portlet__body" ng-show="$root.user_permission['SECTOR_VIEW']">
+		
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget4_tab3_content">
+
+						<div class="row mt-4 col-lg-12" style="padding-bottom:20px;">
+							<div class="col-md-2">
+								<select class="custom-select mb-3 mb-md-0 " id="inputData" ng-model="SelectDataValue" ng-options="value for value in DataValue" ng-change="market_view_change_data_onchange(SelectDataValue,SelectChangeValue)" >
+								</select>
+							</div>
+							<div class="col-md-2">
+								<select class="custom-select" id="inputOpenClose" ng-model="SelectChangeValue" ng-options="value for value in ChangeValue" ng-change="market_view_change_data_onchange(SelectDataValue,SelectChangeValue)">
+								</select>
+							</div>
+							<div class="col-md-8 m--align-right" style="line-height: 35px;">
+								<em>*Day,Week - Universe = FNO, Cash Data. *Month,Quarter,Annual - Universe = Nifty500, Cash Data</em>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xl-12">
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															ALL SECTORS CLOSE
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+
+												<div class="m-widget26__chart" style="width: auto;height:300px">
+													<div id="m_chart_sector_stack_view" style="width: auto;height:300px"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xl-12">
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															ALL SECTORS OPEN
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+
+												<div class="m-widget26__chart" style="width: auto;height:300px">
+													<div id="m_chart_sector_stack_view_open" style="width: auto;height:300px"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+
+							<div class="col-xl-4"> <!-- Auto -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 400px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															AUTO
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+												<div class="m-widget26__chart" style="width:auto;height:500px;overflow: auto;">
+													<div id="m_chart_auto_sector_view" style="width:auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!--  FMCG -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															FMCG
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_fmcg_sector_view" style="width: auto;height:500px;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!--  PVT bank -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 400px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															PVT BANK
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_pvt_bank_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- Fin services  -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															FIN SERVICES
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_finance_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- PSU bank  -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h6 class="m-portlet__head-text">
+															PSU BANK
+														</h6>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_psu_bank_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- IT  -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															IT
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_it_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- INFRA  -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															INFRA
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_infra_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- Metals  -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row m-row--full-height">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 400px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															METAL
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_metals_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- PHARMA -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															PHARMA
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_pharma_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- REALTY -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															REALTY
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_realty_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-xl-4"> <!-- COMMODITIES -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															COMMODITIES
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_commodities_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- COMMODITIES -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h4 class="m-portlet__head-text">
+															CONSUMPTION
+														</h4>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_consumption_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- Energy -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															ENERGY
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_energy_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-xl-4"> <!-- CPSE -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															CPSE
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_cpse_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- PSE -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 300px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															PSE
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+
+												<div class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_pse_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4"> <!-- Media -->
+								<!--begin:: Widgets/Quick Stats-->
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div id="media_portlet" class="m-portlet m-portlet--bordered-semi m-portlet--full-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 350px">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															MEDIA
+														</h3>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+												<div id="media_widget" class="m-widget26__chart" style="width: auto;height:500px;overflow: auto;">
+													<div id="m_chart_media_sector_view" style="width: auto;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							
+
+
+							
+
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-show="!$root.user_permission['SECTOR_VIEW']" >
+	<div class="m-portlet" m-portlet="true">
+
+		<div class="m-portlet__body">
+
+			<center><h5 ><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg" alt="permissionlock">This section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5></center>
+
+			<center><em>-- Sample image to illustrate the module --</em></center>
+			<div class="row">
+				<img width="100%" src="https://neotrader.in/static/SS/Market View.png" alt="Market View">
+			</div>
+		</div>
+	</div>
+</div>
+</div>

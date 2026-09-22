@@ -1,0 +1,194 @@
+<div appunwraptag="" class="m-subheader">
+  <div class="d-flex align-items-center">
+    <div class="mr-auto">
+      <h3 class="m-subheader__title m-subheader__title--separator">
+        Sector View
+      </h3>
+      <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+        <li class="m-nav__item m-nav__item--home">
+          <a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+            <i class="m-nav__link-icon la la-home"></i>
+          </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+          <a class="m-nav__link" href="" ng-reflect-href="">
+            <span class="m-nav__link-text"> Sector View </span>
+          </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+          <a class="m-nav__link" href="/index/dashboard/" ng-click="clear()">
+            <span class="m-nav__link-text"> Dashboard </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <span>
+        <h5 class="m--valign-middle">
+          Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+          <br />
+          <b>Using realtime data </b>, Page refreshes in every 15seconds.
+        </h5>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="m-content">
+  <div class="m-portlet m-portlet--full-height m-portlet--rounded">
+    <div class="m-portlet__head"  >
+      <div class="m-portlet__head-caption"></div>
+      <div class="m-portlet__head-tools">
+        <ul
+          class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+          role="tablist"
+        >
+          <li class="nav-item m-tabs__item">
+            <a
+              class="nav-link m-tabs__link active show"
+              data-toggle="tab"
+              href="#updated_m_widget4_tab3_content_updated"
+              target="_self"
+              role="tab"
+              aria-selected="true"
+            >
+              Sector Analysis
+            </a>
+          </li>
+          <li class="nav-item m-tabs__item">
+            <a
+              class="nav-link m-tabs__link"
+              data-toggle="tab"
+              href="/index/sector_view"
+              ng-click="clear()"
+            >
+              Sector View
+            </a>
+          </li>
+          <li class="nav-item m-tabs__item">
+            <a
+              class="nav-link m-tabs__link"
+              href="/index/market_stats/"
+              ng-click="clear()"
+            >
+              Market Stats
+            </a>
+          </li>
+          <li class="nav-item m-tabs__item">
+            <a
+              class="nav-link m-tabs__link"
+              href="/index/market_replay/"
+              ng-click="clear()"
+            >
+              Market Replay
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="m-portlet__body">
+      <div class="tab-content" ng-show="$root.user_permission['SECTOR_VIEW']">
+        <div class="tab-pane active show"id="updated_m_widget4_tab3_content_updated">
+          <div class="m-portlet" >
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-wrapper">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<h3 class="m-portlet__head-text">
+											Sector Performance
+										</h3>
+									</div>
+								</div>
+
+								<div class="m-portlet__head-tools">
+									<div class="d-flex flex-row justify-content-end">
+										<div class="p-2 align-self-center"><select
+                      style="width: 100px;"
+                        class="custom-select"
+                        id="inputTimeframe"
+                        ng-model="selected_timeframe"
+                        ng-options="value for value in timeframe"
+                        ng-change="change_timeframe()"
+                      ></select></div>
+										
+										<div class="p-2 align-self-center"><select
+                      style="width: 150px;"
+                      class="custom-select"
+                      id="inputTimeframe"
+                      ng-model="selected_broader_index_list"
+                      ng-options="value for value in broader_index_list"
+                      ng-change="change_sector()"
+                    ></select></div>
+										
+										
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+            <div class="text-right" style="line-height: 35px">
+              <em>*Day,Week - Universe = FNO, Cash Data. *Month,Quarter,Annual - Universe = Nifty500, Cash Data</em>
+            </div>
+          
+          <div class="row">
+            <div class="col-lg-7 m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="height: 410px;">
+              <canvas class="pb-5" id="sector-changed-bar-chart"></canvas>
+            </div>
+            <div class="col-lg-5">
+              <div
+                class="text-center py-2 mb-2"
+                style="background-color: #729ec180;"
+              >
+                <h4 class="m-0 p-0">{{selected_sector.name}} STOCKS</h4>
+              </div>
+              
+              <div class="mb-2 d-flex flex-row-reverse">
+                <div class="m-input-icon m-input-icon--left" style="width: 180px;">
+                    <input
+                      type="text"
+                      class="form-control m-input"
+                      placeholder="Search..."
+                      id="generalSearch"
+                    />
+                    <span class="m-input-icon__icon m-input-icon__icon--left">
+                      <span>
+                        <i class="la la-search"></i>
+                      </span>
+                    </span>
+                  </div>
+              </div>
+
+              <div class="m_datatable_pivot_values"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div ng-show="!$root.user_permission['SECTOR_VIEW']">
+			<div class="m-portlet" m-portlet="true">
+				<div class="m-portlet__body">
+					<center>
+						<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+								alt="permissionlock">This
+							section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe
+								Now</a>
+						</h5>
+					</center>
+					<center><em>-- Sample image to illustrate the module --</em></center>
+					<div class="row">
+						<img width="100%" src="{{$root.APP_URL+'/static/SS/Sector_View_SS.png'}}"
+							alt="ss_expert_alerts">
+					</div>
+				</div>
+			</div>
+		</div>
+  </div>
+</div>

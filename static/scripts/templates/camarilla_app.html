@@ -1,0 +1,2111 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+</style>
+<!-- BEGIN: Subheader -->
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"> </watchlist-modal>
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Camarilla Pivots
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="https://neotrader.in/index/dashboard/"
+						ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Camarilla Pivots
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear every 5 minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<!-- END: Subheader -->
+<div class="m-content">
+	<div ng-show="$root.user_permission['CAMARILLA']">
+		<div class="row">
+			<div class="col-xl-12 m--align-right m--margin-bottom-5">
+				<em>*Universe = Nifty 50,100,500, Based on Cash Data, *Universe = NiftyFNO, Based on Cash Data</em>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+					<div class="m-portlet__head-title">
+						<h3 class="m-portlet__head-text">
+							How To Use
+						</h3>
+					</div>
+				</div>
+				<div class="m-portlet__head-tools">
+					<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+						data-target="#howtotoggle_1" type="button">
+						+
+					</button>
+					<a style="margin-left: 5px;" href="/static/pdf2/Camarilla_Pivots_new.pdf" target="_blank"
+						title="camarilla pdf">
+						<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+					</a>
+				</div>
+			</div>
+			<div class="collapse" id="howtotoggle_1">
+				<div class="m-portlet__body">
+					<div class="row">
+						<iframe class="p-3" width="560" height="315" src="https://www.youtube.com/embed/jNtGaPBHen0"
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<iframe class="p-3" width="560" height="315" src="https://www.youtube.com/embed/YezawOwyUrM"
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<iframe class="p-3" width="560" height="315" src="https://www.youtube.com/embed/DMTjPv5vUkM"
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<iframe class="p-3" width="560" height="315" src="https://www.youtube.com/embed/p6nwmK6X98w"
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<iframe class="p-3" width="560" height="315" src="https://www.youtube.com/embed/B_xe5Sb5k80"
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded" ng-show="!CamarillaLoading">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-tools">
+					<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-lg"
+						role="tablist">
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link active show" id="heatmap_tab_button" data-toggle="tab"
+								href="#camarilla_heatmap_tab" ng-click="CamarillaDataUniverseFilter()" target="_self" role="tab" aria-selected="true">
+								Heatmap
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a title="Camarilla Levels" class="nav-link m-tabs__link" data-toggle="tab"
+								id="level_tab_button" ng-click="CamarillaDataUniverseFilter()" href="#camarilla_level_tab" target="_self" role="tab"
+								aria-selected="false">
+								Levels
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="m-portlet__body">
+				
+				<div class="tab-content" >
+					<div class="tab-pane active show" id="camarilla_heatmap_tab">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption d-flex mb-3">
+								<div class="m-portlet__head-title">
+									<h3 title="Camarilla Heatmap" class="m-portlet__head-text">
+										Camarilla Heatmap
+									</h3>
+								</div>
+							</div>
+							<div class="row d-flex mb-3">
+								<span class="align-self-center mr-2">
+									<h6> Change Now </h6>
+								</span>
+								<div class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon mx-2">
+										<label>
+											<input id="change_now" type="checkbox" ng-model="SelectChangeNowValue"
+												ng-change="change_now()">
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<span ng-show="change_today_hide" class="align-self-center mr-2">
+									<h6> Change Today </h6>
+								</span>
+								<div ng-show="change_today_hide" class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon mx-2">
+										<label>
+											<input id="change_today" type="checkbox" ng-model="SelectChangeTodayValue"
+												ng-change="change_today()">
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<span class="align-self-center mr-2">
+									<h6>Auto refresh</h6>
+								</span>
+								<div class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon p-2">
+										<label>
+											<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+												ng-disabled="!autoRefreshButtonDisabledValues" />
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="inputTimeIndexValue"
+										ng-model="SelectIndexTimeValue" ng-options="value for value in IndexTimeValue"
+										ng-change="CamarillaDataUniverseFilter();">
+									</select>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue"
+										ng-change="CamarillaDataUniverseFilter();">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div >
+							<div class="m-portlet mt-3">
+								<div class="m-portlet__head">
+									<div ng-show="SelectIndexTimeValue == 'DAY'" class="m-portlet__head-caption">
+										<h4>Score Filter</h4>
+									</div>
+									<div ng-show="SelectIndexTimeValue == 'DAY'" class="row d-flex align-items-center">
+										<div>
+											<button type="button" class="btn btn-info mr-2" ng-model="isReset"
+												ng-click="resetScoreFilter()">
+												Reset
+											</button>
+										</div>
+										<div class=" mr-1 mt-1">
+											<h6>From</h6>
+										</div>
+										<div>
+											<select style="width: 100px;" class="custom-select mr-2" id="from_score"
+												ng-model="fromScore"
+												ng-options="value disable when value >= toScore for value in score_high_low"
+												ng-change="camrilla_data_filter()"></select>
+										</div>
+										<div class="mr-1 mt-1">
+											<h6>To</h6>
+										</div>
+										<div>
+											<select style="width: 100px;" class="custom-select mr-2" id="to_score"
+												ng-model="toScore"
+												ng-options="value disable when value <= fromScore for value in score_high_low"
+												ng-change="camrilla_data_filter()"></select>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet__body ">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES ABOVE H6
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesAboveH6.length >= 1">
+															<h6>{{CamarillaPricesAboveH6.length < 20 ?
+																	CamarillaPricesAboveH6.length :
+																	tabLimit['pricesaboveH6TabLimit']}} /
+																	{{CamarillaPricesAboveH6.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesAboveH6.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesAboveH6.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesAboveH6,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesAboveH6" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES ABOVE H6'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="tab-content">
+													<div class="tab-pane active show">
+														<div class="m-widget26__chart">
+															<div id="m_chart_heatmap">
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in CamarillaPricesAboveH6 | orderBy:'-CONSECUTIVE_COUNT_HIGH ' | limitTo:tabLimit['pricesaboveH6TabLimit'] "
+																			style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																			<div class="col-lg "
+																				style="text-align:center;background-color:#0c9c78;">
+																				<div class="btn-group dropright">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em
+																							style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold; ">
+																							<strong>{{script.SYMBOL}}<em
+																									ng-if="SelectIndexTimeValue == 'DAY'">
+																									:
+																									{{script.CONSECUTIVE_COUNT_HIGH}}
+																								</em></strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																							target="_blank">
+																							Stock Analyser</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click="$root.watchlistModal([script],'heatmap')">Add
+																							to Watchlist</a>
+																						
+																					</div>
+																				</div>
+																				<div class="mb-1">
+																					<dhan-trading-view-charts
+																							symbol-name="script.SYMBOL"
+																							asset-class="eq"
+																							class-value=""
+																							source="heatmap"></dhan-trading-view-charts>
+																				</div>
+																				<span style="width: 110px;"
+																					ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="CamarillaPricesAboveH4.length > defaultLimit"
+																	class="m-portlet__foot">
+																	<div class="text-center">
+																		<span
+																			ng-if="CamarillaPricesAboveH6.length != tabLimit['pricesaboveH6TabLimit']">
+																			<span
+																				ng-click="showMore(CamarillaPricesAboveH6, 'pricesaboveH6TabLimit')"><i
+																					class="fa fa-chevron-down"
+																					data-toggle="tooltip"
+																					title="show more"></i></span>
+																		</span>
+																		<span
+																			ng-if="CamarillaPricesAboveH6.length == tabLimit['pricesaboveH6TabLimit']">
+																			<span
+																				ng-click="showLess('pricesaboveH6TabLimit')"><i
+																					class="fa fa-chevron-up"
+																					data-toggle="tooltip"
+																					title="show less"></i></span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES ABOVE H4
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesAboveH4.length >= 1">
+															<h6>{{CamarillaPricesAboveH4.length < 20 ?
+																	CamarillaPricesAboveH4.length :
+																	tabLimit['pricesaboveH4TabLimit']}} /
+																	{{CamarillaPricesAboveH4.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesAboveH4.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesAboveH4.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesAboveH4,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesAboveH4" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES ABOVE H4'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="tab-content">
+													<div class="tab-pane active show">
+														<div class="m-widget26__chart">
+															<div id="m_chart_heatmap">
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in CamarillaPricesAboveH4 | orderBy:'-CONSECUTIVE_COUNT_HIGH ' | limitTo:tabLimit['pricesaboveH4TabLimit'] "
+																			style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																			<div class="col-lg "
+																				style="text-align:center;background-color:#0c9c78;">
+																				<div class="btn-group dropright">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em
+																							style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold; ">
+																							<strong>{{script.SYMBOL}}<em
+																									ng-if="SelectIndexTimeValue == 'DAY'">
+																									:
+																									{{script.CONSECUTIVE_COUNT_HIGH}}
+																								</em></strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																							target="_blank">
+																							Stock Analyser</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click="$root.watchlistModal([script],'heatmap')">Add
+																							to Watchlist</a>
+																						
+																					</div>
+																				</div>
+																				<div class="mb-1">
+																					<dhan-trading-view-charts
+																							symbol-name="script.SYMBOL"
+																							asset-class="eq"
+																							class-value=""
+																							source="heatmap"></dhan-trading-view-charts>
+																				</div>
+																				<span style="width: 110px;"
+																					ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="CamarillaPricesAboveH4.length > defaultLimit"
+																	class="m-portlet__foot">
+																	<div class="text-center">
+																		<span
+																			ng-if="CamarillaPricesAboveH4.length != tabLimit['pricesaboveH4TabLimit']">
+																			<span
+																				ng-click="showMore(CamarillaPricesAboveH4, 'pricesaboveH4TabLimit')"><i
+																					class="fa fa-chevron-down"
+																					data-toggle="tooltip"
+																					title="show more"></i></span>
+																		</span>
+																		<span
+																			ng-if="CamarillaPricesAboveH4.length == tabLimit['pricesaboveH4TabLimit']">
+																			<span
+																				ng-click="showLess('pricesaboveH4TabLimit')"><i
+																					class="fa fa-chevron-up"
+																					data-toggle="tooltip"
+																					title="show less"></i></span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable ">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES ABOVE H3
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesAboveH3.length >= 1">
+															<h6>{{CamarillaPricesAboveH3.length < 20 ?
+																	CamarillaPricesAboveH3.length :
+																	tabLimit['pricesaboveH3TabLimit']}} /
+																	{{CamarillaPricesAboveH3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesAboveH3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesAboveH3.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesAboveH3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesAboveH3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES ABOVE H3'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="tab-content">
+													<div class="tab-pane active show">
+														<div class="m-widget26__chart">
+															<div id="m_chart_heatmap">
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in CamarillaPricesAboveH3 | limitTo:tabLimit['pricesaboveH3TabLimit']"
+																			style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																			<div class="col-lg"
+																				style="text-align:center;background-color:#00cc99;">
+																				<div class="btn-group dropright">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em
+																							style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																							</strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:14px;"></i>
+																					</a>
+
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																							target="_blank">
+																							Stock Analyser</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click="$root.watchlistModal([script],'heatmap')">Add
+																							to Watchlist</a>
+																						
+																					</div>
+																				</div>
+																				<div class="mb-1">
+																					<dhan-trading-view-charts
+																							symbol-name="script.SYMBOL"
+																							asset-class="eq"
+																							class-value=""
+																							source="heatmap"></dhan-trading-view-charts>
+																				</div>
+																				<span style="width: 110px;"
+																					ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="CamarillaPricesAboveH3.length > defaultLimit"
+																	class="m-portlet__foot">
+																	<div class="text-center">
+																		<span
+																			ng-if="CamarillaPricesAboveH3.length != tabLimit['pricesaboveH3TabLimit']">
+																			<span
+																				ng-click="showMore(CamarillaPricesAboveH3, 'pricesaboveH3TabLimit')"><i
+																					class="fa fa-chevron-down"
+																					data-toggle="tooltip"
+																					title="show more"></i></span>
+																		</span>
+																		<span
+																			ng-if="CamarillaPricesAboveH3.length == tabLimit['pricesaboveH3TabLimit']">
+																			<span
+																				ng-click="showLess('pricesaboveH3TabLimit')"><i
+																					class="fa fa-chevron-up"
+																					data-toggle="tooltip"
+																					title="show less"></i></span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																OPEN ABOVE H3
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaOpenAboveH3.length >= 1">
+															<h6>{{CamarillaOpenAboveH3.length < 20 ?
+																	CamarillaOpenAboveH3.length :
+																	tabLimit['openaboveH3TabLimit']}} /
+																	{{CamarillaOpenAboveH3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaOpenAboveH3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaOpenAboveH3.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaOpenAboveH3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaOpenAboveH3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'OPEN ABOVE H3'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="tab-content">
+													<div class="tab-pane active show">
+														<div class="m-widget26__chart">
+															<div id="m_chart_heatmap">
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in CamarillaOpenAboveH3 | limitTo:tabLimit['openaboveH3TabLimit']"
+																			style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																			<div class=" d-flex flex-column align-items-center col-lg py-1"
+																				style="text-align:center;background-color: #6dc097;">
+																				<div
+																					class="m-auto btn-group dropright text-white">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em
+																							style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																							</strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																							target="_blank">
+																							Stock Analyser</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click="$root.watchlistModal([script],' heatmap')">Add
+																							to Watchlist
+																						</a>
+																						
+																					</div>
+																					
+																				</div>
+
+																				<div>
+																					<dhan-trading-view-charts
+																							symbol-name="script.SYMBOL"
+																							asset-class="eq"
+																							class-value=""
+																							source="heatmap"></dhan-trading-view-charts>
+																				</div>
+																				
+																			</div>
+																		</div>
+																	</div>
+																	<div ng-if="CamarillaOpenAboveH3.length > defaultLimit"
+																		class="m-portlet__foot">
+																		<div class="text-center">
+																			<span
+																				ng-if="CamarillaOpenAboveH3.length != tabLimit['openaboveH3TabLimit']">
+																				<span
+																					ng-click="showMore(CamarillaOpenAboveH3, 'openaboveH3TabLimit')"><i
+																						class="fa fa-chevron-down"
+																						data-toggle="tooltip"
+																						title="show more"></i></span>
+																			</span>
+																			<span
+																				ng-if="CamarillaOpenAboveH3.length == tabLimit['openaboveH3TabLimit']">
+																				<span
+																					ng-click="showLess('openaboveH3TabLimit')"><i
+																						class="fa fa-chevron-up"
+																						data-toggle="tooltip"
+																						title="show less"></i></span>
+																			</span>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																OPEN ABOVE H4
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaOpenAboveH4.length >= 1">
+															<h6>{{CamarillaOpenAboveH4.length < 20 ?
+																	CamarillaOpenAboveH4.length :
+																	tabLimit['openaboveH4TabLimit']}} /
+																	{{CamarillaOpenAboveH4.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaOpenAboveH4.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaOpenAboveH4.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaOpenAboveH4,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaOpenAboveH4" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'OPEN ABOVE H4'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaOpenAboveH4 |limitTo:tabLimit['openaboveH4TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class=" d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #28B463;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaOpenAboveH4.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaOpenAboveH4.length != tabLimit['openaboveH4TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaOpenAboveH4, 'openaboveH4TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaOpenAboveH4.length == tabLimit['openaboveH4TabLimit']">
+																	<span ng-click="showLess('openaboveH4TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES BELOW L6
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesBelowL6.length >= 1">
+															<h6>{{CamarillaPricesBelowL6.length < 20 ?
+																	CamarillaPricesBelowL6.length :
+																	tabLimit['pricesbelowL6TabLimit']}} /
+																	{{CamarillaPricesBelowL6.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesBelowL6.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesBelowL6.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesBelowL6,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesBelowL6" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES BELOW L6'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaPricesBelowL6 | orderBy:'-CONSECUTIVE_COUNT_LOW ' | limitTo:tabLimit['pricesbelowL6TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class="col-lg"
+																		style="text-align:center;background-color: #bc3333;">
+																		<div class="btn-group dropright">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																						<em
+																							ng-if="SelectIndexTimeValue == 'DAY'">:{{script.CONSECUTIVE_COUNT_LOW}}</em>
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																		<span style="width: 110px;"
+																			ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaPricesBelowL6.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaPricesBelowL6.length != tabLimit['pricesbelowL6TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaPricesBelowL6, 'pricesbelowL6TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaPricesBelowL6.length == tabLimit['pricesbelowL6TabLimit']">
+																	<span
+																		ng-click="showLess('pricesbelowL6TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES BELOW L4
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesBelowL4.length >= 1">
+															<h6>{{CamarillaPricesBelowL4.length < 20 ?
+																	CamarillaPricesBelowL4.length :
+																	tabLimit['pricesbelowH4TabLimit']}} /
+																	{{CamarillaPricesBelowL4.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesBelowL4.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesBelowL4.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesBelowL4,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesBelowL4" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES BELOW L4'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaPricesBelowL4 | orderBy:'-CONSECUTIVE_COUNT_LOW ' | limitTo:tabLimit['pricesbelowH4TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class="col-lg"
+																		style="text-align:center;background-color: #bc3333;">
+																		<div class="btn-group dropright">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																						<em
+																							ng-if="SelectIndexTimeValue == 'DAY'">:{{script.CONSECUTIVE_COUNT_LOW}}</em>
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																		<span style="width: 110px;"
+																			ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaPricesBelowL4 .length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaPricesBelowL4.length != tabLimit['pricesbelowH4TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaPricesBelowL4, 'pricesbelowH4TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaPricesBelowL4.length == tabLimit['pricesbelowH4TabLimit']">
+																	<span
+																		ng-click="showLess('pricesbelowH4TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																PRICES BELOW L3
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaPricesBelowL3.length >= 1">
+															<h6>{{CamarillaPricesBelowL3.length < 20 ?
+																	CamarillaPricesBelowL3.length :
+																	tabLimit['pricesbelowH3TabLimit']}} /
+																	{{CamarillaPricesBelowL3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaPricesBelowL3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaPricesBelowL3.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaPricesBelowL3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaPricesBelowL3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'PRICES BELOW L3'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaPricesBelowL3 | limitTo:tabLimit['pricesbelowH3TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class="col-lg"
+																		style="text-align:center;background-color: #d84d4d;">
+																		<div class="btn-group dropright">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																		<span style="width: 110px;"
+																			ng-bind-html="script.CAMARILLA_ALERT_html"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaPricesBelowL3.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaPricesBelowL3.length != tabLimit['pricesbelowH3TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaPricesBelowL3, 'pricesbelowH3TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaPricesBelowL3.length == tabLimit['pricesbelowH3TabLimit']">
+																	<span
+																		ng-click="showLess('pricesbelowH3TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h4 class="m-portlet__head-text">
+																OPEN BELOW L3
+															</h4>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaOpenBelowL3.length >= 1">
+															<h6>{{CamarillaOpenBelowL3.length < 20 ?
+																	CamarillaOpenBelowL3.length :
+																	tabLimit['openbelowH3TabLimit']}} /
+																	{{CamarillaOpenBelowL3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaOpenBelowL3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaOpenBelowL3.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaOpenBelowL3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaOpenBelowL3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'OPEN BELOW L3'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaOpenBelowL3 | limitTo:tabLimit['openbelowH3TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #CB4335;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaOpenBelowL3.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaOpenBelowL3.length != tabLimit['openbelowH3TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaOpenBelowL3, 'openbelowH3TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaOpenBelowL3.length == tabLimit['openbelowH3TabLimit']">
+																	<span ng-click="showLess('openbelowH3TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h6 class="m-portlet__head-text">
+																OPEN BELOW L4
+															</h6>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="CamarillaOpenBelowL4.length >= 1">
+															<h6>{{CamarillaOpenBelowL4.length < 20 ?
+																	CamarillaOpenBelowL4.length :
+																	tabLimit['openbelowH4TabLimit']}} /
+																	{{CamarillaOpenBelowL4.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='CamarillaOpenBelowL4.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='CamarillaOpenBelowL4.length > 0'
+																  ng-click="$root.watchlistModal(CamarillaOpenBelowL4,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="CamarillaOpenBelowL4" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'OPEN BELOW L4'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in CamarillaOpenBelowL4 | limitTo:tabLimit['openbelowH4TabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #ef8394;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}
+																					</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																			symbol-name="script.SYMBOL"
+																			asset-class="eq"
+																			class-value=""
+																			source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="CamarillaOpenBelowL4.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="CamarillaOpenBelowL4.length != tabLimit['openbelowH4TabLimit']">
+																	<span
+																		ng-click="showMore(CamarillaOpenBelowL4, 'openbelowH4TabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="CamarillaOpenBelowL4.length == tabLimit['openbelowH4TabLimit']">
+																	<span ng-click="showLess('openbelowH4TabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row mt-">
+										<div class="col-lg-6">
+											<div ng-show="SelectIndexTimeValue == 'DAY'"
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h6 class="m-portlet__head-text">
+																H3/L3 REJECTION 
+															</h6>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="ExtractedRejectionH3L3.length >= 1">
+															<h6>{{ExtractedRejectionH3L3.length < 20 ?
+																ExtractedRejectionH3L3.length :
+																	tabLimit['rejectionTabLimit']}} /
+																	{{ExtractedRejectionH3L3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='ExtractedRejectionH3L3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='ExtractedRejectionH3L3.length > 0'
+																  ng-click="$root.watchlistModal(ExtractedRejectionH3L3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="ExtractedRejectionH3L3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'H3/L3 REJECTION'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in ExtractedRejectionH3L3 | limitTo: tabLimit['rejectionTabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div ng-if='script.SERIES == "L"'
+																		class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #28B463;">
+																		<div
+																			class=" m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																	<div ng-if='script.SERIES == "H"'
+																		class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #E74C3C;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="ExtractedRejectionH3L3.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="ExtractedRejectionH3L3.length != tabLimit['rejectionTabLimit']">
+																	<span
+																		ng-click="showMore(ExtractedRejectionH3L3, 'rejectionTabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="ExtractedRejectionH3L3.length == tabLimit['rejectionTabLimit']">
+																	<span ng-click="showLess('rejectionTabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-show="SelectIndexTimeValue == 'DAY'"
+											class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h6 class="m-portlet__head-text">
+															H4/L4 REJECTION 
+														</h6>
+													</div>
+												</div>
+												<div class="m-portlet__head-tools">
+													<div class="mr-2" style="margin-top: 2rem ;"
+														ng-if="ExtractedRejectionH4L4.length >= 1">
+														<h6>{{ExtractedRejectionH4L4.length < 20 ?
+															ExtractedRejectionH4L4.length :
+																tabLimit['rejectionTabLimit']}} /
+																{{ExtractedRejectionH4L4.length}}</h6>
+													</div>
+													<div class="btn-group" ng-if='ExtractedRejectionH4L4.length > 0'>
+														<button type="button" class="btn btn-light dropdown-toggle" 
+															data-toggle="dropdown" 
+															aria-haspopup="true" 
+															aria-expanded="false">
+														  Watchlist </button>
+														<div class="dropdown-menu">
+														  <li>
+															<button  class="dropdown-item" type="button" 
+															  ng-if='ExtractedRejectionH4L4.length > 0'
+															  ng-click="$root.watchlistModal(ExtractedRejectionH4L4,'heatmap')"
+															  data-toggle="modal" data-target="#add_to_watch_list"
+															  class="btn">Add to watchlist</button>
+														  </li>
+														  <li>
+															<dynamic-watchlist source-type="heatmap" 
+															is-group="true" data="ExtractedRejectionH4L4" 
+															page-name="{{'CAMARILLA'}}" 
+															strategy="{{'H3/L3 REJECTION'}}"></dynamic-watchlist>
+														  </li>
+														</div>
+													  </div>
+													
+												</div>
+											</div>
+											<div class="m-widget26__chart">
+												<div id="m_chart_heatmap">
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in ExtractedRejectionH4L4 | limitTo: tabLimit['rejectionTabLimit']"
+																style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																<div ng-if='script.SERIES == "L"'
+																	class="d-flex flex-column align-items-center col-lg py-1"
+																	style="text-align:center;background-color: #28B463;">
+																	<div
+																		class=" m-auto btn-group dropright text-white">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown"
+																			aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:14px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																				target="_blank">
+																				Stock Analyser</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click="$root.watchlistModal([script],'heatmap')">Add
+																				to Watchlist</a>
+																			
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts
+																				symbol-name="script.SYMBOL"
+																				asset-class="eq"
+																				class-value=""
+																				source="heatmap"></dhan-trading-view-charts>
+																	</div>
+																</div>
+																<div ng-if='script.SERIES == "H"'
+																	class="d-flex flex-column align-items-center col-lg py-1"
+																	style="text-align:center;background-color: #E74C3C;">
+																	<div
+																		class="m-auto btn-group dropright text-white">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown"
+																			aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:14px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																				target="_blank">
+																				Stock Analyser</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click="$root.watchlistModal([script],'heatmap')">Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts
+																				symbol-name="script.SYMBOL"
+																				asset-class="eq"
+																				class-value=""
+																				source="heatmap"></dhan-trading-view-charts>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-if="ExtractedRejectionH4L4.length > defaultLimit"
+														class="m-portlet__foot">
+														<div class="text-center">
+															<span
+																ng-if="ExtractedRejectionH4L4.length != tabLimit['rejectionTabLimit']">
+																<span
+																	ng-click="showMore(ExtractedRejectionH4L4, 'rejectionTabLimit')"><i
+																		class="fa fa-chevron-down"
+																		data-toggle="tooltip"
+																		title="show more"></i></span>
+															</span>
+															<span
+																ng-if="ExtractedRejectionH4L4.length == tabLimit['rejectionTabLimit']">
+																<span ng-click="showLess('rejectionTabLimit')"><i
+																		class="fa fa-chevron-up"
+																		data-toggle="tooltip"
+																		title="show less"></i></span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div ng-show="SelectIndexTimeValue == 'DAY'"
+												class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h6 class="m-portlet__head-text">
+																H3/L3 BREAKOUT
+															</h6>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<div class="mr-2" style="margin-top: 2rem ;"
+															ng-if="ExtractedBreakoutH3L3.length >= 1">
+															<h6>{{ExtractedBreakoutH3L3.length < 20 ?
+																ExtractedBreakoutH3L3.length :
+																	tabLimit['breakoutTabLimit']}} /
+																	{{ExtractedBreakoutH3L3.length}}</h6>
+														</div>
+														<div class="btn-group" ng-if='ExtractedBreakoutH3L3.length > 0'>
+															<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+															  Watchlist </button>
+															<div class="dropdown-menu">
+															  <li>
+																<button  class="dropdown-item" type="button" 
+																  ng-if='ExtractedBreakoutH3L3.length > 0'
+																  ng-click="$root.watchlistModal(ExtractedBreakoutH3L3,'heatmap')"
+																  data-toggle="modal" data-target="#add_to_watch_list"
+																  class="btn">Add to watchlist</button>
+															  </li>
+															  <li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="ExtractedBreakoutH3L3" 
+																page-name="{{'CAMARILLA'}}" 
+																strategy="{{'H3/L3 BREAKOUT'}}"></dynamic-watchlist>
+															  </li>
+															</div>
+														  </div>
+													</div>
+												</div>
+												<div class="m-widget26__chart">
+													<div id="m_chart_heatmap">
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in ExtractedBreakoutH3L3 | limitTo:tabLimit['breakoutTabLimit']"
+																	style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																	<div ng-if='script.SERIES == "H"'
+																		class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #28B463;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																	<div ng-if='script.SERIES == "L"'
+																		class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #E74C3C;">
+																		<div
+																			class="m-auto btn-group dropright text-white">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:14px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																					target="_blank">
+																					Stock Analyser</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click="$root.watchlistModal([script],'heatmap')">Add
+																					to Watchlist</a>
+																				
+																			</div>
+																		</div>
+
+																		<div>
+																			<dhan-trading-view-charts
+																					symbol-name="script.SYMBOL"
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap"></dhan-trading-view-charts>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div ng-if="ExtractedBreakoutH3L3.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class="text-center">
+																<span
+																	ng-if="ExtractedBreakoutH3L3.length != tabLimit['breakoutTabLimit']">
+																	<span
+																		ng-click="showMore(ExtractedBreakoutH3L3, 'breakoutTabLimit')"><i
+																			class="fa fa-chevron-down"
+																			data-toggle="tooltip"
+																			title="show more"></i></span>
+																</span>
+																<span
+																	ng-if="ExtractedBreakoutH3L3.length == tabLimit['breakoutTabLimit']">
+																	<span ng-click="showLess('breakoutTabLimit')"><i
+																			class="fa fa-chevron-up"
+																			data-toggle="tooltip"
+																			title="show less"></i></span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+											<div ng-show="SelectIndexTimeValue == 'DAY'"
+											class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+											<div class="m-portlet__head">
+												<div class="m-portlet__head-caption">
+													<div class="m-portlet__head-title">
+														<h6 class="m-portlet__head-text">
+															H4/L4 BREAKOUT
+														</h6>
+													</div>
+												</div>
+												<div class="m-portlet__head-tools">
+													<div class="mr-2" style="margin-top: 2rem ;"
+														ng-if="ExtractedBreakoutH4L4.length >= 1">
+														<h6>{{ExtractedBreakoutH4L4.length < 20 ?
+															ExtractedBreakoutH4L4.length :
+																tabLimit['breakoutTabLimit']}} /
+																{{ExtractedBreakoutH4L4.length}}</h6>
+													</div>
+													<div class="btn-group" ng-if='ExtractedBreakoutH4L4.length > 0'>
+														<button type="button" class="btn btn-light dropdown-toggle" 
+															data-toggle="dropdown" 
+															aria-haspopup="true" 
+															aria-expanded="false">
+														  Watchlist </button>
+														<div class="dropdown-menu">
+														  <li>
+															<button  class="dropdown-item" type="button" 
+															  ng-if='ExtractedBreakoutH4L4.length > 0'
+															  ng-click="$root.watchlistModal(ExtractedBreakoutH4L4,'heatmap')"
+															  data-toggle="modal" data-target="#add_to_watch_list"
+															  class="btn">Add to watchlist</button>
+														  </li>
+														  <li>
+															<dynamic-watchlist source-type="heatmap" 
+															is-group="true" data="ExtractedBreakoutH4L4" 
+															page-name="{{'CAMARILLA'}}" 
+															strategy="{{'H3/L3 BREAKOUT'}}"></dynamic-watchlist>
+														  </li>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="m-widget26__chart">
+												<div id="m_chart_heatmap">
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in ExtractedBreakoutH4L4 | limitTo:tabLimit['breakoutTabLimit']"
+																style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 135px;">
+																<div ng-if='script.SERIES == "H"'
+																	class="d-flex flex-column align-items-center col-lg py-1"
+																	style="text-align:center;background-color: #28B463;">
+																	<div
+																		class="m-auto btn-group dropright text-white">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown"
+																			aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:14px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																				target="_blank">
+																				Stock Analyser</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click="$root.watchlistModal([script],'heatmap')">Add
+																				to Watchlist</a>
+																			
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts
+																				symbol-name="script.SYMBOL"
+																				asset-class="eq"
+																				class-value=""
+																				source="heatmap"></dhan-trading-view-charts>
+																	</div>
+																</div>
+																<div ng-if='script.SERIES == "L"'
+																	class="d-flex flex-column align-items-center col-lg py-1"
+																	style="text-align:center;background-color: #E74C3C;">
+																	<div
+																		class="m-auto btn-group dropright text-white">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown"
+																			aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:14px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																				target="_blank">
+																				Stock Analyser</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click="$root.watchlistModal([script],'heatmap')">Add
+																				to Watchlist</a>
+																			
+																		</div>
+																	</div>
+
+																	<div>
+																		<dhan-trading-view-charts
+																				symbol-name="script.SYMBOL"
+																				asset-class="eq"
+																				class-value=""
+																				source="heatmap"></dhan-trading-view-charts>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-if="ExtractedBreakoutH4L4.length > defaultLimit"
+														class="m-portlet__foot">
+														<div class="text-center">
+															<span
+																ng-if="ExtractedBreakoutH4L4.length != tabLimit['breakoutTabLimit']">
+																<span
+																	ng-click="showMore(ExtractedBreakoutH4L4, 'breakoutTabLimit')"><i
+																		class="fa fa-chevron-down"
+																		data-toggle="tooltip"
+																		title="show more"></i></span>
+															</span>
+															<span
+																ng-if="ExtractedBreakoutH4L4.length == tabLimit['breakoutTabLimit']">
+																<span ng-click="showLess('breakoutTabLimit')"><i
+																		class="fa fa-chevron-up"
+																		data-toggle="tooltip"
+																		title="show less"></i></span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="tab-pane" id="camarilla_level_tab">
+						<div class="row">
+							<div class="col-xl-12">
+								<div class="m-portlet m-portlet--mobile ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 title="Camarilla Pivot Levels" class="m-portlet__head-text">
+													Camarilla Pivot Levels
+												</h3>
+											</div>
+										</div>
+										<div class="row">
+											<span class="align-self-center mr-2">
+												<h6>Auto Refresh</h6>
+											</span>
+											<div class="align-self-center mr-2">
+												<span class="m-switch m-switch--icon p-2">
+													<label>
+														<input id="auto_refresh" type="checkbox"
+															ng-model="SelectRefreshValue"
+															ng-disabled="!autoRefreshButtonDisabledValues" />
+														<span></span>
+													</label>
+												</span>
+											</div>
+											<div class="align-self-center mr-2">
+												<select class="custom-select" id="inputTimeIndexValue"
+													ng-model="SelectIndexTimeValue"
+													ng-options="value for value in IndexTimeValue"
+													ng-change="CamarillaDataUniverseFilter()">
+												</select>
+											</div>
+											<div class="align-self-center mr-2">
+												<select class="custom-select" id="inputIndexValue"
+													ng-model="SelectIndexValue"
+													ng-options="value.Name for value in IndexValue"
+													ng-change="CamarillaDataUniverseFilter()">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="m-portlet__body">
+										<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+											<div class="row align-items-center">
+												<div class="col-xl-8 order-2 order-xl-1">
+													<div class="form-group m-form__group row align-items-center">
+														<div class="col-md-4">
+															<div class="m-input-icon m-input-icon--left">
+																<input type="text" class="form-control m-input"
+																	placeholder="Search..." id="generalSearch"></input>
+																<span
+																	class="m-input-icon__icon m-input-icon__icon--left">
+																	<span>
+																		<i class="la la-search"></i>
+																	</span>
+																</span>
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<div class="col-xl-4 order-1 order-xl-4 m--align-right">
+													<dhan-trading-view-charts symbol-name="datatable" asset-class="eq"
+														class-value="btn btn-outline-info ml-2"
+														source="table"></dhan-trading-view-charts>
+													<button type="button" class="btn btn-outline-info ml-2"
+														data-toggle="modal" style="font-weight: 500;"
+														data-target="#add_to_watch_list"
+														ng-click="$root.watchlistModal(datatable,'table')">
+														Watchlist
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="m_datatable_pivot_values" id="scrolling_both"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				
+
+
+			</div>
+		</div>
+
+		<div align="center" ng-show="CamarillaLoading">
+			<img style="margin-bottom: -100px;"
+				src="/static/apptrade-canvas/img/NeoTrader_Logo_200x200.png" alt=""><br>
+			<img height="15%" width="15%" src="https://neotrader.in/static/SVG/loading_chart.svg"
+				alt="Loading....">
+		</div>
+
+
+
+	</div>
+	<div ng-show="!$root.user_permission['CAMARILLA']">
+		<div class="m-portlet" m-portlet="true">
+			<div class="m-portlet__body">
+				<center>
+					<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg" alt="permissionlock">This
+						section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a>
+					</h5>
+				</center>
+				<center><em>-- Sample image to illustrate the module --</em></center>
+				<div class="row">
+					<img width="100%" src="https://neotrader.in/static/SS/Camarilla Pivots.png" alt="Market View">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

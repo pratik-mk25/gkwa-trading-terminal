@@ -1,0 +1,939 @@
+<style>
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .fa-rotate-45 {
+        -ms-transform: rotate(270deg);
+        /* Internet Explorer 9 */
+        -webkit-transform: rotate(270deg);
+        /* Chrome, Safari, Opera */
+        transform: rotate(270deg);
+        /* Standard syntax */
+    }
+</style>
+<!-- BEGIN: Subheader -->
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"> </watchlist-modal>
+
+<div appunwraptag="" class="m-subheader">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                Candlestick Dashboard (Using Heikin-Ashi candles)
+            </h3>
+            <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                <li class="m-nav__item m-nav__item--home">
+                    <a class="m-nav__link m-nav__link--icon"
+                        href="#https://neotrader.in/index/dashboard/ ng-reflect-href=" #">
+                        <i class="m-nav__link-icon la la-home"></i>
+                    </a>
+                </li>
+                <li class="m-nav__separator">
+                    -
+                </li>
+                <li class="m-nav__item">
+                    <a class="m-nav__link" href="" ng-reflect-href="">
+                        <span class="m-nav__link-text">
+                            Candlestick Dashboard (Using Heikin-Ashi candles)
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <span>
+                <h5 class="m--valign-middle">
+                    Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+                    <br>
+                    New signals appear in every 30minutes.
+                </h5>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="m-content">
+   
+    
+        <div class="row">
+            <div class="col-xl-12 m--align-right m--margin-bottom-10">
+                <em>*Universe = Nifty 500, Cash Market Prices</em>
+            </div>
+        </div>
+        <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            How To Use
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+                    <ul class="m-portlet__nav">
+
+                    </ul>
+                    <button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+                        data-target="#howtotoggle_1" type="button">
+                        +
+                    </button>
+                    <a ng-show="$root.user_permission['NEOTRADER_PRO']" style="margin-left: 5px;"
+                        href="/static/pdf2/Heiken_Ashi.pdf" target="_blank" title="Intraday pdf">
+                        <img src="https://neotrader.in/static/pdf.png" alt="pdf">
+                    </a>
+                </div>
+            </div>
+            <div class="collapse" id="howtotoggle_1">
+                <div class="m-portlet__body">
+                    <div class="row">
+
+                        <iframe style="padding:15px;" width="480" height="315"
+                            src="https://www.youtube.com/embed/IN2zBJ4TLDI?list=PL91yVB1RSqwaUN9ju3-IgLw-XtfspyO-z"
+                            frameborder="0"
+                            title="Secrets of Heikin-Ashi || Learn Everything about Heikin-Ashi Candlesticks ||"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+
+                        <iframe style="padding:15px;" width="480" height="315"
+                            src="https://www.youtube.com/embed/EG2E8Wcpkp4?list=PL91yVB1RSqwaUN9ju3-IgLw-XtfspyO-z"
+                            title="Live Market Analysis - June 9 | Heikin-Ashi - the NeoTrader Way | Heikin-Ashi Candlestick Dashboard"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-portlet m-portlet--full-height m-portlet-rounded" ng-show="$root.user_permission['HEIKIN_ASHI_DASHBOARD']">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-tools">
+                    <div class="col-xl-12 m--margin-top-10 m--margin-bottom-10">
+                        <select class="custom-select" id="time_frame" ng-model="SelectTimeFrameValue"
+                            ng-options="value for value in TimeFrameValue"
+                            ng-change="candelstick_values_change_data();">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <div class="m-section">
+                    <div class="m-section__content">
+                        <div class="m-portlet">
+                            <div ng-show="!loading" class="row ui-sortable m_sortable_portlets_heikin_ashi_patterns">
+                                <div class="col-lg-6">
+                                    <div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+                                        <div class="m-portlet__head ">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <h3 class="m-portlet__head-text">
+                                                        NEW TREND
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__head-tools">
+                                                <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+                                                    role="tablist">
+                                                    <li class="nav-item m-tabs__item" ng-click="selectedTab('Bullish')">
+                                                        <a class="nav-link m-tabs__link active show m--font-success bt"
+                                                            id="bt" data-toggle="tab" href="#bullishNewTrend"
+                                                            target="_self" role="tab" aria-selected="true">
+                                                            Bullish {{NEW_TREND_BULL.length}}
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item m-tabs__item " ng-click="selectedTab('Bearish')">
+                                                        <a class="nav-link m-tabs__link m--font-danger bt1"
+                                                            data-toggle="tab" href="#bearishNewTrend" target="_self"
+                                                            role="tab" aria-selected="false">
+                                                            Bearish {{NEW_TREND_BEAR.length}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="btn-group" ng-show="activeTab=='Bullish'" ng-if='NEW_TREND_BULL.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(NEW_TREND_BULL,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="NEW_TREND_BULL" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'NEW TREND BULL'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                                <div class="btn-group" ng-show="activeTab=='Bearish'" ng-if='NEW_TREND_BEAR.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(NEW_TREND_BEAR,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="NEW_TREND_BEAR" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'NEW TREND BEAR'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active show" id="bullishNewTrend" class="togle">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in NEW_TREND_BULL"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-success py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="bearishNewTrend">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in NEW_TREND_BEAR"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-danger py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+                                        <div class="m-portlet__head ">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <h3 class="m-portlet__head-text">
+                                                        CONFIRMED TREND
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__head-tools">
+                                                <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+                                                    role="tablist">
+                                                    <li class="nav-item m-tabs__item" ng-click="selectedTab('Bullish')">
+                                                        <a class="nav-link m-tabs__link active show m--font-success bt"
+                                                            id="bt" data-toggle="tab" href="#bullishConfirmedTrend"
+                                                            target="_self" role="tab" aria-selected="true">
+                                                            Bullish {{CONFIRMED_TREND_BULL.length}}
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item m-tabs__item " ng-click="selectedTab('Bearish')">
+                                                        <a class="nav-link m-tabs__link m--font-danger bt1"
+                                                            data-toggle="tab" href="#bearishConfirmedTrend"
+                                                            target="_self" role="tab" aria-selected="false">
+                                                            Bearish {{CONFIRMED_TREND_BEAR.length}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="btn-group" ng-show="activeTab=='Bullish'" ng-if='CONFIRMED_TREND_BULL.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(CONFIRMED_TREND_BULL,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="CONFIRMED_TREND_BULL" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'CONFIRMED TREND BULL'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                                <div class="btn-group" ng-show="activeTab=='Bearish'" ng-if='CONFIRMED_TREND_BEAR.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(CONFIRMED_TREND_BEAR,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="CONFIRMED_TREND_BEAR" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'CONFIRMED TREND BEAR'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active show" id="bullishConfirmedTrend"
+                                                    class="togle">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in CONFIRMED_TREND_BULL"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-success py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="bearishConfirmedTrend">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in CONFIRMED_TREND_BEAR"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-danger py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-show="!loading" class="row ui-sortable m_sortable_portlets_heikin_ashi_patterns">
+                                <div class="col-lg-6">
+                                    <div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+                                        <div class="m-portlet__head ">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <h3 class="m-portlet__head-text">
+                                                        REVERSE TREND
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__head-tools">
+                                                <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+                                                    role="tablist">
+                                                    <li class="nav-item m-tabs__item" ng-click="selectedTab('Bullish')">
+                                                        <a class="nav-link m-tabs__link active show m--font-success bt"
+                                                            id="bt" data-toggle="tab" href="#bullishReverseTrend"
+                                                            target="_self" role="tab" aria-selected="true">
+                                                            Bullish {{REVERSE_TREND_BULL.length}}
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item m-tabs__item " ng-click="selectedTab('Bearish')">
+                                                        <a class="nav-link m-tabs__link m--font-danger bt1"
+                                                            data-toggle="tab" href="#bearishReverseTrend" target="_self"
+                                                            role="tab" aria-selected="false">
+                                                            Bearish {{REVERSE_TREND_BEAR.length}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="btn-group" ng-show="activeTab=='Bullish'" ng-if='REVERSE_TREND_BULL.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(REVERSE_TREND_BULL,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="REVERSE_TREND_BULL" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'REVERSE TREND BULL'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                                <div class="btn-group" ng-show="activeTab=='Bearish'" ng-if='REVERSE_TREND_BEAR.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(REVERSE_TREND_BEAR,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="REVERSE_TREND_BEAR" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'REVERSE TREND BEAR'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>    
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active show" id="bullishReverseTrend"
+                                                    class="togle">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in REVERSE_TREND_BULL"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-success py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="bearishReverseTrend">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in REVERSE_TREND_BEAR"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-danger py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+                                        <div class="m-portlet__head ">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <h3 class="m-portlet__head-text">
+                                                        CONTINUE TREND
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__head-tools">
+                                                <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+                                                    role="tablist">
+                                                    <li class="nav-item m-tabs__item" ng-click="selectedTab('Bullish')">
+                                                        <a class="nav-link m-tabs__link active show m--font-success bt"
+                                                            id="bt" data-toggle="tab" href="#bullishContinueTrend"
+                                                            target="_self" role="tab" aria-selected="true">
+                                                            Bullish {{CONTINUE_TREND_BULL.length}}
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item m-tabs__item " ng-click="selectedTab('Bearish')">
+                                                        <a class="nav-link m-tabs__link m--font-danger bt1"
+                                                            data-toggle="tab" href="#bearishContinueTrend"
+                                                            target="_self" role="tab" aria-selected="false">
+                                                            Bearish {{CONTINUE_TREND_BEAR.length}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+												<div class="btn-group" ng-show="activeTab=='Bullish'" ng-if='CONTINUE_TREND_BULL.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(CONTINUE_TREND_BULL,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="CONTINUE_TREND_BULL" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'CONTINUE TREND BULL'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div>
+                                                <div class="btn-group" ng-show="activeTab=='Bearish'" ng-if='CONTINUE_TREND_BEAR.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+													  <li>
+														<button  class="dropdown-item" type="button" 
+														  ng-click="$root.watchlistModal(CONTINUE_TREND_BEAR,'heatmap')"
+														  data-toggle="modal" data-target="#add_to_watch_list"
+														  class="btn">Add to watchlist</button>
+													  </li>
+													  <li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="CONTINUE_TREND_BEAR" 
+														page-name="{{'HEIKIN_ASHI_DASHBOARD'}}" 
+														strategy="{{'CONTINUE TREND BEAR'}}"></dynamic-watchlist>
+													  </li>
+													</div>
+												</div> 
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active show" id="bullishContinueTrend"
+                                                    class="togle">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in CONTINUE_TREND_BULL"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-success py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="bearishContinueTrend">
+                                                    <div class="m-widget26__chart">
+                                                        <div id="m_chart_heatmap">
+                                                            <div class="row">
+                                                                <div ng-repeat="script in CONTINUE_TREND_BEAR"
+                                                                    style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+                                                                    <div class="col-lg m--bg-danger py-1"
+                                                                        style="text-align:center;">
+                                                                        <div class="btn-group dropright">
+                                                                            <a type="button"
+                                                                                class="btn btn-sm btn-secondary "
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                                style="padding: 0;border: none;background: none;">
+                                                                                <em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+                                                                                    class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+                                                                                <i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+                                                                                    style="font-size:14px;"></i>
+                                                                            </a>
+                                                                            <div class="dropdown-menu">
+                                                                                <a class="dropdown-item m-link"
+                                                                                    href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+                                                                                    target="_blank">
+                                                                                    Stock Analyser</a>
+                                                                                <a class="dropdown-item" href="#"
+                                                                                    class="m-link" data-toggle="modal"
+                                                                                    data-target="#add_to_watch_list"
+                                                                                    ng-click="$root.watchlistModal([script],'heatmap')">Add
+                                                                                    to
+                                                                                    Watchlist</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-portlet m-portlet--semi-height">
+                    <div class="m-portlet__head">
+                        <div ng-show="!$root.user_permission['CORPORATELITE']" class="m-portlet__head-caption ">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    Filters
+                                </h3>
+                            </div>
+                            <div class="col-xl-6">
+                                <select class="custom-select" id="inputIndexValue" ng-model="select_universe_index"
+                                    ng-options="value.Name for value in universe_index"
+                                    ng-change="candelstick_values_change_data()">
+                                </select>
+                            </div>
+                            <div class="col-xl-6">
+                                <select class="custom-select" id="time_frame" ng-model="SelectTimeFrameValue"
+                                    ng-options="value for value in TimeFrameValue"
+                                    ng-change="candelstick_values_change_data();">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="!$root.user_permission['CORPORATELITE']" class="m-portlet">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <h6 class="mr-2"> SMALL BODY </h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="adx" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="SMALL_BODY">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2">LONG BODY</h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="adx" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="LONG_BODY">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2">MODERATE BODY</h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="adx" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="MODERATE_BODY">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2">CONFIRMED TREND</h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="di" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="CONFIRMED_TREND">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2">CONTINUE TREND</h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="macd" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="CONTINUE_TREND">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2"> NEW TREND </h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="bb" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="NEW_TREND">
+                                    <span></span>
+                                </label>
+                            </span>
+                            <h6 class="mr-2"> REVERSE TREND </h6>
+                            <span class="m-switch m-switch--icon m-switch--sm mr-4">
+                                <label>
+                                    <input id="rsi" type="checkbox" checked="checked" class="m-visibility"
+                                        data-column="REVERSE_TREND">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-portlet ">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <div class="m-input-icon m-input-icon--left ml-4">
+                                <input type="text" class="form-control m-input" placeholder="Search..."
+                                    id="generalSearch"></input>
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span>
+                                        <i class="la la-search"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <h6 class="mt-2">Auto Refresh</h6>
+                        <div class=" col-sm-2 mr-4 mt-3">
+                            <span class="m-switch m-switch--icon ">
+                                <label>
+                                    <input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+                                        ng-disabled="!autoRefreshButtonDisabledValues" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                        <dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+
+                            <button type="button" class="btn btn-outline-info ml-2" data-toggle="modal" style="font-weight: 500;"
+										data-target="#add_to_watch_list" ng-click="$root.watchlistModal(datatable,'table')">
+										Watchlist
+									</button>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="m-section">
+                        <div class="m-section__content">
+                            <div class="m_datatable_candlestick_alerts">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-show="!$root.user_permission['HEIKIN_ASHI_DASHBOARD']" class="m-portlet__body">
+
+
+            <div class="m-portlet" >
+            <h5 class="text-center">
+                <img width="5%" height="5%" src="{{$root.APP_URL+'/static/lock.svg'}}" alt="permissionlock">
+                This section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a>
+            </h5>
+            <div class="text-center mb-3 ">
+                <em>-- Sample image to illustrate the module --</em>
+            </div>
+                <img width="100%" src="{{$root.APP_URL+'/static/SS/heikin_ashi_dashboard_ss.png'}}" alt="Index Trade">
+        </div>
+        </div>
+    
+</div>

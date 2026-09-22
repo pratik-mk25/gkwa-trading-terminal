@@ -1,0 +1,444 @@
+
+<style>
+	select option:disabled {
+		color: #bdc3d4 !important;
+	}
+</style>
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"> </watchlist-modal>
+<!-- BEGIN: Subheader -->
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Ichimoku Dashboard
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="https://neotrader.in/index/dashboard/"
+						ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Ichimoku Dashboard
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear every 30minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<!-- END: Subheader -->
+<div class="m-content">
+
+	<!--Begin::Portlet-->
+	<div ng-show="$root.user_permission['ICHIMOKU']">
+		<div class="row">
+			<div class="col-xl-12 m--align-right m--margin-bottom-20">
+				<em>*Universe = Nifty 500, Cash Market Prices</em>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+					<div class="m-portlet__head-title">
+						<h3 class="m-portlet__head-text">
+							How To Use
+						</h3>
+					</div>
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="m-portlet__nav">
+
+					</ul>
+					<span class="col-md-4 col-sm-8 mt-2">
+						<h6>Auto Refresh</h6>
+					</span>
+					<span class="m-switch m-switch--icon  mt-3">
+						<label>
+							<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+								ng-disabled="!autoRefreshButtonDisabledValues" />
+							<span></span>
+						</label>
+					</span>
+					<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+						data-target="#howtotoggle_1" type="button">
+						+
+					</button>
+					<a style="margin-left: 5px;" href="/static/pdf2/Ichimoku_DashBoard_1.pdf" target="_blank"
+						title="Intraday pdf">
+						<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+					</a>
+				</div>
+			</div>
+
+			<div class="collapse" id="howtotoggle_1">
+				<div class="m-portlet__body">
+					<div class="row">
+						<div class="col-3">
+							<iframe src="https://www.youtube.com/embed/QrrUr4yveIQ" frameborder="0"
+								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen></iframe>
+						</div>
+
+						<div class="col-3">
+							<iframe src="https://www.youtube.com/embed/HsIGDYSZApU" frameborder="0"
+								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen></iframe>
+						</div>
+
+						<div class="col-3">
+							<iframe src="https://www.youtube.com/embed/_dpafCXaW_E" frameborder="0"
+								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen></iframe>
+						</div>
+
+						<div class="col-3">
+							<iframe src="https://www.youtube.com/embed/F54rqJfakic" frameborder="0"
+								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__head">
+
+
+				<div class="row col-lg-12">
+					<div class="col-xl-2 col-lg-2 m--margin-top-10 m--margin-bottom-10">
+						<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+							ng-options="value for value in IndexValue" ng-change="ichimoku()">
+						</select>
+
+					</div>
+					<div
+						class="col-xl-9 col-lg-9 m-form m-form--label-align-right m--margin-top-10 m--margin-bottom-10">
+						<div class="row align-items-center">
+							<label class="col-form-label col-lg-2 col-xl-2">
+								<h6> TIMEFRAME</h6>
+							</label>
+							<label class="col-xl-5 col-lg-5">
+								<select class="form-control m-select2" id="ichi_signals" name="param"
+									multiple="multiple">
+								</select>
+							</label>
+
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget2_tab1_content">
+						<div class="m-portlet__head-caption">
+
+						</div>
+						<div class="row">
+							<div class="col-md-3 m--margin-top-20">
+								<div class="align-center">
+									<label>
+										<h4>BULLISH SIGNAL</h4>
+									</label>
+								</div>
+								<div class="m-checkbox-list">
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CLOSE_CLOUD_BULL_CROSS_SIGNAL_NG"
+											id="CLOSE_CLOUD_BULL_CROSS_SIGNAL" ng-change="ichimoku();">CLOSE CROSSES
+										CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CS_CLOUD_BULL_CROSS_SIGNAL_NG"
+											id="CS_CLOUD_BULL_CROSS_SIGNAL" ng-change="ichimoku();">CS CROSSES CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="TK_BULL_CROSS_NOW_NG" id="TK_BULL_CROSS_NOW"
+											ng-change="ichimoku();">TS & KS BULLISH CROSS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="TK_BULL_CROSS_SIGNAL_NG"
+											id="TK_BULL_CROSS_SIGNAL" ng-change="ichimoku();">TS & KS BULLISH RECENT
+										CROSS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CS_BULLISH_NG" id="CS_BEARISH"
+											ng-change="ichimoku();">CS BULLISH
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="KMOW_TWIST_BULLISH" id="KMOW_TWIST_BULLISH"
+											ng-change="ichimoku();">KUMO TWIST BULLISH
+										<span></span>
+									</label>
+								</div>
+							</div>
+							<div class="col-md-3 m--margin-top-20">
+								<div>
+									<label>
+										<h4>BEARISH SIGNAL</h4>
+									</label>
+								</div>
+								<div class="m-checkbox-list">
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CLOSE_CLOUD_BEAR_CROSS_SIGNAL_NG"
+											id="CLOSE_CLOUD_BEAR_CROSS_SIGNAL" ng-change="ichimoku();">CLOSE CROSSES
+										CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CS_CLOUD_BEAR_CROSS_SIGNAL_NG"
+											id="CS_CLOUD_BEAR_CROSS_SIGNAL" ng-change="ichimoku();">CS CROSSES CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="TK_BEAR_CROSS_NOW_NG" id="TK_BEAR_CROSS_NOW"
+											ng-change="ichimoku();">TS & KS BEARISH CROSS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="TK_BEAR_CROSS_SIGNAL_NG"
+											id="TK_BEAR_CROSS_SIGNAL" ng-change="ichimoku();">TS & KS BEARISH RECENT
+										CROSS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CS_BEARISH_NG" id="CS_BEARISH"
+											ng-change="ichimoku();">CS BEARISH
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="KMOW_TWIST_BEARISH" id="KMOW_TWIST_BEARISH"
+											ng-change="ichimoku();">KUMO TWIST BEARISH
+										<span></span>
+									</label>
+								</div>
+							</div>
+							<div class="col-md-2 m-section__content">
+								<div class="m--margin-top-20">
+									<label>
+										<h4>General Filters</h4>
+									</label>
+								</div>
+								<div class="m-checkbox-list">
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-warning">
+										<input type="checkbox" ng-model="CLOUD_FLAT_NG" id="CLOUD_FLAT"
+											ng-change="ichimoku();">FLAT CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-warning">
+										<input type="checkbox" ng-model="CLOUD_FUTURE_THICK_NG" id="CLOUD_FUTURE_THICK"
+											ng-change="ichimoku();">THICK FUTURE CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-warning">
+										<input type="checkbox" ng-model="CLOUD_FUTURE_THIN_NG" id="CLOUD_FUTURE_THIN"
+											ng-change="ichimoku();">THIN FUTURE CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-warning">
+										<input type="checkbox" ng-model="KS_FLAT_NG" id="KS_FLAT"
+											ng-change="ichimoku();">FLAT KS LINE
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-warning">
+										<input type="checkbox" ng-model="TS_FLAT_NG" id="TS_FLAT"
+											ng-change="ichimoku();">FLAT TS LINE
+										<span></span>
+									</label>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="m--margin-top-20">
+									<label>
+										<h4>BULLISH FILTER</h4>
+									</label>
+								</div>
+								<div class="m-checkbox-list">
+
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CLOSEAC_NG" id="CLOSEAC"
+											ng-change="ichimoku();">CLOSE ABOVE CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CLOSEATK_NG" id="CLOSEATK"
+											ng-change="ichimoku();">CLOSE ABOVE TS & KS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="CSAC_NG" id="CSAC" ng-change="ichimoku();">CS
+										ABOVE CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="TAK_NG" id="TAK" ng-change="ichimoku();">TS
+										ABOVE KS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="TKAC_NG" id="TKAC" ng-change="ichimoku();">TS &
+										KS ABOVE CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+										<input type="checkbox" ng-model="FUTURE_CLOUD_BULLISH" id="FUTURE_CLOUD_BULLISH"
+											ng-change="ichimoku();">FUTURE CLOUD BULLISH
+										<span></span>
+									</label>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="m--margin-top-20">
+									<label>
+										<h4>BEARISH FILTER</h4>
+									</label>
+								</div>
+								<div class="m-checkbox-list">
+
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CLOSEBC_NG" id="CLOSEBC"
+											ng-change="ichimoku();">CLOSE BELOW CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CLOSEBTK_NG" id="CLOSEBTK"
+											ng-change="ichimoku();">CLOSE BELOW TS & KS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="CSBC_NG" id="CSBC" ng-change="ichimoku();">CS
+										BELOW CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="TBK_NG" id="TBK" ng-change="ichimoku();">TS
+										BELOW KS
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="TKBC_NG" id="TKBC" ng-change="ichimoku();">TS &
+										KS BELOW CLOUD
+										<span></span>
+									</label>
+									<label class="m-checkbox m-checkbox--solid m-checkbox--state-danger">
+										<input type="checkbox" ng-model="FUTURE_CLOUD_BEARISH" id="FUTURE_CLOUD_BEARISH"
+											ng-change="ichimoku();">FUTURE CLOUD BEARISH
+										<span></span>
+									</label>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2 col-sm-2 m--margin-bottom-20 m--margin-top-20 m-input-icon m-input-icon--left">
+								<input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch" />
+								<span class="m-input-icon__icon m-input-icon__icon--left">
+									<span><i class="la la-search"></i></span>
+								</span>
+							</div>
+							<div class="col-xl-2 m--margin-bottom-20 m--margin-top-20">
+								<select class="custom-select" id="inputSymbolUniverse" 
+									ng-model="select_universe_index" ng-options="value.Name for value in universe_index" ng-change="ichimoku()"
+									style="width: 150px;"> 
+								</select>
+							</div>
+							<div class="col-xl-8 order-1 order-xl-4 m--align-right m--margin-top-20 m--margin-bottom-20 d-flex align-items-center" style="padding-left: 33rem;">
+								<select class="custom-select mr-2" id="score_column"
+										ng-options="option.name for option in scoreBullBearArray.availableOptions track by option.id"
+										ng-model="scoreBullBearArray.selectedOption" ng-change="ichimoku()"
+										style="width: 120px;"> 
+								</select>
+						
+								
+								<div class="d-flex align-items-center mr-2">
+									<h6 class="m-0">From</h6>
+								</div>
+								<select class="custom-select mr-2" id="from_score" 
+									ng-model="fromScoreValue"
+									ng-options="value disable when value >= toScoreValue for value in scoreDropdownValues" 
+									ng-change="ichimoku()"
+									ng-disabled="scoreBullBearArray.selectedOption.name=='ALL'"
+									style="width: 100px;"> 
+								</select>
+						
+								<div class="d-flex align-items-center mr-2">
+									<h6 class="m-0">To</h6>
+								</div>
+								<select class="custom-select mr-2" id="to_score" 
+									ng-model="toScoreValue"
+									ng-options="value disable when value <= fromScoreValue for value in scoreDropdownValues" 
+									ng-change="ichimoku()"
+									ng-disabled="scoreBullBearArray.selectedOption.name=='ALL'"
+									style="width: 100px;"> 
+								</select>
+								<div class="m--margin-left-20 d-flex align-items-center">
+									<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" 
+										class-value="btn btn-outline-info ml-2" source="table">
+									</dhan-trading-view-charts>
+									<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal" 
+										style="font-weight: 500;" data-target="#add_to_watch_list" 
+										ng-click="$root.watchlistModal(datatable,'table')">
+										Watchlist
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						<div class="m_datatable_ichimoku" id="scrolling_both">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="!$root.user_permission['ICHIMOKU']">
+		<div>
+			<div class="m-portlet" m-portlet="true">
+
+				<div class="m-portlet__body">
+
+					<center>
+						<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+								alt="permissionlock">This section is available only under NeoTrader Pro Subscription.<a
+								href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5>
+					</center>
+
+					<center><em>-- Sample image to illustrate the module --</em></center>
+					<div class="row">
+						<img width="100%" src="https://neotrader.in/static/SS/Ichimoku Dashboard.png" alt="Market View">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<!--End::Portlet-->

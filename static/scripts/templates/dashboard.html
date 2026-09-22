@@ -1,0 +1,1774 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+
+	.tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+	.tooltip-container .tooltip {
+		visibility: hidden;
+		width: 450px;
+		background-color: white; 
+		color: #000;
+		text-align: center;
+		border: 2px solid gray;
+		border-radius: 5px;
+		padding: 10px;
+		position: absolute;
+		z-index: 1;
+		bottom: 70%;
+		left: 8%;
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+
+	.tooltip-container:hover .tooltip {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	.tooltip-container .tooltip span {
+		display: block;
+		margin: 5px 0;
+	}
+
+	@media (max-width: 768px) {
+            .containerx {
+                justify-content: center;
+            }
+        }
+		
+	@media (max-width: 768px) {
+		.allunset {
+			all: unset;
+		}
+	}
+
+	/* Default (desktop) */
+	.mobile-tooltip {
+		margin-left: -405px;
+	}
+
+	/* Mobile view */
+	@media (max-width: 768px) {
+		.mobile-tooltip {
+			margin-left: -193px;
+		}
+	}
+
+
+</style>
+<!-- BEGIN: Subheader -->
+
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Dashboard
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Dashboard
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="/index/sector_analysis_view/" target="_self" ng-click="clear()">
+						<span class="m-nav__link-text">
+							Market View
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li id="site_demo" class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Site Tour
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					<b>Using realtime data </b>, Page refreshes every 15 seconds.
+				</h5>
+			</span>
+		</div>
+		<!--  T&C Acknowledgement start -->
+		<div class="modal fade" data-backdrop="static" data-keyboard="false" id="m_modal_1" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+			<div class="modal-dialog modal-lg " style="width:50%;" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<img src="../../static/modal_hint_1_upd.png" height="100%" width="100%" />
+					</div>
+					<div class="modal-body align-middle">
+						<label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+							<input type="checkbox" id="checkbox_agree"><b>I HAVE READ AND CONFIRM THAT I FULLY
+								UNDERSTAND AND ACCEPT THE
+								<a href="/disclaimer/" target="_blank"> GROWTH AVENUES - DISCLAIMER, TERMS &
+									CONDITIONS.</a></b>
+							<span></span>
+						</label>
+					</div>
+					<div class="modal-footer align-top">
+						<button type="button" id="view_site" class="btn btn-success btn-block" data-dismiss="modal"
+							disabled>VIEW SITE</button><br>
+						<button type="button" id="view_demo" class="btn btn-primary btn-block" data-dismiss="modal"
+							disabled>VIEW DEMO</button>
+					</div>
+				</div>
+			</div>
+		</div> <!--  T&C Acknowledgement end -->
+
+		<!-- disclaimer start -->
+		<div class="modal fade" data-backdrop="static" data-keyboard="false" id="disclaimer_once" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+			<div class="modal-dialog modal-lg " style="width:50%;" role="document">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<img src="../../static/apptrade-canvas/img/disclaimer.png" height="100%" width="100%" />
+					</div>
+
+					<div class="modal-footer align-top">
+						<button type="button" id="disclaimer_accepted" style="font-weight: 500;"
+							class="btn btn-primary " data-dismiss="modal">AGREE</button><br>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- disclaimer end -->
+	</div>
+</div>
+<div class="m-content">
+	<div ng-show="$root.user_permission['DASHBOARD'] && !loading">
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded" style="padding: 15px;">
+			<div class="m-portlet__body">
+				<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+					<div class="m-portlet__head">
+						<div class="m-portlet__head-caption">
+							<div class="m-portlet__head-title">
+								<h3 class="m-portlet__head-text">
+									How To Use
+								</h3>
+							</div>
+						</div>
+						<div class="m-portlet__head-tools">
+							<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info"
+								data-toggle="collapse" data-target="#howtotoggle_1" type="button">
+								+
+							</button>
+							<a ng-show="$root.user_permission['NEOTRADER_PRO']" style="margin-left: 5px;"
+								href="/static/pdf2/Dashboard_1.pdf" target="_blank" title="Intraday pdf">
+								<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+							</a>
+						</div>
+					</div>
+					<div class="collapse" id="howtotoggle_1">
+						<div class="m-portlet__body">
+							<div class="row">
+								<iframe width="560" height="315"
+									src="https://www.youtube.com/embed/VTUl0ZVGbNg?si=LhvAtwnIBX3MVf-N"
+									title="YouTube video player" frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row col-xl-12 m--margin-bottom-10" style="padding-bottom: 15px;">
+				<div class="col-md-2">
+					<h3 class="m-subheader__title ">
+						Dashboard Universe
+					</h3>
+				</div>
+				<div class="col-md-2">
+					<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+						ng-options="value.Name for value in IndexValue"
+						ng-change="dashboard_change_data_index(SelectIndexValue,SelectHeatmapOpenClose)">
+					</select>
+				</div>
+				<div class="col-md-2 ">
+					<select class="custom-select" id="HeatmapOpenClose" ng-model="SelectHeatmapOpenClose"
+						ng-options="value for value in HeatmapOpenClose"
+						ng-change="dashboard_change_data_index(SelectIndexValue,SelectHeatmapOpenClose)">
+					</select>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-xl-12 m--align-right">
+							<em>*Universe = Nifty 50,100,500, Based on Cash Data, *Universe = NiftyFNO,
+								Based on Cash Data</em>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-content">
+				<div class="tab-pane active show" id="m_widget4_tab1_content">
+					<div class="row">
+						<div class="col-xl-4" style="max-height:500px; margin-bottom: 20px;">
+							<div class="modal fade" id="myModal">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<div style="height:50px">
+											<button id="cancelPopup" ng-click="hide_popup()" type="button"
+												data-dismiss="modal"
+												style="position:absolute; right:0%; margin:5px;
+											background-color:transparent;color: black;border: none;border-radius: 5px; font-size:30px;">&#10008;</button>
+										</div>
+										<div class="modal-body" style="padding-top: 5px;">
+											<div class="w3-content w3-display-container">
+												<img src="" id="allModalAds" style="width:100%; height:100%" />
+												<hr>
+												<a id='URL_Click' target="_blank">
+													<h4> Click Here To know more... </h4>
+												</a><br>
+												<h4 ng-hide="Img.Description !=null">Description : <text
+														id="description"></text></h4>
+												<button id="slideBtn" ng-click="slide_popup(-1)"
+													style="	position: absolute;top: 50%;left: 1.5%;transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%);
+												background-color: transparent;font-size: 30px;border: none;cursor: pointer;border-radius: 5px; color:black;">&#9664;</button>
+												<button id="slideBtn" ng-click="slide_popup(1)"
+													style="	position: absolute;top: 50%;left: 98.5%;transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);
+												background-color: transparent;font-size: 30px;border: none;cursor: pointer; border-radius: 5px; color:black;">&#9654;</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded"
+										style="min-height: 500px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Broad Market Indices
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body">
+											<div class="m-widget26__chart mt-5" style="width: auto;height:300px">
+												<div id="m_chart_broad_market" style="width: auto;height:300px">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-4" style="max-height:500px; margin-bottom: 20px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+										style="min-height: 500px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Sector Performance
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body">
+											<div class="m-widget26__chart" style="width: auto;height:400px">
+												<div id="m_chart_sector_view" style="width: auto;height:400px">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-4" style="max-height:500px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+										style="min-height: 500px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Advance/Decline
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body">
+											<div class="m-widget26__chart mt-5"
+												style="width: auto;height:300px;margin:auto;">
+												<div id="m_chart_adv_dec" style="width: auto;height:300px;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="row col-xl-12 m--margin-bottom-10">
+						<div class="col-md-2">
+							<h3 class="m-subheader__title ">
+								Dashboard Universe
+							</h3>
+						</div>
+						<div class="col-md-2">
+							<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+								ng-options="value.Name for value in IndexValue"
+								ng-change="dashboard_change_data_index(SelectIndexValue,SelectHeatmapOpenClose)">
+							</select>
+						</div>
+						<div class="col-md-2 ">
+							<select class="custom-select" id="HeatmapOpenClose" ng-model="SelectHeatmapOpenClose"
+								ng-options="value for value in HeatmapOpenClose"
+								ng-change="dashboard_change_data_index(SelectIndexValue,SelectHeatmapOpenClose)">
+							</select>
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-xl-12 m--align-right">
+									<em>*Universe = Nifty 50,100,500, Based on Cash Data, *Universe = NiftyFNO,
+										Based on Cash Data</em>
+								</div>
+							</div>
+						</div>
+					</div> -->
+					<!-- <div ng-show="unblock_dashboard" class="row">
+						<div class="col-xl-4" style="max-height:350px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+										style="min-height: 300px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Advance/Decline
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body">
+
+											<div class="m-widget26__chart"
+												style="width: auto;height:225px;margin:auto;">
+												<div id="m_chart_adv_dec" style="width: auto;height:225px;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-8">
+							<div class="row">
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded"
+										style="min-height: 300px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Price Gainers
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+											<div class="m-widget26__chart" style="width:auto;height:225px;margin:auto;">
+												<div id="m_chart_price_gainers" style="width: auto;height:225px;">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+										style="min-height: 300px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Price Losers
+													</h3>
+												</div>
+											</div>
+										</div>
+										<div class="m-portlet__body" style="padding-left:10px;padding-right:10px;">
+											<div class="m-widget26__chart"
+												style="width: auto;height:225px;margin:auto;">
+												<div id="m_chart_price_losers" style="width: auto;height:225px;">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+
+					<div ng-show="unblock_dashboard" class="row">
+						<div class="col-xl-12 mt-5">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet__head-tools">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded" style="min-height: 350px">
+											<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" style="margin-bottom: 0px;">
+												<div class="m-portlet__head">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																Day Trader Bullets 
+															</h3>
+														</div>
+													</div>
+													<div class="m-portlet__head-tools">
+														<ul class="m-portlet__nav">
+
+														</ul>
+														<button type="button" class="btn btn-link btn-lg align-self-center mr-2 tooltip-container" style="color: #000; padding: 0px;" data-toggle="modal" data-target="#m_modal_3">
+															<em class="fas fa-info-circle mr-2 ml-5"></em>
+															<div class="tooltip align-self-center mr-2 mobile-tooltip" style="text-align: left; padding-left: 10px;margin-bottom: 10px;">
+																<div>
+																	<span style="font-weight: 700; display: inline;">* Stock - </span>
+																	<span style="display: inline;">Trading symbol of the stock.</span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* Day Change - </span>
+																	<span style="display: inline;">Price change from the previous trading day close to the current market price (LTP).</span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* Trigger Time - </span>
+																	<span style="display: inline;">Time when the trade signal was generated. </span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* Trigger Price - </span>
+																	<span style="display: inline;">Market price at which the trade was triggered. </span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* Move Since Trigger - </span>
+																	<span style="display: inline;">Price movement from the trigger price to the current market price. </span>
+																</div>
+																<!-- <div>
+																	<span style="font-weight: 700; display: inline;">* %Up - </span>
+																	<span style="display: inline;">Value calculated by increasing the trigger price by 1%. </span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* %Down - </span>
+																	<span style="display: inline;">Value calculated by decreasing the trigger price by 1%. </span>
+																</div> -->
+																<div>
+																	<span style="font-weight: 700; display: inline;">* I Expect - </span>
+																	<span style="display: inline;">Value calculated by increasing the trigger price by 1% in the Bullish tab and decreasing the trigger price by 1% in the Bearish tab.</span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* My Risk - </span>
+																	<span style="display: inline;">Value calculated by decreasing the trigger price by 1% in the Bullish tab and increasing the trigger price by 1% in the Bearish tab.</span>
+																</div>
+																<!-- <hr style="border: 1px solid gray; margin: 10px 0;"> -->
+																<!-- <div>
+																	<span style="margin-bottom: -7px;">Note :-</span>
+																	<span style="margin-bottom: -7px;">* For Targets & Stop loss hover on Stock Name</span>
+																	<span style="margin-bottom: -7px;">* Active stocks refreshes at 5 min interval </span>
+																	<span style="margin-bottom: -7px;">* Grey is stalled whenever the price goes against the trend</span>
+																</div> -->
+															</div>
+														</button>
+														<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+															data-target="#howtotoggle_2" type="button">
+															+
+														</button>
+														<!-- <a style="margin-left: 5px;" href="/static/pdf2/Fibonacci_Pivots_1.pdf" target="_blank"
+															title="Intraday pdf">
+															<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+														</a> -->
+													</div>
+												</div>
+
+												<div class="collapse" id="howtotoggle_2">
+													<div class="m-portlet__body">
+														<div class="row">
+															<iframe 
+																class="p-3"
+																width="560" 
+																height="315" 
+																src="https://www.youtube.com/embed/AGg13q63kU0?si=lV0eCSFCnqXTePz4"  
+																frameborder="0"
+																allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+																allowfullscreen></iframe>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__foot" style="margin: 0px; padding: 0px;">
+												<div class="d-flex flex-column">
+													<div class="m-portlet__head" style="display: flex; height: auto; padding-left: 9px;padding-bottom: 15px;">
+														<div class="m-portlet__head-tools">
+															<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+																role="tablist">
+																<li class="nav-item m-tabs__item">
+																	<a title="BULLISH"
+																		class="nav-link m-tabs__link active show"
+																		data-toggle="tab" href="#cprBullish" target="_self"
+																		role="tab" aria-selected="true"
+																		ng-click="curatedCprData('cprBullish')"	
+																		style="font-weight: 600;margin-top: 14px;font-size: 10px; padding-left: 20px;"
+																	>
+																		BULLISH
+																	</a>
+																</li>
+																<li class="nav-item m-tabs__item">
+																	<a title="BEARISH" class="nav-link m-tabs__link"
+																		data-toggle="tab" href="#cprBearish" target="_self"
+																		role="tab" aria-selected="false"
+																		ng-click="curatedCprData('cprBearish')"
+																		style="font-weight: 600;margin-top: 14px; font-size: 10px;">
+																		BEARISH
+																	</a>
+																</li>
+																
+															</ul>
+														</div>
+														<div class="d-flex ml-3" style="flex-wrap: wrap;">
+															<!-- Bullish Change Pct By -->
+															<div class="d-flex flex-row" style="margin-top:5px" ng-show="activeDayTab === 'cprBullish'">
+																<div class="px-2 align-self-center">
+																	<h6>Chng by :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			ng-model="SelectDayTraderBulletsChangeValue"
+																			ng-options="value for value in DayTraderBulletsChangeValue"
+																			ng-change="dayTraderValue(SelectDayTraderBulletsChangeValue, selectedBullishFilter,'BULLISH')"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+
+																<!-- Filter -->
+																<div class="px-2 align-self-center"> 
+																	<h6>Day Chng Pct :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBullishFilter"
+																			ng-change="dayTraderValue(SelectDayTraderBulletsChangeValue, selectedBullishFilter,'BULLISH')"
+																			ng-options="option as option.label for option in DayTraderBulletsBullishValues"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+																<div class="px-2 align-self-center"> 
+																	<h6>I Expect :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBullishPct"
+																			ng-change="validateBullishValue(selectedBullishPct)"
+																			ng-options="option as option for option in allowedBullishPct"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+																<div class="px-2 align-self-center"> 
+																	<h6>My Risk :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBullishPct_Risk"
+																			ng-change="validateBullishValue_Risk(selectedBullishPct_Risk)"
+																			ng-options="option as option for option in allowedBullishPct_Risk"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+															</div>
+															<!-- Bearish Change Pct By -->
+															<div class="d-flex flex-row" style="margin-top:5px" ng-show="activeDayTab === 'cprBearish'">
+																<div class="px-2 align-self-center">
+																	<h6>Chng by :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			ng-model="SelectDayTraderBulletsChangeValue"
+																			ng-options="value for value in DayTraderBulletsChangeValue"
+																			ng-change="dayTraderValue(SelectDayTraderBulletsChangeValue, selectedBearishFilter,'BEARISH')"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+
+																<!-- Filter -->
+																<div class="px-2 align-self-center"> 
+																	<h6>Day Chng Pct :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBearishFilter"
+																			ng-change="dayTraderValue(SelectDayTraderBulletsChangeValue, selectedBearishFilter,'BEARISH')"
+																			ng-options="option as option.label for option in DayTraderBulletsBearishValues"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+																<div class="px-2 align-self-center"> 
+																	<h6>I Expect :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBearishPct"
+																			ng-change="validateBearishValue(selectedBearishPct)"
+																			ng-options="option as option for option in allowedBearishPct"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+																<div class="px-2 align-self-center"> 
+																	<h6>My Risk :</h6>
+																</div>
+																<div style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			id="filter" 
+																			name="filter" 
+																			ng-model="selectedBearishPct_Risk"
+																			ng-change="validateBearishValue_Risk(selectedBearishPct_Risk)"
+																			ng-options="option as option for option in allowedBearishPct_Risk"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+
+															</div>
+															<div>
+																<div class="d-flex flex-row justify-content-start ">
+																	<div class="p-2">
+																		<input type="text" class="form-control m-input" placeholder="Search..."
+																			id="generalSearchDay_trader_bullets" style="height: 28px; width: 128px;"></input>
+																	</div>
+																</div>
+															</div>
+														</div>
+														</div>
+														
+													</div>
+													<!-- <div class="col-6">
+														<div class="d-flex flex-row justify-content-start ">
+															<div class="p-2">
+																<input type="text" class="form-control m-input" placeholder="Search..."
+																	id="generalSearchDay_trader_bullets"></input>
+															</div>
+														</div>
+													</div> -->
+													<div class="m-portlet__body border-bottom" style="overflow-y: scroll; overflow-x:hidden; padding: 10px; padding-left: 30px; height: 380px;">
+													<div class="tab-content">			
+														<div class="tab-pane active show" id="cprBullish">
+															<!-- <h3 ng-show="cpr_bullish_filter.length === 0 || SelectCuratedShowTime == false" class="text-center h5 pt-5 mt-5" >
+																Selections shall populate here after 9.30 am
+															</h3>
+															<div class="d-flex flex-column" ng-if="cpr_bullish_filter.length > 0 && SelectCuratedShowTime">
+																<div class="row flex-grow-1">
+																	<div style="margin: 0px; margin-right: 1px; margin-bottom: 1px;"
+																		ng-repeat="item in cpr_bullish_filter | orderBy:'CHANGE_COLOUR' ">
+																		<div class="card text-center text-black"
+																			style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																				ng-style="{ 'background-color': item.BULL_BEAR == 1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : '#00cc99'}">
+																			<div class="dropdown">
+																				<a href="#"
+																					class="font-weight-bold d-block dropdown-toggle"
+																					data-toggle="dropdown"
+																					style="font-size: 12px; color: black; text-decoration: none;"
+																					data-toggle="tooltip"
+																					data-placement="top"
+																					ng-attr-title="{{ 
+																									( item.ASTRIKE_COUNT == 3 && (item.bull_t1 == 0 || item.bull_t2 == 0)
+																									) ? ('StopLoss: ' + item.bull_sl) 
+																									: 
+																									('Target-1: ' + item.bull_t1 +
+																									'  //  Target-2: ' + item.bull_t2 +
+																									'  //  StopLoss: ' + item.bull_sl)
+																								}}">
+																					{{ item.SYMBOL }}
+																					
+																					<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																				</a>
+																				<div class="dropdown-menu">
+																					<a class="dropdown-item"
+																						href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																						target="_blank">Stock Analyser</a>
+																					<a class="dropdown-item" href="#"
+																						data-toggle="modal"
+																						data-target="#add_to_watch_list"
+																						ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																						to Watchlist
+																					</a>
+																				</div>
+																			</div>
+																			<dhan-trading-view-charts
+																				symbol-name="item.SYMBOL" 
+																				asset-class="eq"
+																				class-value=""
+																				source="heatmap">
+																			</dhan-trading-view-charts>
+																			<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																				{{ item.CHG_P }}%
+																			</span>
+																			<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																				TIME:-{{ item.TRADE_RANGE_TS  | date:'HH:mm:ss'}}
+																			</span>
+																			
+																		</div>
+																	</div>
+																</div>
+															</div> -->
+
+															
+															<div class="m_datatable_bullish">
+															</div>
+
+														</div> 
+
+														<div class="tab-pane" id="cprBearish">
+															<!-- <h3 ng-show="cpr_bearish_filter.length === 0 || SelectCuratedShowTime == false" 
+																class="text-center h5 pt-5 mt-5">Selections shall populate here after 9.30 am</h3> -->
+															<!-- <div class="d-flex flex-column"
+																ng-if="cpr_bearish_filter.length > 0 && SelectCuratedShowTime">
+																
+																<div class="row flex-grow-1">
+																	<div style="margin: 0px; margin-right: 3px; margin-bottom: 3px;"
+																		ng-repeat="item in cpr_bearish_filter | orderBy:'CHANGE_COLOUR'">
+																		<div class="card text-center text-black"
+																			style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																			ng-style="{ 'background-color':  item.BULL_BEAR == -1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : '#ff0033'}">
+																			<div class="dropdown">
+																				<a href="#"
+																					class="font-weight-bold d-block dropdown-toggle"
+																					data-toggle="dropdown"
+																					style="font-size: 12px; color: black; text-decoration: none;"
+																					data-toggle="tooltip"
+																					data-placement="top"
+																					ng-attr-title="{{ 
+																									( item.ASTRIKE_COUNT == 3 && (item.bear_t1 == 0 || item.bear_t2 == 0)
+																									)
+																									? ('StopLoss: ' + item.bear_sl)
+																									: (
+																										'Target-1 : ' + item.bear_t1 +
+																										'  //  Target-2: ' + item.bear_t2 +
+																										'  //  StopLoss: ' + item.bear_sl
+																									)
+																								}}">
+																					{{ item.SYMBOL }}
+																					<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																				</a>
+																				<div class="dropdown-menu">
+																					<a class="dropdown-item"
+																						href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																						target="_blank">Stock Analyser</a>
+																					<a class="dropdown-item" href="#"
+																						data-toggle="modal"
+																						data-target="#add_to_watch_list"
+																						ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																						to Watchlist
+																					</a>
+																				</div>
+																			</div>
+																			<dhan-trading-view-charts
+																				symbol-name="item.SYMBOL" asset-class="eq"
+																				class-value=""
+																				source="heatmap">
+																			</dhan-trading-view-charts>
+																			<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																				{{ item.CHG_P }}%
+																			</span>
+																			<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																				TIME:-{{ item.TRADE_RANGE_TS  | date:'HH:mm:ss'}}
+																			</span>
+																		</div>
+																	</div>
+																</div>
+															</div> -->
+															<div class="m_datatable_bearish">
+															</div>
+														</div> 
+													</div>
+													
+												</div>
+											</div>
+											<div class="m-portlet__foot" ng-show="isVisible" style="font-weight: 600;">
+												Note :-  Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+											</div>	
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xl-12 mt-5">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet__head-tools">
+										<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-brand  m-portlet--rounded"
+										style="min-height: 350px">
+											<div class="m-portlet__head row col-xl-12" style="height: auto; min-height: 55px; display: flex;">
+												<div class="m-portlet__head-caption col-md-2 containerx">
+													<div class="m-portlet__head-title">
+														<h3 class="m-portlet__head-text">
+															Active Stocks
+														</h3>
+													</div>
+												</div>
+												<div class="row col-md-6" style="display: flex; justify-content: flex-end;">													
+													<div class="align-self-center mr-2">
+														<button type="button" class="btn btn-link btn-lg align-self-center mr-2 tooltip-container" style="color: #000; padding: 0px;" data-toggle="modal" data-target="#m_modal_3">
+															<em class="fas fa-info-circle mr-2 ml-5"></em>
+															<div class="tooltip align-self-center mr-2" style="text-align: left; padding-left: 10px;margin-bottom: 10px;margin-left: 35px;">
+																<div>
+																	<span style="font-weight: 700; display: inline;">* WELL SET BULL - </span>
+																	<span style="display: inline;">Stocks that are showing some continued bullishness</span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* WELL SET BEAR - </span>
+																	<span style="display: inline;">Stocks that are showing some continued bearishness</span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* TAKING GUARD BULL <strong>(Day Timeframe)</strong></span>
+																	<span style="display: inline;">Stocks that are turning bullish </span>
+																</div>
+																<div>
+																	<span style="font-weight: 700; display: inline;">* TAKING GUARD BEAR <strong>(Day Timeframe)</strong></span>
+																	<span style="display: inline;">Stocks that are turning bearish </span>
+																</div>
+																<hr style="border: 1px solid gray; margin: 10px 0;">
+																<div>
+																	<span style="margin-bottom: -7px;">Note :-</span>
+																	<span style="margin-bottom: -7px;">* For Targets & Stop loss hover on Stock Name</span>
+																	<span style="margin-bottom: -7px;">* Active stocks refreshes at 5 min interval </span>
+																	<span style="margin-bottom: -7px;">* Grey is stalled whenever the price goes against the trend</span>
+																	<!-- <span style="margin-bottom: -7px;">* 30 min and 60 min Ichimoku score is used to do the filter</span>  -->
+																</div>
+															</div>
+														</button>
+														<em>*High Probability Setups based on Proprietary Strategies</em>
+													</div>														
+												</div>
+											</div>
+											<div class="m-portlet__foot" style="margin: 0px; padding: 0px;">
+												<div class="d-flex flex-column">
+													<div class="m-portlet__head" style="display: flex; height: auto; padding-left: 9px;padding-bottom: 15px;">
+														<div class="m-portlet__head-tools">
+															<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+																role="tablist">
+																<li class="nav-item m-tabs__item">
+																	<a title="WELL SET BULLISH"
+																		class="nav-link m-tabs__link active show"
+																		data-toggle="tab" href="#trendedBullish" target="_self"
+																		role="tab" aria-selected="true"
+																		ng-click="updateTabdata('trendedBullish')"
+																		style="font-weight: 600;margin-top: 14px;font-size: 10px; padding-left: 20px;"
+																	>
+																		WELL SET BULL
+																	</a>
+																</li>
+																<li class="nav-item m-tabs__item">
+																	<a title="WELL SET BEARISH" class="nav-link m-tabs__link"
+																		data-toggle="tab" href="#trendedBearish" target="_self"
+																		role="tab" aria-selected="false"
+																		ng-click="updateTabdata('trendedBearish')"
+																		style="font-weight: 600;margin-top: 14px; font-size: 10px;">
+																		WELL SET BEAR
+																	</a>
+																</li>
+																<li class="nav-item m-tabs__item">
+																	<a title="TAKING GUARD BULLISH"
+																		class="nav-link m-tabs__link" data-toggle="tab"
+																		href="#reversalBullish" target="_self" role="tab"
+																		aria-selected="false"
+																		ng-click="updateTabdata('reversalBullish')"
+																		style="font-weight: 600;margin-top: 14px;font-size: 10px;"
+																		>
+																		TAKING GUARD BULL
+																	</a>
+																</li>
+																<li class="nav-item m-tabs__item">
+																	<a title="TAKING GUARD BEARISH"
+																		class="nav-link m-tabs__link" data-toggle="tab"
+																		href="#reversalBearish" target="_self" role="tab"
+																		aria-selected="false"
+																		ng-click="updateTabdata('reversalBearish')"
+																		style="font-weight: 600;margin-top: 14px;font-size: 10px;">
+																		TAKING GUARD BEAR
+																	</a>
+																</li>
+																<li class="nav-item m-tabs__item">
+																	<a title="Price Gainer/Looser" class="nav-link m-tabs__link"
+																		data-toggle="tab" href="#priceGainerLooser"
+																		target="_self" role="tab" aria-selected="false"
+																		ng-click="updateTabdata('priceGainerLooser')"
+																		style="font-weight: 600;margin-top: 14px; font-size: 10px;">
+																		Price Gainer/Looser
+																	</a>
+																</li>
+															</ul>
+														</div>
+
+														
+
+														  
+														<div class="d-flex ml-3" style="flex-wrap: wrap;">
+															<!-- Bullish Filter -->
+															<!-- <div class="d-flex align-items-center position-relative" ng-show="activeTab === 'trendedBullish'">
+
+																<button type="button"
+																		class="btn"
+																		ng-click="showCustomFilterModal = !showCustomFilterModal"
+																		>
+																		<i class="fas fa-filter"></i>
+																</button>
+															
+																<div class="custom-modal border rounded bg-white p-3 shadow-sm"
+																	 ng-show="showCustomFilterModal"
+																	 style="position: absolute; right: 110%; top: 0; z-index: 1050; width: 250px;">
+																	 <div style="display: flex; gap: 1rem;">
+																		<div style="border-right: 1px solid #ccc; padding-right: 1rem; margin-right: 1rem;">
+																			<label class="font-weight-bold mb-1">AGE Filter :</label>
+																			
+																			<div>
+																				<h6>From</h6>
+																				<select class="form-control form-control-sm mb-2"
+																						ng-model="selectedBullMin"
+																						ng-options="value disable when value >= selectedBullMax for value in scoreRange"
+																						ng-change="filterBullishData()"
+																						ng-disabled="!scoreRange || !scoreRange.length">
+																				</select>
+																			</div>
+																	
+																			<div>
+																				<h6>To</h6>
+																				<select class="form-control form-control-sm mb-2"
+																						ng-model="selectedBullMax"
+																						ng-options="value disable when value <= selectedBullMin for value in scoreRange"
+																						ng-change="filterBullishData()"
+																						ng-disabled="!scoreRange || !scoreRange.length">
+																				</select>
+																			</div>
+																		</div>
+																		 <div>
+																			 <label class="font-weight-bold mb-1">CHG% Filter :</label>
+																	 
+																			 <div>
+																				 <h6>From</h6>
+																				 <select class="form-control form-control-sm mb-2"
+																						ng-model="selectedPctChgMin"
+																						ng-options="value as value for value in pctChgRange"
+																						ng-change="filterBullishData()"
+																						ng-disabled="!pctChgRange || !pctChgRange.length">
+																				</select>
+
+																			 </div>
+																	 
+																			 <div>
+																				 <h6>To</h6>
+																				 <select class="form-control form-control-sm mb-2"
+																						ng-model="selectedPctChgMax"
+																						ng-options="value as value for value in pctChgRange"
+																						ng-change="filterBullishData()"
+																						ng-disabled="!pctChgRange || !pctChgRange.length">
+																				</select>
+
+																			 </div>
+																		 </div>
+																	 </div>
+																	 <hr class="my-2" />
+
+																	<label class="font-weight-bold mb-1">Sort By :</label>
+																	<select class="form-control form-control-sm mb-2"
+																			ng-model="selectedSortOption"
+																			ng-options="option.value as option.label for option in sortOptions"
+																			ng-change="onSortOptionChange()">
+																	</select>
+
+																	<hr class="my-2" />
+															
+																	<label class="font-weight-bold">TimeFrame :</label>
+																	<select class="form-control form-control-sm mb-2"
+																			ng-model="selectedTimeframeNew"
+																			ng-options="timeframe for timeframe in timeframes"
+																			ng-change="onTimeframeChange()">
+																	</select>
+
+																	<div class="d-flex justify-content-center mb-2">
+																		<button type="button" class="btn btn-info btn-sm"
+																				ng-click="resetFilters()">Reset</button>
+																	</div>
+																	  
+																</div>
+															</div> -->
+
+
+															<!-- ################################################################################################## -->
+
+															<!-- <div class="m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width" ng-show="activeTab === 'trendedBullish'"
+																m-dropdown-toggle="click">
+																<button type="button" href="#" class="btn m-nav__link m-dropdown__toggle" style="margin-top: 5px;">
+																		<i class="fas fa-filter"></i>
+																</button>
+															
+																<div class="m-dropdown__wrapper dropdown-position" style="margin-top: 5px; right: -47px; width: 270px;">
+																	<span class="m-dropdown__arrow m-dropdown__arrow--right" style="right: 50px;"></span>
+																	<div class="m-dropdown__inner" style="width: 240px;">
+																		<div class="m-dropdown__header m--align-center" ng-click="$event.stopPropagation()" style="height: 55px;">
+																			<span class="m-dropdown__header-title" style="font-size: 20px; font-weight: 600;">
+																				Filter Options
+																			</span>
+																		</div>
+																		<hr class="my-2" />
+																		<div class="m-dropdown__body" ng-click="$event.stopPropagation()" style="padding-top: 0px; padding-bottom: 0px; padding-left: 15px;">
+																			<div class="m-dropdown__content">
+																				<div class="tab-content">
+																					<div style="display: flex; align-items: center;">
+																					  
+																					  <div style="padding-right: 1rem; margin-right: 1rem; border-right: 1px solid #ccc; margin-top: 5px;">
+																						<label class="font-weight-bold mb-1" style="padding-left: 20px;">Sort By :</label>
+																						<select class="form-control form-control-sm mb-2"
+																								ng-model="selectedSortOption"
+																								ng-options="option.value as option.label for option in sortOptions"
+																								ng-change="onSortOptionChange()"
+																								ng-click="$event.stopPropagation()">
+																						</select>
+																					  </div>
+																				  
+																					  <div style="margin-top: 5px;">
+																						<label class="font-weight-bold">TimeFrame :</label>
+																						<select class="form-control form-control-sm mb-2"
+																								ng-model="selectedTimeframeNew"
+																								ng-options="timeframe for timeframe in timeframes"
+																								ng-change="onTimeframeChange()"
+																								ng-click="$event.stopPropagation()">
+																						</select>
+																					  </div>
+																					  
+																					</div>
+																				  </div>
+																				  
+																			</div>
+																		</div>
+																		<hr class="my-2" />
+
+																		<div class="d-flex justify-content-center mb-2" style="padding-bottom: 5px;">
+																			<button type="button" class="btn btn-info btn-sm"
+																					ng-click="resetFilters()">Reset</button>
+																		</div>
+																	</div>
+																</div>
+															</div>	 -->
+
+															<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBullish'">
+																<div class="px-2 align-self-center">
+																	<h6>Sort By :</h6>
+																	<!-- <i class="fas fa-clock" style="font-size: 20px;"></i> -->
+																	<!-- <i class="fas fa-sort" style="font-size: 20px;"></i> -->
+																	<!-- <img src="https://cdn-icons-png.flaticon.com/512/2838/2838794.png" alt="Clock Icon"> -->
+																</div>
+																<div class="" style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																		ng-model="selectedSortOption" 
+																		ng-options="option.value as option.label for option in sortOptions" 
+																		ng-change="onSortOptionChange()"
+																		style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>
+
+																<div class="px-2 align-self-center">
+																	<h6>TimeFrame :</h6>
+																	<!-- <i class="fas fa-clock" style="font-size: 20px;"></i> -->
+																</div>
+																<div class="" style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched"
+																			ng-model="selectedTimeframeNew"
+																			ng-options="timeframe as timeframe disable when isDisabled(timeframe) for timeframe in timeframes"
+																			ng-change="onTimeframeChange()"
+																			ng-disabled="IsAstrikeForTrendedBull && activeTab === 'trendedBullish'"
+																			style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																	</select>
+																</div>	
+															</div>
+
+
+															<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBearish'">
+																<div class="px-2 align-self-center">
+																	<h6>Sort By :</h6>
+																</div>
+																<div class="" style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																		  ng-model="selectedSortOption"
+																		  ng-options="option.value as option.label for option in sortOptions"
+																		  ng-change="onSortOptionChange()"
+																		  style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																  	</select>
+																</div>
+
+																<div class="px-2 align-self-center">
+																	<h6>TimeFrame :</h6>
+																</div>
+																<div class="" style="padding-top: 2px;">
+																	<select class="custom-select ng-pristine ng-valid ng-not-empty ng-touched" 
+																		  ng-model="selectedTimeframeNew"
+																		  ng-options="timeframe as timeframe disable when isDisabled(timeframe) for timeframe in timeframes"
+																		  ng-change="onTimeframeChange()"
+																		  ng-disabled="IsAstrikeForTrendedBear && activeTab === 'trendedBearish'"
+																		  style="height: 28px; font-size: 12px; padding-top: 7px; line-height: 1.2;">
+																  	</select>
+																</div>	
+															</div>
+
+															<!-- ############################################################################################## -->
+															
+												
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBullish'">
+															<div class="px-2 align-self-center"><h6>Age Movement</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="changeNowTrendedBullish"
+																				ng-change="filterBullishData();">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBullish'">
+															<div class="px-2 align-self-center"><h6>Curated</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon" 
+																		 ng-style="(selectedTimeframeNew === 'WEEK' || selectedTimeframeNew === 'MONTH') ? {'opacity': '0.5', 'cursor': 'not-allowed'} 
+																		: {}">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="IsAstrikeForTrendedBull" ng-change="changeCurated('trendedBullish')" 
+																			ng-disabled="selectedTimeframeNew === 'WEEK' || selectedTimeframeNew === 'MONTH'">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBearish'">
+															<div class="px-2 align-self-center"><h6>Age Movement</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="changeNowTrendedBearish"
+																				ng-change="filterBearishData();">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'trendedBearish'">
+															<div class="px-2 align-self-center"><h6>Curated</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon"
+																	     ng-style="(selectedTimeframeNew === 'WEEK' || selectedTimeframeNew === 'MONTH') ? {'opacity': '0.5', 'cursor': 'not-allowed'} 
+																		: {}">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="IsAstrikeForTrendedBear" 
+																			       ng-change="changeCurated('trendedBearish')" 
+																				   ng-disabled="selectedTimeframeNew === 'WEEK' || selectedTimeframeNew === 'MONTH'">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'reversalBullish'">
+															<div class="px-2 align-self-center"><h6>Age Movement</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="changeNowReversalBullish"
+																				ng-change="filterReversalChangeNow('bullish')">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'reversalBullish'">
+															<div class="px-2 align-self-center"><h6>Curated</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="IsAstrikeForReversalBull" ng-change="changeCurated('reversalBullish')" >
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'reversalBearish'">
+															<div class="px-2 align-self-center"><h6>Age Movement</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="changeNowReversalBearish"
+																				ng-change="filterReversalChangeNow('bearish')">
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+
+														<div class="d-flex flex-row " style="margin-top:5px" ng-show="activeTab === 'reversalBearish'">
+															<div class="px-2 align-self-center"><h6>Curated</h6></div>
+																<div class="">
+																	<div class="m-switch m-switch--icon">
+																		<label class="m-0 p-0">
+																			<input type="checkbox" ng-model="IsAstrikeForReversalBear" ng-change="changeCurated('reversalBearish')" >
+																			<span></span>
+																		</label>
+																	</div>
+																</div>
+														</div>
+														</div>
+														</div>
+													
+													<div class="m-portlet__body border-bottom" style="overflow-y: scroll; overflow-x:hidden; padding: 10px; padding-left: 30px; height: 230px;">
+														<div class="tab-content">  
+															
+															<div class="tab-pane active show" id="trendedBullish">
+																<h3 ng-show="trended_bullish_data.length === 0" class="text-center h5 pt-5 mt-5" >
+																	No stocks qualify today
+																</h3>
+																<div class="d-flex flex-column" ng-if="trended_bullish_data.length > 0">
+																	<div class="row flex-grow-1">
+																		<div style="margin: 0px; margin-right: 1px; margin-bottom: 1px;"
+																			ng-repeat="item in trended_bullish_data | orderBy:'CHANGE_COLOUR'">
+																			<div class="card text-center text-black"
+																				style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																				  ng-style="{ 'background-color': item.BULL_BEAR == 1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : item.TRENDED_FLIP == 0 ?  '#cccccc': '#00cc99'}">
+																				<div class="dropdown">
+																					<a href="#"
+																						class="font-weight-bold d-block dropdown-toggle"
+																						data-toggle="dropdown"
+																						style="font-size: 12px; color: black; text-decoration: none;"
+																						data-toggle="tooltip"
+																						data-placement="top"
+																									>
+																						{{ item.SYMBOL }}
+
+																						<!-- ng-attr-title="{{ 
+																										( item.ASTRIKE_COUNT == 3
+																										   && item.TRENDED_FLIP != 0  
+																										   && (item.bull_t1 == 0 || item.bull_t2 == 0)
+																										) 
+																										? ('StopLoss: ' + item.bull_sl) 
+																										: (
+																											item.TRENDED_FLIP != 0 
+																											? ('Target-1: ' + item.bull_t1 +
+																											'  //  Target-2: ' + item.bull_t2 +
+																											'  //  StopLoss: ' + item.bull_sl)
+																											: ''
+																										)
+																									}}" -->
+																						<span>
+																							{{ item.SCORE }} 
+																						</span>
+																						  
+																						<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item"
+																							href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																							target="_blank">Stock Analyser</a>
+																						<a class="dropdown-item" href="#"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																							to Watchlist
+																						</a>
+																					</div>
+																				</div>
+																				<div ng-show="changeNowTrendedBullish" class="font-weight-bold">
+																					<span ng-if="item.SCORE_OLD < 1 " title="TAKING GUARD BULL">TG-Bull</span>
+																					<span ng-if="item.SCORE_OLD >= 1">{{ item.SCORE_OLD }}</span>
+																					<i class="fas fa-arrow-right"></i> {{ item.SCORE }}
+																				</div>
+																				<dhan-trading-view-charts
+																					symbol-name="item.SYMBOL" 
+																					asset-class="eq"
+																					class-value=""
+																					source="heatmap">
+																				</dhan-trading-view-charts>
+																				<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																					{{ item.PCT_CHG }}%
+																				</span>
+																				<span ng-show="item.TIMEFRAME != 'WEEK' && item.TIMEFRAME != 'MONTH'" style="position:relative; top:-6px; margin-bottom: -6px;font-size:20px;" >
+																					<span ng-if="item.BULL_BEAR == 1"
+																						ng-attr-title="{{ (item.BULL_BEAR == 1 && item.ASTRIKE_COUNT == 3) 
+																										? (item.TRADE_RANGE_TS | date:'yyyy-MM-dd HH:mm:ss') 
+																										: '' }}"
+																						ng-repeat="count in getNumber(item.ASTRIKE_COUNT) track by $index"
+																						ng-style="{'opacity': item.TRENDED_FLIP == 0 ? 0 : 1, 'font-size': '15px'}">
+																						&#9733;
+																					</span>
+																					<span ng-if="item.ASTRIKE_COUNT == 0 || item.BULL_BEAR != 1 || item.TIMEFRAME == 'WEEK' || item.TIMEFRAME == 'MONTH'" 
+																					style="visibility: hidden;"> &#9733;
+																					</span>
+																				</span>
+																				
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="tab-pane" id="trendedBearish">
+																<h3 ng-show="trended_bearish_data.length === 0"
+																	class="text-center h5 pt-5 mt-5">No stocks qualify today</h3>
+																<div class="d-flex flex-column"
+																	ng-if="trended_bearish_data.length > 0">
+																	<div class="row flex-grow-1">
+																		<div style="margin: 0px; margin-right: 3px; margin-bottom: 3px;"
+																			ng-repeat="item in trended_bearish_data | orderBy:'CHANGE_COLOUR'">
+																			<div class="card text-center text-black"
+																				style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																				ng-style="{ 'background-color':  item.BULL_BEAR == -1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : item.TRENDED_FLIP == 0 ? '#cccccc' : '#f4516c'}">
+																				<div class="dropdown">
+																					<a href="#"
+																						class="font-weight-bold d-block dropdown-toggle"
+																						data-toggle="dropdown"
+																						style="font-size: 12px; color: black; text-decoration: none;"
+																						data-toggle="tooltip"
+																						data-placement="top"
+																									>
+																						{{ item.SYMBOL }}
+
+																						<!-- ng-attr-title="{{ 
+																										( item.ASTRIKE_COUNT == 3 
+																											&& item.TRENDED_FLIP != 0 
+																											&& (item.bear_t1 == 0 || item.bear_t2 == 0)
+																										)
+																										? ('StopLoss: ' + item.bear_sl)
+																										: (
+																											item.TRENDED_FLIP != 0
+																											? ('Target-1 : ' + item.bear_t1 +
+																											'  //  Target-2: ' + item.bear_t2 +
+																											'  //  StopLoss: ' + item.bear_sl)
+																											: ''
+																										)
+																									}}" -->
+																						<span>
+																							{{ item.SCORE }}
+																						</span>																						  
+																						<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item"
+																							href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																							target="_blank">Stock Analyser</a>
+																						<a class="dropdown-item" href="#"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																							to Watchlist
+																						</a>
+																					</div>
+																				</div>
+																				<div ng-show="changeNowTrendedBearish" class="font-weight-bold">
+																					<span ng-if="item.SCORE_OLD > -1 " title="TAKING GUARD BEAR">TG-Bear</span>
+																					<span ng-if="item.SCORE_OLD <= -1">{{ item.SCORE_OLD }}</span>
+																					<i class="fas fa-arrow-right"></i> {{ item.SCORE }}
+																				</div>
+																				<dhan-trading-view-charts
+																					symbol-name="item.SYMBOL" asset-class="eq"
+																					class-value=""
+																					source="heatmap">
+																				</dhan-trading-view-charts>
+																				<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																					{{ item.PCT_CHG }}%
+																				</span>
+																				<span ng-show="item.TIMEFRAME != 'WEEK' && item.TIMEFRAME != 'MONTH'" style="position:relative; top:-6px; margin-bottom: -6px;font-size:20px;" >
+																					<span ng-if="item.BULL_BEAR == -1" 
+																						  ng-attr-title="{{ (item.BULL_BEAR == -1 && item.ASTRIKE_COUNT == 3) 
+																											? (item.TRADE_RANGE_TS | date:'yyyy-MM-dd HH:mm:ss') 
+																											: '' }}"
+																						  ng-repeat="count in getNumber(item.ASTRIKE_COUNT) track by $index"  
+																					      ng-style="{'opacity': item.TRENDED_FLIP == 0 ? 0 : 1, 'font-size': '15px'}"> &#9733; </span>
+																					<span ng-if="item.ASTRIKE_COUNT == 0 || item.BULL_BEAR != -1 || item.TIMEFRAME == 'WEEK' || item.TIMEFRAME == 'MONTH'" 
+																						style="visibility: hidden;"> &#9733;
+																					</span>
+																				</span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="tab-pane" id="reversalBullish">
+																<h3 ng-if="reversal_bullish_filter_data.length === 0" class="text-center h5 pt-5 mt-5">
+																	No stocks qualify today
+																</h3>
+																	<div class="row " ng-if="reversal_bullish_filter_data.length > 0">
+																		<div  style="margin: 0px; margin-right: 3px; margin-bottom: 3px;" 
+																		      ng-repeat="item in reversal_bullish_filter_data | orderBy:'CHANGE_COLOUR'">
+																			<div class="card text-center text-black"
+																				style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																				ng-style="{ 'background-color':  item.BULL_BEAR == 1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : item.REVERSAL_FLIP == 0 ?  '#cccccc': '#00cc99'}">
+																				<div class="dropdown">
+																					<a href="#"
+																						class="font-weight-bold d-block dropdown-toggle"
+																						data-toggle="dropdown"
+																						style="font-size: 12px; color: black; text-decoration: none;"
+																						data-toggle="tooltip"
+																						data-placement="top"
+																									>
+																						{{ item.SYMBOL }}
+
+																						<!-- ng-attr-title="{{ 
+																										( item.ASTRIKE_COUNT == 3 
+																											&& item.REVERSAL_FLIP != 0 
+																											&& (item.bull_t1 == 0 || item.bull_t2 == 0)
+																										)
+																										? ('StopLoss: ' + item.bull_sl)
+																										: (
+																											item.REVERSAL_FLIP != 0
+																											? ('Target-1 : ' + item.bull_t1 +
+																											'  //  Target-2: ' + item.bull_t2 +
+																											'  //  StopLoss: ' + item.bull_sl)
+																											: ''
+																										)
+																									}}" -->
+																						<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item"
+																							href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																							target="_blank">Stock Analyser</a>
+																						<a class="dropdown-item" href="#"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																							to Watchlist</a>
+																					</div>
+																				</div>
+
+																				<div ng-show="changeNowReversalBullish" class="font-weight-bold">
+																					<span ng-if="item.SCORE_OLD > -2 " title="TAKING GUARD BEAR">From TG-Bear</span>
+																					<span ng-if="item.SCORE_OLD <= -2 " title="WELL SET BEAR">From WS-Bear</span>
+																				</div>
+
+																				<dhan-trading-view-charts
+																					symbol-name="item.SYMBOL" asset-class="eq"
+																					class-value=""
+																					source="heatmap">
+																				</dhan-trading-view-charts>
+																				<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																					{{ item.PCT_CHG }}%
+																				</span>
+
+																				<span style="position:relative; top:-6px; margin-bottom: -6px;font-size:20px;" >
+																					<span ng-if="item.BULL_BEAR == 1" 
+																						ng-attr-title="{{ (item.BULL_BEAR == 1 && item.ASTRIKE_COUNT == 3) 
+																											? (item.TRADE_RANGE_TS | date:'yyyy-MM-dd HH:mm:ss') 
+																											: '' }}"
+																					      ng-repeat="count in getNumber(item.ASTRIKE_COUNT) track by $index" 
+																					      ng-style="{'opacity': item.REVERSAL_FLIP == 0 ? 0 : 1,'font-size': '15px'}">
+																						&#9733;
+																					</span>
+																					<span ng-if="(item.ASTRIKE_COUNT == 0) || (item.BULL_BEAR != 1)" style="visibility: hidden;">&#9733;</span>
+																				</span>
+																			</div>
+																		</div>
+																	</div>
+															</div>
+															<div class="tab-pane" id="reversalBearish">
+																<h3 ng-if="reversal_bearish_filter_data.length === 0"
+																	class="text-center h5 pt-5 mt-5">No stocks qualify today</h3>
+																<div class="d-flex flex-column"
+																	ng-if="reversal_bearish_filter_data.length > 0">
+																	<div class="row flex-grow-1">
+																		<div style="margin: 0px; margin-right: 3px; margin-bottom: 3px;"
+																			ng-repeat="item in reversal_bearish_filter_data | orderBy:'CHANGE_COLOUR'">
+																			<div class="card text-center text-black"
+																				style="border-radius: 0; width: 150px; color: black; padding-bottom: 2px;"
+																				ng-style="{ 'background-color':  item.BULL_BEAR == -1 && item.ASTRIKE_COUNT == 3 && item.CHANGE_COLOUR == 1 ? '#cccccc' : item.REVERSAL_FLIP == 0 ? '#cccccc' : '#f4516c'}">
+																				<div class="dropdown">
+																					<a href="#"
+																						class="font-weight-bold d-block dropdown-toggle"
+																						data-toggle="dropdown"
+																						style="font-size: 12px; color: black; text-decoration: none;"
+																						data-toggle="tooltip"
+																						data-placement="top"
+																									>
+																						{{ item.SYMBOL }}
+
+																						<!-- ng-attr-title="{{ 
+																										( item.ASTRIKE_COUNT == 3 
+																											&& item.REVERSAL_FLIP != 0 
+																											&& (item.bear_t1 == 0 || item.bear_t2 == 0)
+																										)
+																										? ('StopLoss: ' + item.bear_sl)
+																										: (
+																											item.REVERSAL_FLIP != 0
+																											? ('Target-1 : ' + item.bear_t1 +
+																											'  //  Target-2: ' + item.bear_t2 +
+																											'  //  StopLoss: ' + item.bear_sl)
+																											: ''
+																										)
+																									}}" -->
+																						<i class="fa fa-caret-down text-dark ml-2 fa-rotate-45" style="font-size:14px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item"
+																							href="/index/stock_analyser/{{item.SYMBOL}}/INTRADAY"
+																							target="_blank">Stock Analyser</a>
+																						<a class="dropdown-item" href="#"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([item], "heatmap")'>Add
+																							to Watchlist</a>
+																					</div>
+																				</div>
+
+																				<div ng-show="changeNowReversalBearish" class="font-weight-bold">
+																					<span ng-if="item.SCORE_OLD < 2 " title="TAKING GUARD BULL">From TG-Bull</span>
+																					<span ng-if="item.SCORE_OLD >= 2 " title="WELL SET BULL">From WS-Bull</span>
+																				</div>
+
+																				<dhan-trading-view-charts
+																					symbol-name="item.SYMBOL" asset-class="eq"
+																					class-value=""
+																					source="heatmap">
+																				</dhan-trading-view-charts>
+																				<span style="font-size: 12px; color: black; text-decoration: none; font-weight: 700;">
+																					{{ item.PCT_CHG }}%
+																				</span>
+
+																				<span style="position:relative; top:-6px; margin-bottom: -6px;font-size:20px;" >
+																					<span ng-if="item.BULL_BEAR == -1" 
+																						  ng-attr-title="{{ (item.BULL_BEAR == -1 && item.ASTRIKE_COUNT == 3) 
+																											? (item.TRADE_RANGE_TS | date:'yyyy-MM-dd HH:mm:ss') 
+																											: '' }}"
+																					      ng-repeat="count in getNumber(item.ASTRIKE_COUNT) track by $index" 
+																					      ng-style="{'opacity': item.REVERSAL_FLIP == 0 ? 0 : 1,'font-size': '15px'}">
+																						&#9733;
+																					</span>
+																					<span ng-if="(item.ASTRIKE_COUNT == 0) || (item.BULL_BEAR != -1)" style="visibility: hidden;">&#9733;</span>
+																				</span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="tab-pane" id="priceGainerLooser">
+																<div class="row allunset">
+																	<div class="col-6 allunset">
+																		<h4>Price gainer</h4>
+																		<div id="m_chart_price_gainers"
+																			style="width: auto;height:190px;"></div>
+																	</div>
+																	<div class="col-6 allunset">
+																		<h4>Price losser</h4>
+																		<div id="m_chart_price_losers"
+																			style="width: auto;height:190px;"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="m-portlet__foot" ng-show="isVisible" style="font-weight: 600;">
+												Note :-  Last Refresh Date Time: <span ng-bind="lastRefresh"> </span>
+											</div>											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div ng-show="unblock_dashboard" class="row"> -->
+						<div class="col-xl-12">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12">
+									<div class="m-portlet m-portlet--full-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+										style="min-height: 350px">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Heatmap
+													</h3>
+												</div>
+											</div>
+											<div class=" m-portlet__head-tools">
+												<i class="fas fa-info-circle mr-2 "> </i>
+												<img class="mr-2" src="/static/apptrade-canvas/img/tv-charts-icon.png">
+												<em> ** click this icon to view charts ! </em>
+											</div>
+										</div>
+										<div class="m-portlet__body">
+											<div class="m-widget26__chart">
+												<div id="m_chart_heatmap">
+													<div class="row m-row--full-height">
+														<div class="align-self-center"
+															ng-repeat="script in heatmap_data"
+															style="border-radius:5px;width:150px;margin-top: 1px;margin-right: 1px;">
+
+															<div class="col-lg" ng-if="script.DAY_CLOSE_CHG_P"
+																ng-style="{'text-align':'center', 'background-color': getBackgroundColor(script.DAY_CLOSE_CHG_P )}">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none;">
+																		<em
+																			style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																			to Watchlist</a>
+																	</div>
+																</div><br>
+																<dhan-trading-view-charts symbol-name="script.SYMBOL"
+																	asset-class="eq" class-value=""
+																	source="heatmap"></dhan-trading-view-charts>
+																<p
+																	style="margin-bottom: 0px;color: black;font-size: 10;font-weight: bold;">
+																	<strong>{{script.DAY_CLOSE_CHG_P}} %</strong>
+																</p>
+															</div>
+
+															<div class="col-lg" ng-if="script.DAY_OPEN_CHG_P"
+																ng-style="{'text-align':'center', 'background-color': getBackgroundColor(script.DAY_OPEN_CHG_P )}">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none;">
+																		<em
+																			style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																			to Watchlist</a>
+																	</div>
+																</div></br>
+																<dhan-trading-view-charts symbol-name="script.SYMBOL"
+																	asset-class="eq" class-value=""
+																	source="heatmap"></dhan-trading-view-charts>
+																<p
+																	style="margin-bottom: 0px;color: black;font-size: 10;font-weight: bold;">
+																	<strong>{{script.DAY_OPEN_CHG_P}} %</strong>
+																</p>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- </div> -->
+						<div ng-show="!unblock_dashboard">
+							<div class="m-portlet m-portlet--head-sm" m-portlet="true">
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+	
+											</h3>
+										</div>
+									</div>
+									<div class="m-portlet__head-tools">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-show="!$root.user_permission['DASHBOARD']">
+	<div class="m-portlet" m-portlet="true">
+		<div class="m-portlet__body">
+			<center>
+				<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg" alt="permissionlock">This
+					section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a>
+				</h5>
+			</center>
+			<center><em>-- Sample image to illustrate the module --</em></center>
+			<div class="row">
+				<img width="100%" src="{{$root.APP_URL+'/static/SS/Dashboard_SS.jpeg'}}" alt="Dashboard">
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div align="center" style="margin-top: 10%;" ng-show="loading && $root.user_permission['DASHBOARD']">
+	<img style="margin-bottom: -100px;" src="/static/apptrade-canvas/img/NeoTrader_Logo_200x200.png" alt=""><br>
+	<img height="15%" width="15%" src="https://neotrader.in/static/SVG/loading_chart.svg" alt="Loading....">
+</div>

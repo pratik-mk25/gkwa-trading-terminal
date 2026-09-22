@@ -1,0 +1,356 @@
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Option Trades
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Option Trades
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New trades generated every 30minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height ">
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget2_tab1_content">
+						<div class="m-portlet  m-portlet--unair">
+							<div class="m-portlet__body  m-portlet__body--no-padding">
+								<div class="row m-row--no-padding">
+									<div class="col-md-12 col-lg-6 col-xl-2">
+										<div class="m-widget12">
+											<div class="m-widget12__item">
+												<span
+													class="m-widget12__text1">Type<br><span>Intraday/Overnight</span></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 col-lg-6 col-xl-2">
+										<div class="m-widget12">
+											<div class="m-widget12__item">
+												<span class="m-widget12__text2">Max Trade
+													Duration<br><span> 3 - 5
+														Days</span></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<p class="m-widget12__text2" style="font-size: initial;">
+						** Note All option trades are valid for 3 - 5 days from date of generation to final targets (T3
+						MET/SL MET). It can be exited intraday if targets or stop loss levels are hit on the
+						same day itself.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+		<div class="m-portlet__head">
+			<div class="m-portlet__head-caption">
+				<div class="m-portlet__head-title">
+					<h3 class="m-portlet__head-text">
+						How To Use
+					</h3>
+				</div>
+			</div>
+			<div class="m-portlet__head-tools">
+				<ul class="m-portlet__nav">
+
+				</ul>
+				<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+					data-target="#howtotoggle" type="button">
+					+
+				</button>
+			</div>
+		</div>
+		<div class="collapse" id="howtotoggle">
+			<div class="m-portlet__body">
+				<div class="row">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/b4C8eg496E4?si=F0sOTxVD2VgxdDh7"
+							title="YouTube video player" frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="m-portlet__body">
+		<div class="tab-content" ng-if="$root.user_permission['INTRADAY_TRADE']">
+			<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height">
+				<div class="m-portlet__body">
+					<div class="m-portlet m-portlet--collapsed m-portlet--head-md" m-portlet="true">
+						<div class="m-portlet__head mt-5">
+							<div class="m-portlet__head-wrapper">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<h3 class="m-portlet__head-text">
+											Options Trades Filters
+										</h3>
+									</div>
+								</div>
+								<div class="m-portlet__head-tools">
+									<div class="d-flex flex-row justify-content-end">
+										<div class="align-self-center p-2">
+											<select 
+												class="custom-select m--margin-right-15" 
+												ng-model="$parent.select_universe_index" ng-options="value.Name for value in universe_index" ng-change="scanner_refresh_data_2();">
+											</select>
+										</div>
+										<div class="align-self-center p-2">
+											<h6>Open Trades</h6>
+										</div>
+										<div class="m-switch m-switch--icon mt-2 p-2">
+											<label>
+												<input id="trade_now" type="checkbox"
+													ng-model="$parent.SelectTradeNowValue"
+													ng-change="$parent.scanner_refresh_data();">
+												<span></span>
+											</label>
+										</div>
+										<div class="p-2 align-self-center">
+											<h6>Curated</h6>
+										</div>
+										<div class="m-switch m-switch--icon mt-2 p-2">
+											<label>
+												<input id="curated_signal" type="checkbox"
+													ng-model="$parent.SelectCuratedValue"
+													ng-change="$parent.scanner_refresh_data();">
+												<span></span>
+											</label>
+										</div>
+										<div class="p-2">
+											<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info"
+												data-toggle="collapse" data-target="#scannerstoggle_intraday"
+												type="button">+
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="collapse" id="scannerstoggle_intraday">
+							<div class="m-portlet__body">
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Status Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2"
+												id="m_select2_3_status_intraday_optional" name="param"
+												multiple="multiple">
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Long/Short Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2"
+												id="m_select2_3_alert_intraday_optional" name="param"
+												multiple="multiple">
+											</select>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="m-portlet" id="m_blockui_intraday_trades" m-portlet="true">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 class="m-portlet__head-text">
+										Options Trades Results
+									</h3>
+								</div>
+							</div>
+							<div class="m-portlet__head-tools">
+								<div class="row">
+									<zerodha-place-order-btn 
+									ng-show="$root.isBrokerButton['ZERODHA']" 
+									trade-details="datatable" 
+									instrument-type-object="{'FNO':'OPT'}"
+									source-type="table"
+									api-key="'ilp43avf5bra0ckr'"
+
+									></zerodha-place-order-btn>
+
+									<button target="_self" ng-if="$root.isBrokerButton['ALICE BLUE']"
+										ng-click="trade_data_onclick3()" class="btn btn-secondary mr-2"
+										style="font-size:50 " type="button" id="aliceBlueFnoBtn"
+										data-appcode="HN0nEVr5RTujgvU"
+										data-basket='{{aliceBlueBasketIntradayFuture}}'><img height="19" class="mr-2"
+											src="https://neotrader.in/static/SS/aliceblue.png" />
+										FNO
+									</button>
+
+									<button target="_self" ng-show="$root.isBrokerButton['NUVAMA']"
+										ng-click="trade_data_onclick4()" class="btn btn-secondary mr-2" type="button"
+										id='test4'><img src="https://neotrader.in/static/SS/nuvama.png" width="25"
+											height="20">
+										FNO
+									</button>
+
+									<!-- <button class="mr-1 btn btn-secondary" ng-click="trade_data_onclick_symphony_fno()" ng-show="$root.user_permission['SYMPHONY']">
+									<img style="width: 25px;" src="{{$root.APP_URL+'/static/SS/symphony.png'}}"  alt="symphony" />
+									FNO</button>
+									<button class="w-0 h-0" id="custom_xts_button_option" style="visibility: hidden;"></button> -->
+
+									
+									<fyers-place-order-btn ng-show="$root.isBrokerButton['FYERS']"
+									trade-details="datatable" 
+									instrument-type-object="{'FNO':'OPT'}"
+									source-type="table"
+									></fyers-place-order-btn>
+
+									<five-paisa-place-order-btn ng-show="$root.isBrokerButton['FIVE PAISA']"
+									trade-details="datatable" 
+									instrument-type-object="{'FNO':'OPT'}"
+									source-type="table"
+									></five-paisa-place-order-btn>
+
+								</div>
+							</div>
+						</div>
+						<div class="m-portlet__body">
+							<div class="card-head">
+								<div class="row">
+									<div class="col-6">
+										<div class="d-flex flex-row justify-content-start ">
+											<div class="p-2">
+												<input type="text" class="form-control m-input" placeholder="Search..."
+													id="generalSearchScanners_intraday"></input>
+											</div>
+										</div>
+									</div>
+									<div class="col-6 ">
+										<div class="d-flex dlex-row justify-content-end">
+											<div class="p-2 align-self-center">
+												<h6>Auto Refresh</h6>
+											</div>
+											<div class="p-2">
+												<div class="m-switch m-switch--icon">
+													<label>
+														<input id="auto_refresh" type="checkbox"
+															ng-model="SelectRefreshValue"
+															ng-disabled="!autoRefreshButtonDisabledValues"
+															ng-change="selectRefreshValue(SelectRefreshValue)" />
+														<span></span>
+													</label>
+												</div>
+											</div>
+											<div class="p-2 ">
+												<dhan-trading-view-charts symbol-name="datatable" asset-class="opt"
+													class-value="btn btn-outline-info ml-2"
+													source="table"></dhan-trading-view-charts>
+
+												<button type="button" class="btn btn-outline-info ml-2"
+													data-toggle="modal" style="font-weight: 500;"
+													data-target="#add_to_watch_list"
+													ng-click="$root.watchlistModal(datatable,'table')">
+													Watchlist
+												</button>
+											</div>
+											<div class="p-2">
+												<button ng-click="mytrades_post_data_onclick()"
+													class="btn btn-outline-info ml-2" type="button" id="showtoast">
+													Add to My Trades
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="m_datatable_intraday_option"></div>
+						</div>
+					</div>
+					<div class="m-portlet__body">
+						<div ng-show="$root.user_permission_intraday == false">
+							<div class="m-portlet m-portlet--head-sm" m-portlet="true">
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+
+											</h3>
+										</div>
+									</div>
+									<div class="m-portlet__head-tools">
+									</div>
+								</div>
+								<div class="m-portlet__body">
+									<div class="row">
+
+										<img src="https://trade.chartadvise.com/static/lock.svg" alt="permissionlock">
+
+										<h1>Please Subscribe for this Scanner </h1>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-show="!$root.user_permission['INTRADAY_TRADE']">
+			<div class="m-portlet" m-portlet="true">
+				<div class="m-portlet__body">
+					<center>
+						<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+								alt="permissionlock">This
+							section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe
+								Now</a>
+						</h5>
+					</center>
+					<center><em>-- Sample image to illustrate the module --</em></center>
+					<div class="row">
+						<img width="100%" src="{{$root.APP_URL+'/static/SS/Option_trade_SS.png'}}"
+							alt="ss_expert_alerts">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

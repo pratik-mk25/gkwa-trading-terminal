@@ -1,0 +1,392 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+</style>
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+
+<!-- BEGIN: Subheader -->
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Investments
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="https://neotrader.in/index/dashboard/"
+						ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Investments
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New trades generate every friday between 3-3:30pm.
+					<br>
+					<br>
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<div class="m-portlet ">
+		<div class="m-portlet__body">
+			<div class="row ">
+				<div class="col-md-12 col-lg-6 col-xl-2">
+					<div class="m-widget12">
+						<div class="m-widget12__item">
+							<span class="m-widget12__text1">Type<br><span>Investment</span></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-lg-6 col-xl-2">
+					<div class="m-widget12">
+						<div class="m-widget12__item">
+							<span class="m-widget12__text2">Max Trade Duration<br><span>12
+									Weeks</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+		<div class="m-portlet__head">
+			<div class="m-portlet__head-caption">
+				<div class="m-portlet__head-title">
+					<h3 class="m-portlet__head-text">
+						How To Use
+					</h3>
+				</div>
+			</div>
+			<div class="m-portlet__head-tools">
+				<a style="margin-left: 5px;" href="/static/pdf2/Investment_Ideas_1.pdf" target="_blank"
+					title="Investment pdf">
+					<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+				</a>
+			</div>
+		</div>
+		<div class="collapse" id="howtotoggle_1">
+			<div class="m-portlet__body">
+				<h3>Coming Soon</h3>
+			</div>
+		</div>
+	</div>	
+	<div class="m-portlet__body">
+		<div class="tab-content" ng-show="$root.user_permission['INVESTMENTS']">
+			<div class="m-portlet m-portlet--bordered-semi m-portlet--full-height">
+				<div class="m-portlet__body ">
+					<div class="m-portlet m-portlet--collapsed m-portlet--head-md" m-portlet="true">
+						<div class="m-portlet__head mt-5">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 class="m-portlet__head-text">
+										Investment Trades Filters
+									</h3>
+									<br>
+								</div>
+							</div>
+							<div class="m-portlet__head-tools">
+								<div class="d-flex flex-row justify-content-end">
+									<div class="p-2">
+										<select class="custom-select m--margin-right-20" id="inputSymbolUniverse"
+											ng-model="select_universe_index"
+											ng-options="value.Name for value in universe_index"
+											ng-change="scanner_refresh_data_2();">
+										</select>
+									</div>
+									<div class="p-2 align-self-center"><h6>Open Trades</h6></div>
+									<div class="p-2">
+										<div class="m-switch m-switch--icon mt-2">
+											<label>
+												<input id="trade_now" type="checkbox" ng-model="SelectTradeNowValue"
+													ng-change="scanner_refresh_data_2();">
+												<span></span>
+											</label>
+										</div>
+									</div>
+									<div class="p-2 align-self-center" ng-show="!$root.user_permission['CORPORATELITE']"><h6>Non Curated</h6></div>
+									<div class="p-2">
+										<div ng-show="!$root.user_permission['CORPORATELITE']"
+											class="m-switch m-switch--icon mt-2">
+											<label>
+												<input id="curated_signal" type="checkbox"
+													ng-model="SelectNonCuratedValue"
+													ng-change="scanner_refresh_data_2()">
+												<span></span>
+											</label>
+										</div>
+									</div>
+									<div class="p-2 align-self-center"><h6>Curated </h6></div>
+									<div class="p-2">
+										<div class="m-switch m-switch--icon mt-2">
+											<label>
+												<input id="curated_signal" type="checkbox"
+													ng-model="SelectCuratedValue"
+													ng-change="scanner_refresh_data_2();">
+												<span></span>
+											</label>
+										</div>
+									</div>
+									<div class="p-2 align-self-center" ng-show="!$root.user_permission['CORPORATELITE']"><h6>Supercurated </h6></div>
+									<div class="p-2">
+										<div ng-show="!$root.user_permission['CORPORATELITE']"
+											class="m-switch m-switch--icon mt-2">
+											<label>
+												<input id="super_curated" type="checkbox"
+													ng-model="SelectSuperCuratedValue"
+													ng-change="scanner_refresh_data_2()">
+												<span></span>
+											</label>
+										</div>
+									</div>
+									<div class="p-2">
+										<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info"
+											data-toggle="collapse" data-target="#scannerstoggle_intraday"
+											type="button">
+											+
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="collapse" id="scannerstoggle_intraday">
+							<div class="m-portlet__body">
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Scanners Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2" id="m_select2_3_investment"
+												name="param" multiple="multiple"></select>
+										</div>
+									</div>
+								</div>
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Status Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2" id="m_select2_3_status_investment"
+												name="param" multiple="multiple">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Timeframe Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2" id="m_select2_3_timeframe_investment"
+												name="param" multiple="multiple">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+									<div class="row align-items-center">
+										<label class="col-form-label col-lg-2 col-md-2 col-sm-2">
+											Select Long/Short Multiple
+										</label>
+										<div class="col-lg-10 col-md-10 col-sm-10">
+
+											<select class="form-control m-select2" id="m_select2_3_alert_investment"
+												name="param" multiple="multiple">
+											</select>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="m-portlet">
+						<div class="m-portlet__head" id="m_blockui_investment_trades" m-portlet="true">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 class="m-portlet__head-text">
+										Investments Trades Results
+									</h3>
+								</div>
+							</div>
+							<div class="m-portlet__head-tools">
+								<div class="row">
+									<zerodha-place-order-btn 
+								ng-show="$root.isBrokerButton['ZERODHA']" 
+								trade-details="datatable" 
+								instrument-type-object="{'CASH':'EQ','FNO':'FUT_CRT_MONTH'}"
+								source-type="table"
+								api-key="'cnsigfmbatl7lo1h'"
+								></zerodha-place-order-btn>
+
+									<button target="_self" ng-if="$root.isBrokerButton['ALICE BLUE']"
+										ng-click="trade_data_onclick2()" class="btn btn-secondary mr-2"
+										style="font-size:50 " type="button"
+										id="aliceBlueEquityBtn" data-appcode="HN0nEVr5RTujgvU"
+										data-basket='{{aliceBlueBasketInvestmentEquity}}'><img height="19" class="mr-2" src="https://neotrader.in/static/SS/aliceblue.png" />
+											CASH
+									</button>
+
+									<button target="_self" ng-if="$root.isBrokerButton['ALICE BLUE']"
+										ng-click="trade_data_onclick3()" class="btn btn-secondary mr-2"
+										style="font-size:50 " type="button" id="aliceBlueFnoBtn"
+										data-appcode="HN0nEVr5RTujgvU" data-basket='{{aliceBlueBasketInvestmentFuture}}'>
+										<div class="d-flex">
+											<div><img class="mr-2" src="https://neotrader.in/static/SS/aliceblue.png" width="20" height="20"></div>
+											<div class="ml-1">FNO</div>
+											<div class="loader ml-3" ng-show="aliceblue_FNO_spinner_hide_and_show_button"></div>
+										</div>
+									</button>
+
+									<button target="_self" ng-show="$root.isBrokerButton['NUVAMA']"
+										ng-click="trade_data_onclick4()" class="btn btn-secondary mr-2"
+										type="button" id='test4'><img src="https://neotrader.in/static/SS/nuvama.png" width="25" height="20">
+										CASH
+									</button>
+
+									<button target="_self" ng-show="$root.isBrokerButton['NUVAMA']"
+										ng-click="trade_data_onclick5()" class="btn btn-secondary mr-2"
+										type="button" id='test5'><img src="https://neotrader.in/static/SS/nuvama.png" width="25" height="20">
+										FNO
+									</button>
+
+									<!-- <button class="btn btn-secondary" ng-click="trade_data_onclick_symphony_cash()" ng-show="$root.user_permission['SYMPHONY']">
+										<img style="width: 25px;" src="{{$root.APP_URL+'/static/SS/symphony.png'}}"  alt="symphony" />
+	
+											CASH</button>
+										<button class="mr-1 btn btn-secondary" ng-click="trade_data_onclick_symphony_fno()" ng-show="$root.user_permission['SYMPHONY']">
+										<img style="width: 25px;" src="{{$root.APP_URL+'/static/SS/symphony.png'}}"  alt="symphony" />
+	
+											FNO</button>
+										<button class="w-0 h-0" id="custom_xts_button_investment" style="visibility: hidden;"></button> -->
+
+
+										<!-- 5paisa  -->
+								<!-- <button class="mr-2 btn btn-secondary" ng-click="trade_data_onclick_5paisa_cash()" ng-show="$root.isBrokerButton['FIVE PAISA']">
+								<img style="width: 25px;" src="{{$root.APP_URL+'/static/SS/5paisa.png'}}"  alt="5paisa" />
+								CASH</button>
+								<button class="btn btn-secondary" ng-click="trade_data_onclick_5paisa_fno()" ng-show="$root.isBrokerButton['FIVE PAISA']">
+								<img style="width: 25px;" src="{{$root.APP_URL+'/static/SS/5paisa.png'}}"  alt="5paisa" />
+								FNO</button>
+								<button class="w-0 h-0" id="custom-btn-fivePaisa_invesment" style="visibility: hidden;"></button> -->
+								<!-- 5paisa  -->
+
+
+
+								<!-- <fyers-place-order-btn trade-details="datatable" trade-page="investment"></fyers-place-order-btn> -->
+
+								<fyers-place-order-btn ng-show="$root.isBrokerButton['FYERS']"
+								trade-details="datatable" 
+								instrument-type-object="{'CASH':'EQ','FNO':'FUT_CRT_MONTH'}"
+								source-type="table"
+								></fyers-place-order-btn>
+
+								<five-paisa-place-order-btn ng-show="$root.isBrokerButton['FIVE PAISA']"
+								trade-details="datatable" 
+								instrument-type-object="{'CASH':'EQ','FNO':'FUT_CRT_MONTH'}"
+								source-type="table"
+								></five-paisa-place-order-btn>
+								</div>
+								
+							</div>
+						</div>
+						<div class="m-portlet__body">
+							<div class="card-head">
+								<p><i>*** Symbols marked in blue
+									with 3 stars denote super curated trades which go through higher levels of
+									filtration.</i></p>
+							</div>
+							<div class="card-head">
+								<div class="row">
+									<div class="col-6">
+										<div class="d-flex flex-row justify-content-start ">
+											<div class="p-2">
+												<input type="text" class="form-control m-input" placeholder="Search..." id="generalSearchScanners_investment"></input>
+											</div>
+										</div>
+									</div>
+									<div class="col-6 ">
+										<div class="d-flex dlex-row justify-content-end">
+											<div class="p-2 align-self-center"><h6>Auto Refresh</h6></div>
+											<div class="p-2">
+												<div class="m-switch m-switch--icon">
+													<label>
+														<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+															ng-disabled="!autoRefreshButtonDisabledValues" />
+														<span></span>
+													</label>
+												</div>
+											</div>
+											<div class="p-2 ">
+												<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+												<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal" style="font-weight: 500;" data-target="#add_to_watch_list"ng-click="$root.watchlistModal(datatable,'table')">
+													Watchlist
+												</button>
+											</div>
+											<div class="p-2">
+												<button ng-click="mytrades_post_data_onclick()" class="btn btn-outline-info ml-2" type="button" id="showtoast"> 
+													Add to My Trades
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="m_datatable_investment"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-show="!$root.user_permission['INVESTMENTS']">
+			<div class="m-portlet" m-portlet="true">
+				<div class="m-portlet__body">
+					<center>
+						<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+								alt="permissionlock">This section is available only under NeoTrader Pro
+							Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5>
+					</center>
+					<center><em>-- Sample image to illustrate the module --</em></center>
+					<div class="row">
+						<img width="100%" src="{{$root.APP_URL+'/static/SS/Investments_SS.png'}}"
+							alt="ss_investment_trades">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

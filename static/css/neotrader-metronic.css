@@ -1,0 +1,727 @@
+
+/* NeoTrader Metronic 7 Theme Polish */
+body {
+    background-color: #f2f3f8 !important;
+    color: #575962;
+    font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header & Brand */
+.m-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #ebedf2;
+    box-shadow: 0 1px 15px 1px rgba(69, 65, 78, 0.08);
+}
+
+.m-brand {
+    background: #ffffff !important;
+    border-right: 1px solid #ebedf2;
+    padding: 0 20px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.m-brand__logo-wrapper img {
+    max-height: 48px;
+    width: auto;
+}
+
+/* Top Rolling Ticker */
+.metronic-ticker-bar {
+    background: #ffffff;
+    border-bottom: 1px solid #ebedf2;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.metronic-ticker-badge {
+    background: #5867dd;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.metronic-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.metronic-ticker-track::-webkit-scrollbar { display: none; }
+
+.metronic-ticker-item {
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metronic-ticker-item .sym { color: #3f4047; font-weight: 700; }
+.metronic-ticker-item .val-up { color: #34bfa3; }
+.metronic-ticker-item .val-down { color: #f4516c; }
+
+/* Subheader */
+.m-subheader {
+    padding: 25px 30px 10px 30px;
+    background: transparent;
+}
+
+.m-subheader__title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #3f4047;
+    margin: 0;
+    padding-right: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.m-subheader__title--separator {
+    border-right: 1px solid #ebedf2;
+    margin-right: 15px;
+}
+
+.m-subheader__breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.m-subheader__breadcrumbs li {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #898b9a;
+}
+
+.m-subheader__breadcrumbs li a {
+    color: #5867dd;
+    text-decoration: none;
+}
+
+/* Metronic Aside Left Sidebar */
+.m-aside-left {
+    background: #ffffff !important;
+    border-right: 1px solid #ebedf2;
+    box-shadow: 0 1px 15px 1px rgba(69, 65, 78, 0.05);
+    width: 255px;
+    min-height: calc(100vh - 70px);
+}
+
+.m-aside-menu {
+    padding: 15px 0;
+}
+
+.m-menu__section-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #9699a2;
+    padding: 12px 25px 6px 25px;
+    letter-spacing: 0.8px;
+}
+
+.m-menu__item a.m-menu__link {
+    display: flex;
+    align-items: center;
+    padding: 10px 25px;
+    color: #575962;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.m-menu__item a.m-menu__link:hover {
+    background: #f7f8fa;
+    color: #5867dd;
+}
+
+.m-menu__item.m-menu__item--active a.m-menu__link {
+    background: #f0f3ff;
+    color: #5867dd;
+    font-weight: 600;
+    border-left-color: #5867dd;
+}
+
+.m-menu__link-icon {
+    width: 24px;
+    font-size: 1.1rem;
+    color: #898b9a;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.m-menu__item.m-menu__item--active .m-menu__link-icon,
+.m-menu__item a.m-menu__link:hover .m-menu__link-icon {
+    color: #5867dd;
+}
+
+/* Metronic Portlet Cards */
+.m-portlet {
+    background: #ffffff;
+    border: 1px solid #ebedf2;
+    border-radius: 4px;
+    box-shadow: 0 1px 15px 1px rgba(69, 65, 78, 0.08);
+    margin-bottom: 25px;
+}
+
+.m-portlet__head {
+    padding: 16px 25px;
+    border-bottom: 1px solid #ebedf2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.m-portlet__head-title {
+    margin: 0;
+}
+
+.m-portlet__head-text {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #3f4047;
+    margin: 0;
+}
+
+.m-portlet__head-text small {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #898b9a;
+    margin-top: 2px;
+}
+
+.m-portlet__body {
+    padding: 20px 25px;
+}
+
+/* Metronic Tables */
+.m-table-metronic {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.m-table-metronic thead th {
+    background: #f4f5f8;
+    color: #575962;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 14px;
+    border-top: 1px solid #ebedf2;
+    border-bottom: 2px solid #ebedf2;
+    white-space: nowrap;
+}
+
+.m-table-metronic tbody td {
+    padding: 12px 14px;
+    border-top: 1px solid #ebedf2;
+    vertical-align: middle;
+    color: #3f4047;
+}
+
+.m-table-metronic tbody tr:nth-of-type(even) {
+    background-color: #fafbfc;
+}
+
+.m-table-metronic tbody tr:hover {
+    background-color: #f2f5ff;
+}
+
+/* Badges */
+.m-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.m-badge--success { background: #e8f8f5; color: #10b981; border: 1px solid #a7f3d0; }
+.m-badge--danger { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+.m-badge--info { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+.m-badge--warning { background: #fffbeb; color: #f59e0b; border: 1px solid #fde68a; }
+.m-badge--metal { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+
+/* Buttons */
+.m-btn--custom {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 3px;
+}
+
+.btn-primary-m {
+    background: #5867dd;
+    color: #fff;
+    border: 1px solid #5867dd;
+    cursor: pointer;
+}
+.btn-primary-m:hover {
+    background: #4655c7;
+}
+
+.btn-outline-m {
+    background: transparent;
+    color: #5867dd;
+    border: 1px solid #5867dd;
+    cursor: pointer;
+}
+.btn-outline-m:hover {
+    background: #5867dd;
+    color: #fff;
+}
+
+/* Search input */
+.m-search-input-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.m-search-input-wrap i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.m-search-input-wrap input {
+    padding: 6px 12px 6px 30px;
+    font-size: 0.85rem;
+    border: 1px solid #ebedf2;
+    border-radius: 3px;
+    outline: none;
+    color: #3f4047;
+    background: #ffffff;
+}
+
+.m-search-input-wrap input:focus {
+    border-color: #5867dd;
+}
+
+/* --- Metronic Demo 7 Slim Icon Rail --- */
+.m-aside-left--slim {
+    width: 68px !important;
+    min-width: 68px !important;
+    background: #ffffff !important;
+    border-right: 1px solid #ebedf2;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 101;
+}
+
+.m-aside-left--slim .m-menu__nav {
+    padding: 10px 0;
+    list-style: none;
+    margin: 0;
+}
+
+.m-aside-left--slim .m-menu__item {
+    position: relative;
+}
+
+.m-aside-left--slim .m-menu__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 54px;
+    width: 100%;
+    color: #718096;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.m-aside-left--slim .m-menu__link:hover,
+.m-aside-left--slim .m-menu__item.active .m-menu__link {
+    color: #00c5dc;
+    background: #f8fafc;
+    border-left-color: #00c5dc;
+}
+
+.m-aside-left--slim .m-menu__link i {
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+/* Aside Flyout Submenu on hover */
+.m-aside-left--slim .m-menu__item:hover .m-menu__submenu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.m-aside-left--slim .m-menu__submenu {
+    display: none;
+    position: absolute;
+    left: 68px;
+    top: 0;
+    width: 250px;
+    background: #ffffff;
+    border: 1px solid #ebedf2;
+    box-shadow: 0 10px 30px 0 rgba(82,63,105,0.15);
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+.m-aside-left--slim .m-menu__subnav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.m-aside-left--slim .m-menu__subnav .m-menu__subitem-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a0aec0;
+    padding: 8px 18px 4px 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.m-aside-left--slim .m-menu__subnav a {
+    display: flex;
+    align-items: center;
+    padding: 8px 18px;
+    color: #4a5568;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.m-aside-left--slim .m-menu__subnav a:hover,
+.m-aside-left--slim .m-menu__subnav a.active {
+    background: #f0fdf4;
+    color: #00c5dc;
+    padding-left: 22px;
+}
+
+.m-aside-left--slim .m-menu__subnav a i {
+    font-size: 0.75rem;
+    margin-right: 8px;
+    color: #cbd5e1;
+}
+
+.m-aside-left--slim .m-menu__subnav a:hover i {
+    color: #00c5dc;
+}
+
+/* --- Top Header Market Regime Badge --- */
+.market-trend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: #ffffff;
+    cursor: default;
+}
+.market-trend-pill.neutral { color: #64748b; border-color: #cbd5e1; }
+.market-trend-pill.bullish { color: #10b981; border-color: #a7f3d0; background: #ecfdf5; }
+.market-trend-pill.bearish { color: #ef4444; border-color: #fecaca; background: #fef2f2; }
+
+/* --- Chart Cards with Cyan Accent Border --- */
+.m-portlet--border-bottom-cyan {
+    border-bottom: 3px solid #00c5dc !important;
+}
+
+.chart-card-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-card-header h4 {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.chart-watermark {
+    font-size: 11px;
+    color: #94a3b8;
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* --- HeatMap Tiles Grid --- */
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+    gap: 6px;
+    padding: 12px 0;
+}
+
+.heatmap-tile {
+    border-radius: 4px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.heatmap-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.heatmap-tile .sym {
+    font-size: 0.76rem;
+    font-weight: 700;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.heatmap-tile .pct {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 2px;
+    display: block;
+}
+
+/* 4-Color Logic from Dashboard_1.pdf */
+.tile-dark-green { background-color: #00CC99; color: #ffffff; }
+.tile-light-green { background-color: #99FFCC; color: #064e3b; }
+.tile-light-red { background-color: #FF9999; color: #7f1d1d; }
+.tile-dark-red { background-color: #FF0033; color: #ffffff; }
+
+/* --- Floating WhatsApp Button --- */
+.floating-whatsapp-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 54px;
+    height: 54px;
+    background-color: #25d366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    z-index: 9999;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-whatsapp-btn:hover {
+    transform: scale(1.08);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+/* --- Market View Subtabs Pills --- */
+.mv-tab-pill {
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #4a5568;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mv-tab-pill.active {
+    background: #00c5dc;
+    color: #ffffff;
+}
+
+.mv-tab-pill:hover:not(.active) {
+    background: #e2e8f0;
+}
+
+/* === ENHANCED METRONIC 7 POLISH FROM 55 SCREENSHOTS === */
+
+/* Active Stock Cards & Aging Badges */
+.active-stocks-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px 0;
+}
+.active-stock-card {
+    width: 146px;
+    border-radius: 0px;
+    padding: 6px 4px;
+    text-align: center;
+    color: #000;
+    font-size: 11px;
+    position: relative;
+    user-select: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+.active-stock-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 5;
+}
+.active-stock-card.card-bull {
+    background-color: #00cc99;
+    color: #000;
+}
+.active-stock-card.card-bear {
+    background-color: #ff0033;
+    color: #fff;
+}
+.active-stock-card.card-stalled {
+    background-color: #cccccc;
+    color: #222;
+}
+.active-stock-card .stock-title {
+    font-weight: 700;
+    font-size: 12px;
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+.active-stock-card .aging-badge {
+    display: inline-block;
+    background: rgba(0,0,0,0.15);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.active-stock-card .tv-chart-icon {
+    height: 14px;
+    margin: 2px 0;
+    cursor: pointer;
+}
+.active-stock-card .chg-pct {
+    font-weight: 700;
+    font-size: 11px;
+    display: block;
+}
+.active-stock-card .aging-stars {
+    font-size: 13px;
+    color: #ffd700;
+    line-height: 1;
+    margin-top: -2px;
+}
+
+/* Multi-Timeframe Status Dots (SUMMARY 30M:1H:D:W) */
+.mtf-dot-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.mtf-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dot-bull-strong { background-color: #00cc99; }
+.dot-bull-mild { background-color: #99ffcc; }
+.dot-bear-mild { background-color: #ff9999; }
+.dot-bear-strong { background-color: #ff0033; }
+.dot-neutral { background-color: #cbd5e1; }
+
+/* 30-Minute Timeline Matrix Arrows */
+.matrix-cell-arrow {
+    font-size: 14px;
+    font-weight: 800;
+    display: inline-block;
+    text-align: center;
+    width: 22px;
+}
+.arrow-bull-strong { color: #00cc99; }
+.arrow-bull-mild { color: #34bfa3; }
+.arrow-bear-strong { color: #ff0033; }
+.arrow-bear-mild { color: #f4516c; }
+.arrow-neutral { color: #94a3b8; }
+
+/* Candlestick Definition & Header Boxes */
+.candlestick-def-box {
+    background-color: #f8fafc;
+    border-left: 4px solid #5867dd;
+    padding: 12px 18px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #2d3748;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Fibonacci & Pivots Bands */
+.pivot-band-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Metronic Nav Tabs Pills Modern */
+.nav-pills-metronic {
+    display: flex;
+    gap: 6px;
+    border-bottom: none;
+}
+.nav-pills-metronic .nav-link {
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #575962;
+    background: #f4f5f8;
+    border: 1px solid #ebedf2;
+    transition: all 0.2s;
+}
+.nav-pills-metronic .nav-link.active {
+    background: #5867dd;
+    color: #ffffff;
+    border-color: #5867dd;
+}

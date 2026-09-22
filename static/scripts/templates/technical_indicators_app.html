@@ -1,0 +1,333 @@
+<!-- BEGIN: Subheader -->
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()" ></watchlist-modal>
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Key Technical Indicators
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#"
+						ng-reflect-href="https://neotrader.in/index/dashboard/">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Key Technical Indicators
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Generate Reports
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear in every 30minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<!-- END: Subheader -->
+<div class="m-content">
+
+	<!--Begin::Section-->
+	<!--Begin::Portlet-->
+	<div ng-show="$root.user_permission['TECHNICAL_INDICATORS']">
+		<div class="row">
+			<div class="col-xl-12 m--align-right m--margin-bottom-5">
+				<em>*Cash Market Prices</em>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+					<div class="m-portlet__head-title">
+						<h3 class="m-portlet__head-text">
+							How To Use
+						</h3>
+					</div>
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="m-portlet__nav">
+
+					</ul>
+					<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+						data-target="#howtotoggle_1" type="button">
+						+
+					</button>
+					<a style="margin-left: 5px;" href="/static/pdf2/Key Technical Indicators.pdf" target="_blank"
+						title="Intraday pdf">
+						<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+					</a>
+				</div>
+			</div>
+
+			<div class="collapse" id="howtotoggle_1">
+				<div class="m-portlet__body">
+					<div class="row">
+						<iframe style="padding:15px;" width="560" height="315"
+							src="https://www.youtube.com/embed/G3P1cxrNoak" frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<!-- <iframe  style="padding:15px;" width="480" height="315" src="https://www.youtube.com/embed/oqKhqbrAhb4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__head">
+
+				<div class="m-portlet__head-tools">
+					<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+						role="tablist">
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link active show" data-toggle="tab"
+								href="#m_widget2_tab1_content" target="_self" role="tab" aria-selected="true">
+								Timeframe View
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link" data-toggle="tab" href="#m_widget2_tab2_content"
+								target="_self" role="tab" aria-selected="false">
+								Symbol View
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget2_tab1_content">
+						<div class="m-portlet__head-caption">
+							<div class="row">
+								<div class="col-md-2 col-sm-2">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue"
+										ng-change="scanner_ind_refresh_data()">
+									</select>
+								</div>
+								<div class="col-md-2 col-sm-2">
+									<select class="custom-select" id="inputTimeFrameValue"
+										ng-model="SelectTimeFrameValue" ng-options="value for value in TimeFrameValue"
+										ng-change=" scanner_ind_refresh_data()">
+									</select>
+								</div>
+
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> ADX </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="adx" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["ADX"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> ATR </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="adx" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["ATR"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> +/-DI </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="di" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["PDI","MDI"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> MACD </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="macd" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["MACD"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> BB </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="bb" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["BB_UP","BB_MID","BB_LOW"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> RSI </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="rsi" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["RSI"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6> STOCH </h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="stoch" type="checkbox" checked="checked" class="m-visibility"
+												data-column=["SLOWK","SLOWD"]>
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="col-md-1 col-sm-1 m--block-inline">
+									<h6>Auto Refresh</h6>
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+												ng-disabled="!autoRefreshButtonDisabledValues" />
+											<span></span>
+										</label>
+									</span>
+								</div>
+
+								<div class="col-md-4 col-sm-2 m--margin-bottom-30">
+									<div class="m-input-icon m-input-icon--left">
+										<input type="text" class="form-control m-input" placeholder="Search..."
+											id="generalSearch"></input>
+										<span class="m-input-icon__icon m-input-icon__icon--left">
+											<span>
+												<i class="la la-search"></i>
+											</span>
+										</span>
+									</div>
+								</div>
+
+								<div class="col-md-8 order-1 order-xl-4 m--align-right">
+									<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+									<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal"
+										style="font-weight: 500;" data-target="#add_to_watch_list"
+										ng-click="$root.watchlistModal(datatable,'table')">
+										Watchlist
+									</button>
+
+								</div>
+
+							</div>
+						</div>
+
+						<div class="m_datatable_technical_indicators" id="scrolling_both"></div>
+
+
+
+					</div>
+					<div class="tab-pane" id="m_widget2_tab2_content">
+						<div class="m-portlet m-portlet--mobile ">
+							<div class="m-portlet__head">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<h3 class="m-portlet__head-text">
+											Symbol View
+										</h3>
+									</div>
+								</div>
+							</div>
+
+							<div class="m-portlet m-portlet--mobile">
+								<div style="display: flex;">
+									<div style="padding-left: 32px; padding-top: 30px;">
+										<h4 class="m-portlet__head-text">
+											<strong>
+												{{ takesymbol }}
+											</strong>
+										</h4>
+									</div>
+									<div style="width: 100%; text-align: right; padding-top: 20px;">
+										<div class="input-group" style="display: inline-flex; width: 300px;">
+											<div class="m-typeahead">
+												<span class="twitter-typeahead"
+													style="position: relative; display: inline-block;">
+													<!-- <input
+														class="form-control m-input tt-hint" type="text" readonly=""
+														autocomplete="off" spellcheck="false" tabindex="-1" dir="ltr"
+														style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box padding-box rgb(255, 255, 255);"> -->
+													<input
+														class="form-control m-input tt-input" id="m_typeahead_5" type="text"
+														placeholder="Search Symbols" autocomplete="off" spellcheck="false"
+														dir="auto"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+													<pre aria-hidden="true"
+														style="position: absolute; visibility: hidden; white-space: pre; font-family: sans-serif, Arial; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+													<div class="tt-menu tt-empty"
+														style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;">
+														<div class="tt-dataset"></div>
+													</div>
+												</span>
+											</div>
+	
+											<div class="input-group-append">
+											<button class="btn" type="button" 
+												style="background-color: #22B9FF; color: white; border: none;"
+												ng-click="typeahead2()">Search</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet__body">
+									<div class="m_datatable_indicator_summary"></div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="!$root.user_permission['TECHNICAL_INDICATORS']">
+		<div class="m-portlet" m-portlet="true">
+
+			<div class="m-portlet__body">
+
+				<center>
+					<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg" alt="permissionlock">This
+						section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a>
+					</h5>
+				</center>
+
+				<center><em>-- Sample image to illustrate the module --</em></center>
+				<div class="row">
+					<img width="100%" src="{{$root.APP_URL+'/static/SS/Key_Technical_Indicators_SS.png'}}"
+						alt="Market View">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End::Portlet-->
+</div>

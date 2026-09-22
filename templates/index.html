@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GKWA | Stock Market Trading Software | AI Trading Terminal India</title>
+    <meta name="description" content="Discover GKWA, the premier algorithmic trading platform in India designed for beginners and pros. Simplify trading with advanced AI tools, Camarilla pivots, and real-time insights." />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neoDark: '#131623',
+                        neoCard: '#1a1e2e',
+                        neoBorder: '#2b3248',
+                        neoCyan: '#33D6AD',
+                        neoBlue: '#2563eb',
+                        neoYellow: '#facc15'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/neotrader.css">
+</head>
+<body class="bg-[#131623] text-white">
+
+    <!-- TOP LIVE ROLLING TICKER -->
+    <div class="ticker-container px-4">
+        <span class="ticker-badge">LIVE NSE</span>
+        <div class="ticker-track" id="tickerTrack">
+            {% for item in ticker %}
+            <div class="ticker-item">
+                <span class="sym">{{ item.symbol }}</span>
+                <span class="val {% if item.is_up %}val-up{% else %}val-down{% endif %}">₹{{ "%.2f"|format(item.ltp) }}</span>
+                <span class="{% if item.is_up %}val-up{% else %}val-down{% endif %}">
+                    {% if item.is_up %}▲ +{% else %}▼ {% endif %}{{ item.chg_pct }}%
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="navbar-custom">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2">
+                    <img src="/static/apptrade-canvas/img/gkwa_logo_white.svg" alt="GKWA Trading Terminal" style="height: 42px;" />
+                </a>
+            </div>
+
+            <!-- Desktop Navigation Dropdowns -->
+            <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium">
+                <div class="relative group cursor-pointer">
+                    <span class="hover:text-cyan-400 flex items-center gap-1 transition-colors">
+                        Product <i class="fa fa-chevron-down text-[10px] opacity-60 group-hover:rotate-180 transition-transform"></i>
+                    </span>
+                    <div class="absolute left-0 top-full pt-3 hidden group-hover:block z-50">
+                        <div class="bg-[#1a1e2e] border border-[#2b3248] rounded-xl shadow-2xl p-4 w-60 space-y-2">
+                            <a href="/dashboard/" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">AI Trading Software</a>
+                            <a href="#strategies" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Camarilla Scanner</a>
+                            <a href="#pricing" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Courses & Mentorship</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative group cursor-pointer">
+                    <span class="hover:text-cyan-400 flex items-center gap-1 transition-colors">
+                        Trading Strategies <i class="fa fa-chevron-down text-[10px] opacity-60 group-hover:rotate-180 transition-transform"></i>
+                    </span>
+                    <div class="absolute left-0 top-full pt-3 hidden group-hover:block z-50">
+                        <div class="bg-[#1a1e2e] border border-[#2b3248] rounded-xl shadow-2xl p-4 w-56 space-y-2">
+                            <a href="/dashboard/" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Index Trading</a>
+                            <a href="/dashboard/" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Intraday Breakouts</a>
+                            <a href="/dashboard/" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Options Straddles</a>
+                            <a href="/dashboard/" class="block px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-cyan-400 text-slate-200">Positional Play</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#camarilla-section" class="hover:text-cyan-400 transition-colors">Camarilla Pivots</a>
+                <a href="#pricing" class="hover:text-cyan-400 transition-colors">Pricing</a>
+                <a href="#faq" class="hover:text-cyan-400 transition-colors">FAQ</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden lg:flex items-center gap-4">
+                <a href="/dashboard/" class="btn-outline-neon text-sm flex items-center gap-2">
+                    <i class="fa fa-chart-line"></i> Launch Terminal
+                </a>
+                <button class="btn-neotrader btn-open-demo text-sm">
+                    Watch Live Demo
+                </button>
+            </div>
+
+            <!-- Mobile Hamburger Toggle -->
+            <div class="lg:hidden flex items-center gap-3">
+                <a href="/dashboard/" class="btn-neotrader text-xs py-1.5 px-3">Terminal</a>
+                <button id="mobileMenuToggle" class="text-white text-xl p-2">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER MENU -->
+    <div id="mobileDrawer" class="hidden fixed inset-0 z-50 bg-[#131623] bg-opacity-95 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center pb-6 border-b border-slate-800">
+            <a href="/" class="flex items-center gap-2">
+                <img src="/static/apptrade-canvas/img/gkwa_logo_white.svg" alt="GKWA" style="height: 34px;" />
+            </a>
+            <button id="closeMobileDrawer" class="text-slate-400 text-2xl hover:text-white">&times;</button>
+        </div>
+        <div class="mt-8 space-y-5 text-lg font-semibold">
+            <a href="/dashboard/" class="block text-cyan-400">🚀 Launch Trading Terminal</a>
+            <a href="#strategies" class="block hover:text-cyan-400">Trading Strategies</a>
+            <a href="#camarilla-section" class="block hover:text-cyan-400">Camarilla Pivots</a>
+            <a href="#pricing" class="block hover:text-cyan-400">Pricing & Plans</a>
+            <a href="#faq" class="block hover:text-cyan-400">FAQs</a>
+            <button class="btn-neotrader btn-open-demo w-full mt-6">Watch Live Demo</button>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <!-- Ambient background glows -->
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/60 border border-cyan-400/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-6">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            SEBI Registered Analyst Mentorship • AI Powered
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight max-w-5xl mx-auto mb-6">
+            <span class="text-yellow-400">Ab Smart-Trading Hoga Easy</span><br>
+            <span class="text-white">With GKWA Software!</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed mb-10">
+            Get ready-made trades, pre-processed analysis from multiple indicators, automated scoring & ranking on stocks and indices, and 1-click execution.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+            <button class="btn-neotrader btn-open-demo text-base sm:text-lg px-8 py-4 w-full sm:w-auto">
+                <i class="fa fa-play-circle text-xl"></i> Watch a Live Demo
+            </button>
+            <a href="/dashboard/" class="btn-outline-neon text-base sm:text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center gap-2">
+                <i class="fa fa-chart-pie"></i> Launch Trading Terminal
+            </a>
+        </div>
+
+        <!-- Metric highlights -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+            <div class="neo-card text-center p-6">
+                <div class="text-3xl font-bold text-cyan-400">15+</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase font-medium">Algorithmic Scanners</div>
+            </div>
+            <div class="neo-card text-center p-6">
+                <div class="text-3xl font-bold text-emerald-400">82%+</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase font-medium">Historical Win Ratio</div>
+            </div>
+            <div class="neo-card text-center p-6">
+                <div class="text-3xl font-bold text-yellow-400">1-Click</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase font-medium">Broker Order Routing</div>
+            </div>
+            <div class="neo-card text-center p-6">
+                <div class="text-3xl font-bold text-blue-400">40+ Yrs</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase font-medium">Market Expertise</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE DEMO BOOKING MODAL POPUP -->
+    <div id="demoModal" class="neo-modal-overlay">
+        <div class="neo-modal-content grid grid-cols-1 md:grid-cols-12 overflow-hidden">
+            <!-- Left Form Side -->
+            <div class="md:col-span-6 p-8 bg-[#161a29]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-white">Book a Live Demo</h3>
+                    <button id="closeDemoModal" class="text-slate-400 text-2xl hover:text-white">&times;</button>
+                </div>
+                <p class="text-xs text-slate-400 mb-6">Experience real-time AI trade signals, Camarilla pivot breakouts, and 1-click execution firsthand.</p>
+                
+                <form id="demoBookingForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
+                        <input type="text" id="demoName" required placeholder="e.g. Rahul Sharma"
+                            class="w-full bg-[#10131e] border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Phone Number *</label>
+                        <div class="flex gap-2">
+                            <select id="demoCountryCode" class="bg-[#10131e] border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none">
+                                <option value="+91">+91 (IN)</option>
+                                <option value="+1">+1 (US)</option>
+                                <option value="+44">+44 (UK)</option>
+                                <option value="+971">+971 (UAE)</option>
+                            </select>
+                            <input type="tel" id="demoPhone" required placeholder="9876543210" pattern="[0-9]{10,}"
+                                class="w-full bg-[#10131e] border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Email ID *</label>
+                        <input type="email" id="demoEmail" required placeholder="name@example.com"
+                            class="w-full bg-[#10131e] border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <button type="submit" class="btn-neotrader w-full py-4 text-sm mt-4">
+                        Submit & Unlock Free Demo
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Promo Side -->
+            <div class="md:col-span-6 bg-gradient-to-br from-[#1a2138] to-[#121626] p-8 flex flex-col justify-center border-l border-slate-800 text-center">
+                <div class="text-yellow-400 font-bold text-2xl mb-2">Ab Smart-Trading Hoga Easy!</div>
+                <p class="text-slate-300 text-sm mb-6">See how GKWA's signature trade scanners filter 500+ NSE stocks in seconds to pinpoint high-probability trade setups.</p>
+                <div class="space-y-3 text-left text-xs text-slate-300">
+                    <div class="flex items-center gap-2"><i class="fa fa-check text-cyan-400"></i> Pre-calculated Entry, Targets & Stop Loss</div>
+                    <div class="flex items-center gap-2"><i class="fa fa-check text-cyan-400"></i> Multi-Timeframe Camarilla H4/L4 alerts</div>
+                    <div class="flex items-center gap-2"><i class="fa fa-check text-cyan-400"></i> Direct broker connectivity with Zerodha, Fyers, Alice Blue</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STRATEGIES SHOWCASE -->
+    <section id="strategies" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">Master Every Market Condition</h2>
+            <p class="text-slate-400 text-base">Whether you trade intraday indices or positional equities, GKWA's AI engine serves tailored trade setups.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="neo-card relative group">
+                <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-cyan-400 flex items-center justify-center text-xl mb-6">
+                    <i class="fa fa-bolt"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Intraday Breakout Radar</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    DAWN, BTST, and BREAKOUT-1/2 scans detect sudden volume bursts and volatility expansions within 15-minute timeframes.
+                </p>
+                <a href="/dashboard/" class="text-cyan-400 text-sm font-semibold flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                    Explore Signals <i class="fa fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="neo-card relative group">
+                <div class="w-12 h-12 rounded-xl bg-teal-600/20 text-emerald-400 flex items-center justify-center text-xl mb-6">
+                    <i class="fa fa-compass"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Camarilla Pivots (H1-H6, L1-L6)</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    GKWA's signature mathematical levels to pinpoint exact reversal floors and breakout ceilings on Nifty and FNO stocks.
+                </p>
+                <a href="/dashboard/" class="text-emerald-400 text-sm font-semibold flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                    View Pivot Matrix <i class="fa fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="neo-card relative group">
+                <div class="w-12 h-12 rounded-xl bg-yellow-600/20 text-yellow-400 flex items-center justify-center text-xl mb-6">
+                    <i class="fa fa-layer-group"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Options Straddle & Strike Radar</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    Automated ATM Straddle suggestions, Long Call/Put setups, and Open Interest Put-Call Ratio (PCR) analysis to combat theta decay.
+                </p>
+                <a href="/dashboard/" class="text-yellow-400 text-sm font-semibold flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                    Analyze Strikes <i class="fa fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAMARILLA SECTION & FOUNDERS -->
+    <section id="camarilla-section" class="py-20 bg-[#0f121d] border-y border-[#20263b] px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="text-cyan-400 text-sm font-bold uppercase tracking-wider">The Science of Market Precision</div>
+                <h2 class="text-3xl sm:text-5xl font-black text-white">Built by Market Pioneers</h2>
+                <p class="text-slate-300 text-base leading-relaxed">
+                    <strong>GKWA</strong> was conceptualized with 40+ years of technical market leadership to deliver institutional-grade algorithmic signals, Camarilla pivot matrices, and seamless multi-broker connectivity for Indian stock market traders.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                    <div class="bg-[#181c2d] p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-emerald-400 text-base mb-1">H4 Level Breakout</div>
+                        <div class="text-xs text-slate-400">When price crosses H4 with volume, strong momentum pushes toward H5 and H6 targets.</div>
+                    </div>
+                    <div class="bg-[#181c2d] p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-rose-400 text-base mb-1">L4 Level Breakdown</div>
+                        <div class="text-xs text-slate-400">Trigger for aggressive short plays targeting L5 and L6 support exhaustion.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-5 neo-card border-cyan-500/30 text-center p-8 bg-gradient-to-b from-[#191f33] to-[#111422]">
+                <div class="text-xs text-cyan-400 font-mono mb-2">LIVE TERMINAL PREVIEW</div>
+                <div class="text-2xl font-bold text-white mb-4">Interactive Trading Dashboard</div>
+                <p class="text-slate-400 text-xs mb-6">Explore the full subscriber terminal with real-time stock quotes, automated signal scoring, and paper trade execution.</p>
+                <a href="/dashboard/" class="btn-neotrader w-full py-3.5 text-sm">
+                    Enter Subscriber Terminal <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING PLANS -->
+    <section id="pricing" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl sm:text-5xl font-black text-white mb-4">Simple, Transparent Pricing</h2>
+            <p class="text-slate-400 text-base">Select the subscription tier that best matches your trading frequency and capital.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Basic Plan -->
+            <div class="neo-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="text-slate-400 text-sm font-semibold mb-2">Starter</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">GKWA Basic</h3>
+                    <div class="text-4xl font-black text-white mb-6">₹2,999<span class="text-sm font-normal text-slate-400"> / month</span></div>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> End-of-Day Scanners</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Daily Camarilla Pivot Levels</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Sector Heatmap View</li>
+                        <li class="text-slate-500"><i class="fa fa-times mr-2"></i> Real-time Intraday Radar</li>
+                    </ul>
+                </div>
+                <button class="btn-outline-neon w-full mt-8 py-3 text-sm btn-open-demo">Get Started</button>
+            </div>
+
+            <!-- Pro Plan (Popular) -->
+            <div class="neo-card p-8 flex flex-col justify-between border-cyan-400/50 relative shadow-2xl shadow-cyan-950/50">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-teal-400 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    Most Popular
+                </div>
+                <div>
+                    <div class="text-cyan-400 text-sm font-semibold mb-2">Active Traders</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">GKWA Pro</h3>
+                    <div class="text-4xl font-black text-cyan-400 mb-6">₹5,999<span class="text-sm font-normal text-slate-400"> / month</span></div>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Real-time Intraday Radar (DAWN, BREAKOUT)</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Dynamic H1-H6 & L1-L6 Camarilla Alerts</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Options ATM Straddle & PCR Engine</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> 1-Click Multi-Broker Execution</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Weekly Q&A Mentorship Webinars</li>
+                    </ul>
+                </div>
+                <a href="/dashboard/" class="btn-neotrader w-full mt-8 py-3.5 text-sm">Launch Pro Terminal</a>
+            </div>
+
+            <!-- Corporate Plan -->
+            <div class="neo-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="text-slate-400 text-sm font-semibold mb-2">Institutions</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Corporate Elite</h3>
+                    <div class="text-4xl font-black text-white mb-6">₹14,999<span class="text-sm font-normal text-slate-400"> / month</span></div>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Everything in Pro</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> API Access & Webhooks</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Multi-User Desk Logins</li>
+                        <li><i class="fa fa-check text-cyan-400 mr-2"></i> Priority Dedicated Relationship Manager</li>
+                    </ul>
+                </div>
+                <button class="btn-outline-neon w-full mt-8 py-3 text-sm btn-open-demo">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-[#0f121d] border-t border-[#20263b] px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-black text-center text-white mb-12">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <div class="neo-card faq-item p-5 cursor-pointer">
+                    <div class="faq-header flex justify-between items-center font-bold text-base text-white">
+                        <span>What is GKWA and how does it help traders?</span>
+                        <i class="fa fa-chevron-down text-xs text-slate-400"></i>
+                    </div>
+                    <div class="text-sm text-slate-400 mt-3 hidden faq-body">
+                        GKWA is an AI-powered stock market analytics platform. It pre-processes technical indicators, scans 500+ NSE stocks, and generates ready-made trade ideas with entry, stop loss, and target levels.
+                    </div>
+                </div>
+
+                <div class="neo-card faq-item p-5 cursor-pointer">
+                    <div class="faq-header flex justify-between items-center font-bold text-base text-white">
+                        <span>Which brokers can I connect for trade execution?</span>
+                        <i class="fa fa-chevron-down text-xs text-slate-400"></i>
+                    </div>
+                    <div class="text-sm text-slate-400 mt-3 hidden faq-body">
+                        GKWA seamlessly connects to Zerodha Kite, FYERS, Alice Blue, 5Paisa, and Nuvama for one-click order placement directly from the signal tables.
+                    </div>
+                </div>
+
+                <div class="neo-card faq-item p-5 cursor-pointer">
+                    <div class="faq-header flex justify-between items-center font-bold text-base text-white">
+                        <span>Can I test the strategies without risking real capital?</span>
+                        <i class="fa fa-chevron-down text-xs text-slate-400"></i>
+                    </div>
+                    <div class="text-sm text-slate-400 mt-3 hidden faq-body">
+                        Yes! The platform includes a virtual Paper Trading mode allowing you to simulate 1-click execution, track live P&L, and test strategies in real-time.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER WITH SEBI DISCLOSURE -->
+    <footer class="bg-[#0b0d15] text-slate-400 text-xs py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <img src="/static/apptrade-canvas/img/gkwa_logo_white.svg" alt="GKWA" style="height: 32px;" />
+                </div>
+                <div class="flex space-x-6 text-slate-300 text-sm">
+                    <a href="/dashboard/" class="hover:text-white">Terminal</a>
+                    <a href="#strategies" class="hover:text-white">Strategies</a>
+                    <a href="#pricing" class="hover:text-white">Pricing</a>
+                    <a href="#faq" class="hover:text-white">FAQ</a>
+                </div>
+            </div>
+            <hr class="border-slate-800">
+            <p class="leading-relaxed text-slate-500">
+                <strong>SEBI Compliance & Risk Disclosure:</strong> Stock trading and investments are subject to market risks. Past performance of any trading software or strategy does not guarantee future results. GKWA is an analytical software platform provided for educational and informational purposes. Users must consult their financial advisor before executing financial commitments.
+            </p>
+            <div class="text-center text-slate-600 pt-4">
+                &copy; 2026 GKWA. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script>
+        // Inline accordion handler for FAQ
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const body = item.querySelector('.faq-body');
+                const icon = item.querySelector('.fa-chevron-down');
+                const isHidden = body.classList.contains('hidden');
+                document.querySelectorAll('.faq-body').forEach(b => b.classList.add('hidden'));
+                document.querySelectorAll('.fa-chevron-down').forEach(i => i.style.transform = 'rotate(0deg)');
+                if (isHidden) {
+                    body.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

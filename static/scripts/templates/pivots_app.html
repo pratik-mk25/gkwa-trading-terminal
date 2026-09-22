@@ -1,0 +1,1676 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+</style>
+
+<!-- BEGIN: Subheader -->
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Fibonacci Pivots
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="https://neotrader.in/index/dashboard/"
+						ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Fibonacci Pivots
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear every 5 minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+
+<!-- END: Subheader -->
+<div class="m-content">
+
+	<!--Begin::Section-->
+
+	<!--Begin::Portlet-->
+	<div ng-show="$root.user_permission['FIBONACCI_PIVOT']">
+		<div class="row">
+			<div class="col-xl-12 m--align-right m--margin-bottom-5">
+				<em>*Universe = Nifty 50,100,500, Based on Cash Data, *Universe = NiftyFNO, Based on Cash Data</em>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+					<div class="m-portlet__head-title">
+						<h3 class="m-portlet__head-text">
+							How To Use
+						</h3>
+					</div>
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="m-portlet__nav">
+
+					</ul>
+					<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+						data-target="#howtotoggle_1" type="button">
+						+
+					</button>
+					<a style="margin-left: 5px;" href="/static/pdf2/Fibonacci_Pivots_1.pdf" target="_blank"
+						title="Intraday pdf">
+						<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+					</a>
+				</div>
+			</div>
+
+			<div class="collapse" id="howtotoggle_1">
+				<div class="m-portlet__body">
+					<div class="row">
+						<iframe 
+							class="p-3"
+							width="560" 
+							height="315" 
+							src="https://www.youtube.com/embed/fAq69jdVOmU" 
+							frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-tools">
+					<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-lg"
+						role="tablist">
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link active show" data-toggle="tab"
+								href="#m_widget2_tab1_content" target="_self" role="tab" aria-selected="true">
+								HeatMap
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link" data-toggle="tab" href="#m_widget2_tab2_content"
+								target="_self" role="tab" aria-selected="false">
+								Levels
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<!-- fibonacci Heatmap Starts  -->
+					<div class="tab-pane active show" id="m_widget2_tab1_content">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption d-flex mb-3">
+								<div class="m-portlet__head-title">
+									<h3 title="Fibonacci Heatmap" class="m-portlet__head-text">
+										Fibonacci Heatmap
+									</h3>
+								</div>
+							</div>
+							<div class="row d-flex mb-3">
+								<span class="align-self-center mr-2">
+									<h6> Change Now </h6>
+								</span>
+								<div class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon mx-2">
+										<label>
+											<input id="change_now" type="checkbox" ng-model="SelectChangeNowValue"
+												ng-change="pivots_heatmap()">
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<span ng-show="change_today_hide" class="align-self-center mr-2">
+									<h6> Change Today </h6>
+								</span>
+								<div ng-show="change_today_hide" class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon mx-2">
+										<label>
+											<input id="change_today" type="checkbox" ng-model="SelectChangeTodayValue"
+												ng-change="pivots_heatmap()">
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<span class="align-self-center mr-2">
+									<h6>Auto refresh</h6>
+								</span>
+								<div class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon p-2">
+										<label>
+											<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+												ng-disabled="!autoRefreshButtonDisabledValues" />
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="HeatMapTimeframe"
+										ng-model="SelectIndexTimeValueHeatMap"
+										ng-options="value for value in IndexTimeValueHeatMap"
+										ng-change="pivots_heatmap_change_data_by_timeframe();">
+									</select>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue" ng-change="pivots_heatmap();">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="m-portlet__body"></div>
+						<div ng-show="!loading">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="m-portlet">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text m--font-success">
+														Bearish To Bullish 
+													</h3>
+												</div>
+											</div>
+											<div class="m-portlet__head-tools">
+												<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+													role="tablist">
+													<li class="nav-item m-tabs__item m-2">
+														<a class="nav-link m-tabs__link active show" data-toggle="tab"
+															href="#weekly_changed_state_bearish_to_bullish"
+															target="_self" role="tab" aria-selected="true"
+															ng-click="pivots_changed_state_filter('week')">
+															Weekly
+														</a>
+													</li>
+													<div class="d-flex m-3" style="margin-top: 2rem ;"
+														ng-if="weekly_bearish_to_bullish.length >= 1">
+														<h6>{{weekly_bearish_to_bullish.length < 20 ?
+																weekly_bearish_to_bullish.length :
+																tabLimit['fibonacciBearishToBullishTablimitWeekly']}} /
+																{{ weekly_bearish_to_bullish.length}}</h6>
+													</div>
+													
+													<li class="nav-item m-tabs__item m-2 ">
+														<a class="nav-link m-tabs__link" data-toggle="tab"
+															href="#monthly_changed_state_bearish_to_bullish"
+															target="_self" role="tab" aria-selected="false"
+															ng-click="pivots_changed_state_filter('month')">
+															Monthly
+														</a>
+													</li>
+													<div class="d-flex m-3" style="margin-top: 2rem ;"
+														ng-if="monthly_bearish_to_bullish.length >= 1">
+														<h6>{{monthly_bearish_to_bullish.length < 20 ?
+																monthly_bearish_to_bullish.length :
+																tabLimit['fibonacciBearishToBullishTablimitMonthly']}} /
+																{{monthly_bearish_to_bullish.length}}</h6>
+													</div>
+													
+												</ul>
+												<div class="btn-group" ng-if='data_for_plus_w.length > 0'>
+													<button type="button" class="btn btn-light dropdown-toggle" 
+															data-toggle="dropdown" 
+															aria-haspopup="true" 
+															aria-expanded="false">
+													  Watchlist </button>
+													<div class="dropdown-menu">
+														<li>
+															<button  class="dropdown-item" type="button" 
+																ng-click="$root.watchlistModal(data_for_plus_w,'heatmap')"
+																data-toggle="modal" data-target="#add_to_watch_list"
+																class="btn">Add to watchlist</button>
+														</li>
+														<li>
+															<dynamic-watchlist source-type="heatmap" 
+															is-group="true" data="data_for_plus_w" 
+															page-name="{{'FIBONACCI_PIVOT'}}" 
+															strategy="{{'bearish to bullish'}}"></dynamic-watchlist>
+														</li>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-content">
+											<div class="tab-pane active show"
+												id="weekly_changed_state_bearish_to_bullish">
+												<div class="m-portlet__body">
+													<div class="row">
+														<div ng-repeat="script in weekly_bearish_to_bullish | limitTo: tabLimit['fibonacciBearishToBullishTablimitWeekly']"
+															style="margin-left:1px; margin-top:1px; border-radius:2px; width:160px;">
+															<div class="col-lg m--bg-success py-1"
+																style="text-align:center; ">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none; ">
+																		<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																			class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click="$root.watchlistModal([script],'heatmap')">Add
+																			to Watchlist</a>
+																	</div>
+																</div>
+																<div>
+																	<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div ng-if="weekly_bearish_to_bullish.length > defaultLimit"
+													class="m-portlet__foot">
+													<div class="text-center">
+														<span
+															ng-if="weekly_bearish_to_bullish.length != tabLimit['fibonacciBearishToBullishTablimitWeekly']">
+															<span
+																ng-click="showMore(weekly_bearish_to_bullish, 'fibonacciBearishToBullishTablimitWeekly')"><i
+																	class="fa fa-chevron-down" data-toggle="tooltip"
+																	title="show more"></i></span>
+														</span>
+														<span
+															ng-if="weekly_bearish_to_bullish.length == tabLimit['fibonacciBearishToBullishTablimitWeekly']">
+															<span
+																ng-click="showLess('fibonacciBearishToBullishTablimitWeekly')"><i
+																	class="fa fa-chevron-up" data-toggle="tooltip"
+																	title="show less"></i></span>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="monthly_changed_state_bearish_to_bullish">
+												<div class="m-portlet__body">
+													<div class="row">
+														<div ng-repeat="script in monthly_bearish_to_bullish | limitTo:tabLimit['fibonacciBearishToBullishTablimitMonthly']"
+															style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+															<div class="col-lg m--bg-success py-1"
+																style="text-align:center; ">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none;">
+																		<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																			class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click="$root.watchlistModal([script],'heatmap')">Add
+																			to Watchlist</a>
+																	</div>
+																</div>
+																<div>
+																	<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div ng-if="monthly_bearish_to_bullish.length > defaultLimit"
+													class="m-portlet__foot">
+													<div class="text-center">
+														<span
+															ng-if="monthly_bearish_to_bullish.length != tabLimit['fibonacciBearishToBullishTablimitMonthly']">
+															<span
+																ng-click="showMore(monthly_bearish_to_bullish, 'fibonacciBearishToBullishTablimitMonthly')"><i
+																	class="fa fa-chevron-down" data-toggle="tooltip"
+																	title="show more"></i></span>
+														</span>
+														<span
+															ng-if="monthly_bearish_to_bullish.length == tabLimit['fibonacciBearishToBullishTablimitMonthly']">
+															<span
+																ng-click="showLess('fibonacciBearishToBullishTablimitMonthly')"><i
+																	class="fa fa-chevron-up" data-toggle="tooltip"
+																	title="show less"></i></span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="m-portlet">
+										<div class="m-portlet__head">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text m--font-danger">
+														Bullish To Bearish
+													</h3>
+												</div>
+											</div>
+											<div class="m-portlet__head-tools">
+												<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+													role="tablist">
+													<li class="nav-item m-tabs__item m-2">
+														<a class="nav-link m-tabs__link active show" data-toggle="tab"
+															href="#weekly_changed_state_bullish_to_bearish"
+															target="_self" role="tab" aria-selected="true"
+															ng-click="pivots_changed_state_filter('week')">
+															Weekly
+														</a>
+													</li>
+													<div class="m-3" style="margin-top: 2rem ;"
+														ng-if="weekly_bullish_to_bearish.length >= 1">
+														<h6>{{weekly_bullish_to_bearish.length < 20 ?
+																weekly_bullish_to_bearish.length :
+																tabLimit['fibonacciBullishToBearishTablimitWeekly']}} /
+																{{weekly_bullish_to_bearish.length}}</h6>
+													</div>
+													
+													
+													<li class="nav-item m-tabs__item m-2 ">
+														<a class="nav-link m-tabs__link" data-toggle="tab"
+															href="#monthly_changed_state_bullish_to_bearish"
+															target="_self" role="tab" aria-selected="false"
+															ng-click="pivots_changed_state_filter('month')">
+															Monthly
+														</a>
+													</li>
+													<div class="m-3" style="margin-top: 2rem ;"
+														ng-if="monthly_bullish_to_bearish.length >= 1">
+														<h6>{{monthly_bullish_to_bearish.length < 20 ?
+																monthly_bullish_to_bearish.length :
+																tabLimit['fibonacciBullishToBearishTablimitMonthly']}} /
+																{{monthly_bullish_to_bearish.length}}</h6>
+													</div>
+													<div class="btn-group" ng-if='data_for_bullish.length > 0'>
+														<button type="button" class="btn btn-light dropdown-toggle" 
+																data-toggle="dropdown" 
+																aria-haspopup="true" 
+																aria-expanded="false">
+														  Watchlist </button>
+														<div class="dropdown-menu">
+															<li>
+																<button  class="dropdown-item" type="button" 
+																	ng-if='data_for_bullish.length > 0'
+																	ng-click="$root.watchlistModal(data_for_bullish,'heatmap')"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	class="btn"> Add to watchlist</button>
+															</li>
+															<li>
+																<dynamic-watchlist source-type="heatmap" 
+																is-group="true" data="data_for_bullish" 
+																page-name="{{'FIBONACCI_PIVOT'}}" 
+																strategy="{{'bullish to bearish'}}"></dynamic-watchlist>
+															</li>
+														</div>
+													</div>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-content">
+											<div class="tab-pane active show"
+												id="weekly_changed_state_bullish_to_bearish">
+												<div class="m-portlet__body">
+													<div class="row">
+														<div ng-repeat="script in weekly_bullish_to_bearish |limitTo:tabLimit['fibonacciBullishToBearishTablimitWeekly']"
+															style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+															<div class="col-lg m--bg-danger py-1"
+																style="text-align:center; ">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none; ">
+																		<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																			class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click="$root.watchlistModal([script],'heatmap')">Add
+																			to Watchlist</a>
+																	</div>
+																</div>
+																<div>
+																	<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div ng-if="weekly_bullish_to_bearish.length > defaultLimit"
+													class="m-portlet__foot">
+													<div class="text-center">
+														<span
+															ng-if="weekly_bullish_to_bearish.length != tabLimit['fibonacciBullishToBearishTablimitWeekly']">
+															<span
+																ng-click="showMore(weekly_bullish_to_bearish, 'fibonacciBullishToBearishTablimitWeekly')"><i
+																	class="fa fa-chevron-down" data-toggle="tooltip"
+																	title="show more"></i></span>
+														</span>
+														<span
+															ng-if="weekly_bullish_to_bearish.length == tabLimit['fibonacciBullishToBearishTablimitWeekly']">
+															<span
+																ng-click="showLess('fibonacciBullishToBearishTablimitWeekly')"><i
+																	class="fa fa-chevron-up" data-toggle="tooltip"
+																	title="show less"></i></span>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="monthly_changed_state_bullish_to_bearish">
+												<div class="m-portlet__body">
+													<div class="row">
+														<div ng-repeat="script in monthly_bullish_to_bearish |limitTo: tabLimit['fibonacciBullishToBearishTablimit']"
+															style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+															<div class="col-lg m--bg-danger py-1"
+																style="text-align:center; ">
+																<div class="btn-group dropright">
+																	<a type="button" class="btn btn-sm btn-secondary "
+																		data-toggle="dropdown" aria-haspopup="true"
+																		aria-expanded="false"
+																		style="padding: 0;border: none;background: none; ">
+																		<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																			class="text-white"><strong>{{script.SYMBOL}}</strong></em>
+																		<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																			style="font-size:14px;"></i>
+																	</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser</a>
+																		<a class="dropdown-item" href="#" class="m-link"
+																			data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click="$root.watchlistModal([script],'heatmap')">Add
+																			to Watchlist</a>
+																	</div>
+																</div>
+																<div>
+																	<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div ng-if="monthly_bullish_to_bearish.length > defaultLimit"
+													class="m-portlet__foot">
+													<div class="text-center">
+														<span
+															ng-if="monthly_bullish_to_bearish.length != tabLimit['fibonacciBullishToBearishTablimitMonthly']">
+															<span
+																ng-click="showMore(monthly_bullish_to_bearish, 'fibonacciBullishToBearishTablimitMonthly')"><i
+																	class="fa fa-chevron-down" data-toggle="tooltip"
+																	title="show more"></i></span>
+														</span>
+														<span
+															ng-if="monthly_bullish_to_bearish.length == tabLimit['fibonacciBullishToBearishTablimitMonthly']">
+															<span
+																ng-click="showLess('fibonacciBullishToBearishTablimitMonthly')"><i
+																	class="fa fa-chevron-up" data-toggle="tooltip"
+																	title="show less"></i></span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng-show="!loading" class="row ui-sortable m_sortable_portlets_options_alerts">
+							<div class="col-lg-6">
+								<div ng-show="heatmap_R4P"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													R4+
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_R4P.length >= 1">
+												<h6>{{heatmap_R4P.length < 20 ? heatmap_R4P.length :
+														tabLimit['R4TabLimit']}} / {{heatmap_R4P.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_R4P.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_R4P.length > 0'
+															ng-click="$root.watchlistModal(heatmap_R4P,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_R4P" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'R4P'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_R4P |  limitTo:tabLimit['R4TabLimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.R4P == 1"
+															style="text-align:center;background-color: #0c9c78;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}<em
+																				ng-show="IndexTimeValueHeatMap == 'DAY'">
+																				:
+																				{{script.CONSICUTIVE_COUNT_HIGH}}</em></strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_R4P.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_R4P.length != tabLimit['R4TabLimit']">
+														<span ng-click="showMore(heatmap_R4P, 'R4TabLimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_R4P.length ==tabLimit['R4TabLimit']">
+														<span ng-click="showLess('R4TabLimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head ">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													R3-R4
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_R3_R4.length >= 1">
+												<h6>{{heatmap_R3_R4.length < 20 ? heatmap_R3_R4.length :
+														tabLimit['R3R4Tablimit']}} / {{heatmap_R3_R4.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_R3_R4.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_R3_R4.length > 0'
+															ng-click="$root.watchlistModal(heatmap_R3_R4,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_R3_R4" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'R3R4'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_R3_R4 | limitTo:tabLimit['R3R4Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.R3_R4 == 1"
+															style="text-align:center;background-color: #00cc99;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_R3_R4.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_R3_R4.length != tabLimit['R3R4Tablimit']">
+														<span ng-click="showMore(heatmap_R3_R4, 'R3R4Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_R3_R4.length == tabLimit['R3R4Tablimit']">
+														<span ng-click="showLess('R3R4Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div ng-if="heatmap_R2_R3"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h4 class="m-portlet__head-text">
+													R2-R3
+												</h4>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;">
+												<h6>{{heatmap_R2_R3.length < 20 ? heatmap_R2_R3.length :
+														tabLimit['R2R3Tablimit']}} /{{heatmap_R2_R3.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_R2_R3.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_R2_R3.length > 0'
+															ng-click="$root.watchlistModal(heatmap_R2_R3,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_R2_R3" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'R2R3'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_R2_R3 | limitTo:tabLimit['R2R3Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.R2_R3 == 1"
+															style="text-align:center;background-color: #2ECC71;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_R2_R3.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_R2_R3.length != tabLimit['R2R3Tablimit']">
+														<span ng-click="showMore(heatmap_R2_R3, 'R2R3Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_R2_R3.length == tabLimit['R2R3Tablimit']">
+														<span ng-click="showLess('R2R3Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text ">
+													R1-R2
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_R1_R2.length >= 1">
+												<h6>{{heatmap_R1_R2 .length < 20 ? heatmap_R1_R2 .length :
+														tabLimit['R1R2Tablimit']}} /{{heatmap_R1_R2 .length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_R1_R2.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_R1_R2.length > 0'
+															ng-click="$root.watchlistModal(heatmap_R1_R2,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_R1_R2" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'R1R2'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_R1_R2 | limitTo:tabLimit['R1R2Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.R1_R2 == 1"
+															style="text-align:center;background-color: #58D68D;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_R1_R2.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_R1_R2.length != tabLimit['R1R2Tablimit']">
+														<span ng-click="showMore(heatmap_R1_R2, 'R1R2Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_R1_R2.length == tabLimit['R1R2Tablimit']">
+														<span ng-click="showLess('R1R2Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div ng-if="heatmap_P_R1"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head align-items-center">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													P-R1
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_P_R1.length >= 1">
+												<h6>{{heatmap_P_R1.length < 20 ? heatmap_P_R1.length :
+														tabLimit['PR1Tablimit']}} /{{heatmap_P_R1.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_P_R1.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_P_R1.length > 0'
+															ng-click="$root.watchlistModal(heatmap_P_R1,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_P_R1" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'PR1'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_P_R1 | limitTo:tabLimit['PR1Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.P_R1 == 1"
+															style="text-align:center;background-color: #82E0AA;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_P_R1.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_P_R1.length != tabLimit['PR1Tablimit']">
+														<span ng-click="showMore(heatmap_P_R1, 'PR1Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_P_R1.length == tabLimit['PR1Tablimit']">
+														<span ng-click="showLess('PR1Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div ng-if="heatmap_S4M"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													S4-
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_S4M.length >= 1">
+												<h6>{{heatmap_S4M.length < 20 ? heatmap_S4M.length
+														:tabLimit['S4Tablimit'] }}/{{heatmap_S4M.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_S4M.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_S4M.length > 0'
+															ng-click="$root.watchlistModal(heatmap_S4M,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_S4M" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'S4P'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_S4M | limitTo:tabLimit['S4Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.S4M == 1"
+															style="text-align:center;background-color: #bc3333;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_S4M.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_S4M.length != tabLimit['S4Tablimit']">
+														<span ng-click="showMore(heatmap_S4M, 'S4Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_S4M.length == tabLimit['S4TabLimit']">
+														<span ng-click="showLess('S4Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head ">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h4 class="m-portlet__head-text">
+													S3-S4
+												</h4>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_S3_S4.length >= 1">
+												<h6>{{heatmap_S3_S4.length < 20 ? heatmap_S3_S4.length
+														:tabLimit['S3S4Tablimit'] }}/{{heatmap_S3_S4.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_S3_S4.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_S3_S4.length > 0'
+															ng-click="$root.watchlistModal(heatmap_S3_S4,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_S3_S4" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'S3S4'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_S3_S4 | limitTo:tabLimit['S3S4Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.S3_S4 == 1"
+															style="text-align:center;background-color: #d84d4d;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_S3_S4.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_S3_S4.length != tabLimit['S3S4Tablimit']">
+														<span ng-click="showMore(heatmap_S3_S4, 'S3S4Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_S3_S4.length == tabLimit['S3S4Tablimit']">
+														<span ng-click="showLess('S3S4Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div ng-if="heatmap_S2_S3"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h6 class="m-portlet__head-text">
+													S2-S3
+												</h6>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_S2_S3.length >= 1">
+												<h6>{{heatmap_S2_S3.length < 20 ? heatmap_S2_S3.length
+														:tabLimit['S2S3Tablimit'] }}/{{heatmap_S2_S3.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_S2_S3.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_S2_S3.length > 0'
+															ng-click="$root.watchlistModal(heatmap_S2_S3,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_S2_S3" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'S2S3'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_S2_S3 | limitTo:tabLimit['S2S3Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.S2_S3 == 1"
+															style="text-align:center;background-color: #E74C3C;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_S2_S3.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_S2_S3.length != tabLimit['S2S3Tablimit']">
+														<span ng-click="showMore(heatmap_S2_S3, 'S2S3Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_S2_S3.length == tabLimit['S2S3Tablimit']">
+														<span ng-click="showLess('S2S3Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													S1-S2
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_S1_S2.length >= 1">
+												<h6>{{heatmap_S1_S2.length < 20 ? heatmap_S1_S2.length
+														:tabLimit['S1S2Tablimit'] }}/{{heatmap_S1_S2.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_S1_S2.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												  Watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_S1_S2.length > 0'
+															ng-click="$root.watchlistModal(heatmap_S1_S2,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_S1_S2" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'S1S2'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_S1_S2 | limitTo:tabLimit['S1S2Tablimit']"
+														style="margin-left: 1px;margin-top: 1px;border-radius: 2px;width: 160px;">
+														<div class="col-lg" ng-if="script.S1_S2 == 1"
+															style="text-align:center;background-color: #EC7063;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_S1_S2.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_S1_S2.length != tabLimit['S1S2Tablimit']">
+														<span ng-click="showMore(heatmap_S1_S2, 'S1S2Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_S1_S2.length == tabLimit['S1S2Tablimit']">
+														<span ng-click="showLess('S1S2Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="heatmap_P_S1"
+									class="m-portlet m-portlet--tabs m-portlet--mobile m-portlet--sortable">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													P-S1
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div class="mr-2" style="margin-top: 2rem ;"
+												ng-if="heatmap_P_S1.length >= 1">
+												<h6>{{heatmap_P_S1.length < 20 ? heatmap_P_S1.length
+														:tabLimit['PS1Tablimit'] }}/{{heatmap_P_S1.length}}</h6>
+											</div>
+											<div class="btn-group" ng-if='heatmap_P_S1.length > 0'>
+												<button type="button" class="btn btn-light dropdown-toggle" 
+														data-toggle="dropdown" 
+														aria-haspopup="true" 
+														aria-expanded="false">
+												   		watchlist </button>
+												<div class="dropdown-menu">
+													<li>
+														<button  class="dropdown-item" type="button" 
+															ng-if='heatmap_P_S1.length > 0'
+															ng-click="$root.watchlistModal(heatmap_P_S1,'heatmap')"
+															data-toggle="modal" data-target="#add_to_watch_list"
+															class="btn">Add to watchlist</button>
+													</li>
+													<li>
+														<dynamic-watchlist source-type="heatmap" 
+														is-group="true" data="heatmap_P_S1" 
+														page-name="{{'FIBONACCI_PIVOT'}}" 
+														strategy="{{'PS1'}}"></dynamic-watchlist>
+													</li>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="m-portlet__body">
+												<div class="row">
+													<div ng-repeat="script in heatmap_P_S1 | limitTo:tabLimit['PS1Tablimit']"
+														style="margin-left:1px;margin-top:1px;border-radius:2px;width:160px;">
+														<div class="col-lg" ng-if="script.P_S1 == 1"
+															style="text-align:center;background-color: #F1948A;">
+															<div class="btn-group dropright">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;color: white;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/PIVOTS"
+																		target="_blank">
+																		Stock Analyser</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal"
+																		data-target="#add_to_watch_list"
+																		ng-click="$root.watchlistModal([script],'heatmap')">Add
+																		to Watchlist</a>
+																</div>
+																</br>
+															</div>
+
+															<div class="mb-1">
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="heatmap_P_S1.length > defaultLimit" class="m-portlet__foot">
+												<div class="text-center">
+													<span ng-if="heatmap_P_S1.length != tabLimit['PS1Tablimit']">
+														<span ng-click="showMore(heatmap_P_S1, 'PS1Tablimit')"><i
+																class="fa fa-chevron-down" data-toggle="tooltip"
+																title="show more"></i></span>
+													</span>
+													<span ng-if="heatmap_P_S1.length == tabLimit['PS1Tablimit']">
+														<span ng-click="showLess('PS1Tablimit')"><i
+																class="fa fa-chevron-up" data-toggle="tooltip"
+																title="show less"></i></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div align="center" ng-show="loading">
+							<img style="margin-bottom: -100px;"
+								src="/static/apptrade-canvas/img/NeoTrader_Logo_200x200.png" alt=""><br>
+							<img height="15%" width="15%" src="https://neotrader.in/static/SVG/loading_chart.svg"
+								alt="Loading....">
+						</div>
+					</div>
+					<div class="tab-pane" id="m_widget2_tab2_content">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 title="Fibonacci Pivot Levels" class="m-portlet__head-text">
+										Fibonacci Pivot Levels
+									</h3>
+								</div>
+							</div>
+							<div class="row">
+								<span class="align-self-center mr-2">
+									<h6>Auto Refresh</h6>
+								</span>
+								<div class="align-self-center mr-2">
+									<span class="m-switch m-switch--icon p-2">
+										<label>
+											<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+												ng-disabled="!autoRefreshButtonDisabledValues" />
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="inputTimeValue" ng-model="SelectIndexTimeValue"
+										ng-options="value for value in IndexTimeValue"
+										ng-change="pivots_values_change_data()">
+									</select>
+								</div>
+								<div class="align-self-center mr-2">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue" ng-change="pivots_values()">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="m-portlet__body">
+							<!--begin: Datatable -->
+							<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+								<div class="row align-items-center">
+									<div class="col-xl-8 order-2 order-xl-1">
+										<div class="form-group m-form__group row align-items-center">
+											<div class="col-md-4">
+												<div class="m-input-icon m-input-icon--left">
+													<input type="text" class="form-control m-input"
+														placeholder="Search..." id="generalSearch"></input>
+													<span class="m-input-icon__icon m-input-icon__icon--left">
+														<span>
+															<i class="la la-search"></i>
+														</span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 order-1 order-xl-4 m--align-right">
+										<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+										<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal"
+											style="font-weight: 500;" data-target="#add_to_watch_list"
+											ng-click="$root.watchlistModal(datatable,'table')">
+											Watchlist
+										</button>
+									</div>
+								</div>
+							</div>
+							<!--end: Search Form -->
+							<!--begin: Datatable -->
+							<div class="m_datatable_pivot_values" id="scrolling_both">
+							</div>
+							<!--end: Datatable -->
+						</div>
+						<!--Begin::Timeline 3 -->
+						<!--End::Timeline 3 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-show="!$root.user_permission['FIBONACCI_PIVOT']">
+		<div>
+			<div class="m-portlet" m-portlet="true">
+
+				<div class="m-portlet__body">
+
+					<center>
+						<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+								alt="permissionlock">This section is available only under NeoTrader Pro Subscription.<a
+								href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5>
+					</center>
+
+					<center><em>-- Sample image to illustrate the module --</em></center>
+					<div class="row">
+						<img width="100%" src="https://neotrader.in/static/SS/Fibonacci Pivots.png" alt="Market View">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End::Portlet-->
+</div>

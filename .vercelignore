@@ -1,0 +1,25 @@
+# Development binaries and virtual environments
+uv
+.venv
+.venv/
+
+# Heavy source files and raw PDF extracts
+*.pdf
+real html/
+real html
+dashboard_source_files/
+dashboard_source_files
+dashboard_source.html
+dashboard_extracted.html
+dashboard_pdf_text.txt
+pdf_img-*.png
+
+# Python cache and scratch
+__pycache__/
+*.pyc
+scratch/
+*.log
+
+# Git files
+.git/
+.gitignore

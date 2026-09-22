@@ -1,0 +1,617 @@
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Market Stats
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#" ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+						Market Stats
+						</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="/index/dashboard/"  ng-click="clear()">
+						<span class="m-nav__link-text">
+							Dashboard
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					<b>Using realtime data </b>, Page refreshes every 15 seconds.
+				</h5>
+			</span>
+		</div>
+	</div>
+	<div class="m-content">
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link "  href="/index/sector_analysis_view/" ng-click="clear()" >
+							  Sector Analysis
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link" href="/index/sector_view/"  ng-click="clear()">
+								Sector View
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link active show" data-toggle="tab" href="#m_widget4_tab2_content"  role="tab" aria-selected="true">
+								Market Stats
+							</a>
+						</li>
+						<li class="nav-item m-tabs__item">
+							<a class="nav-link m-tabs__link"  href="/index/market_replay/"  ng-click="clear()" >
+								Market Replay
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-show="$root.user_permission['MARKET_STATS']">
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget4_tab2_content">
+						<div class="row">
+							<div class="col-xl-12 m--align-right m--margin-bottom-20">
+								<em>*Universe = FNO, Based on Cash Data</em>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Stock Change
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+
+										</div>
+									</div>
+									<div class="m-portlet__body">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="m-widget16__head">
+														<div class="m-widget16__item">
+															<span class="m-widget16__sceduled m--font-boldest m--font-primary">
+																Type
+															</span>
+
+															<span class="m-widget16__amount m--font-boldest m--font-dark m--font-primary m--align-right">
+																Count-Close
+															</span>
+														</div>
+													</div>
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																> 4 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="count_5_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																3 to 4 %
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="count_4_5_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																2 to 3 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="count_3_4_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																1 to 2 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="count_2_3_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																0 to 1 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="count_0_2_close">
+															</span>
+														</div>
+
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="m-widget16__head">
+														<div class="m-widget16__item">
+															<span class="m-widget16__sceduled m--font-boldest m--font-primary">
+																Type
+															</span>
+
+															<span class="m-widget16__amount m--align-right m--font-boldest m--font-primary m--font-dark">
+																Count-Close
+															</span>
+														</div>
+													</div>
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																< -4 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="_count_5_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																-3 to -4 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="_count_4_5_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																-2 to -3 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="_count_3_4_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																-1 to -2 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="_count_2_3_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																0 to -1 %
+															</span>
+
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="_count_0_2_close">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end:: Stock Stats-->
+							</div>
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Pivots Change
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+
+										</div>
+									</div>
+									<div class="m-portlet__body">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="m-widget16__head">
+														<div class="m-widget16__item">
+															<span class="m-widget16__sceduled m--font-boldest m--font-focus m--font-primary">
+																Type
+															</span>
+															<span class="m-widget16__amount m--font-boldest m--font-primary m--align-right">
+																Count
+															</span>
+														</div>
+													</div>
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																R4 +
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="R4">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																R3-R4
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="R3_R4">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																R2-R3
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="R2_R3">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																R1-R2
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="R1_R2">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																P-R1
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="P_R1">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="m-widget16__head">
+														<div class="m-widget16__item">
+															<span class="m-widget16__sceduled m--font-boldest m--font-focus m--font-primary">
+																Type
+															</span>
+															<span class="m-widget16__amount m--font-boldest m--font-primary m--align-right">
+																Count
+															</span>
+														</div>
+													</div>
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																S4 -
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="S4">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																S3-S4
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="S3_S4">
+
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																S2-S3
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="S2_S3">
+
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																S1-S2
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="S1_S2">
+															</span>
+														</div>
+														<!--end::widget item-->
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																P-S1
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="P_S1">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end:: Pivot Stats-->
+							</div>
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Gap Up/Down With Follow/NoFollow Through
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+
+										</div>
+									</div>
+									<div class="m-portlet__body m-portlet__body--no-padding">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-xl-12">
+													<div class="m-widget1">
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Gap Up With Follow Through</span>
+																</div>
+																<u><span data-toggle="tooltip" title="{{GAP_UP_FOLLOW_THRU.join(' , ')}}" tooltip class="m-widget1__number m--font-boldest m--font-success" ng-bind="gap_up_follow_through"></span></u>
+															</div>
+														</div>
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Gap Down With No Follow Through</span>
+																</div>
+																<div class="col m--align-right">
+																	<u><span data-toggle="tooltip" title="{{GAP_DOWN_NO_FOLLOW_THRU.join(' , ')}}" tooltip class="m-widget1__number m--font-success" ng-bind="gap_down_no_follow_through"></span></u>
+																</div>
+															</div>
+														</div>
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Gap Down With Follow Through</span>
+																</div>
+																<div class="col m--align-right">
+																	<u><span   data-toggle="tooltip" title="{{GAP_DOWN_FOLLOW_THRU.join(' , ')}}" tooltip class="m-widget1__number m--font-boldest m--font-danger" ng-bind="gap_down_follow_through"></span></u>
+																</div>
+															</div>
+														</div>
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Gap Up With No Follow Through</span>
+																</div>
+																<div class="col m--align-right">
+																	<u><span data-toggle="tooltip" title="{{GAP_UP_NO_FOLLOW_THRU.join(' , ')}}" tooltip class="m-widget1__number m--font-danger" ng-bind="gap_up_no_follow_through"></span></u>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end:: Stock Stats-->
+							</div>
+						</div>
+
+						<div class="row">
+						</div>
+						<div style="display:None;" class="row">
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Nifty ATM Straddle & Strangle Prices
+												</h3>
+											</div>
+										</div>
+									</div>
+									<div class="m-portlet__body m-portlet__body--no-padding">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-xl-6">
+													<!--begin:: Widgets/Stats2-1 -->
+													<div class="m-widget1">
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Straddle</span>
+																</div>
+																<div class="col m--align-right">
+																	<span class="m-widget1__number m--font-primary" ng-bind="nifty_straddle_price"></span>
+																</div>
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<div class="col-xl-6">
+													<!--begin:: Widgets/Stats2-1 -->
+													<div class="m-widget1">
+														<div class="m-widget1__item">
+															<div class="row m-row--no-padding align-items-center">
+																<div class="col">
+																	<span class="m--font-boldest">Strangle</span>
+																</div>
+																<div class="col m--align-right">
+																	<span class="m-widget1__number m--font-warning" ng-bind="nifty_strangle_price"></span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end:: Stock Stats-->
+							</div>
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													New Above/Below Cloud Today (30 Min)
+												</h3>
+											</div>
+										</div>
+									</div>
+									<div class="m-portlet__body">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																Above Cloud
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="cloud_above">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																Below Cloud
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="cloud_below">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--end:: Stock Stats-->
+							</div>
+							<div class="col-xl-4">
+								<!--begin:: Widgets/Support Cases-->
+								<div class="m-portlet  m-portlet--full-height ">
+									<div class="m-portlet__head">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Stocks In Buy/Sell Mode
+												</h3>
+											</div>
+										</div>
+									</div>
+									<div class="m-portlet__body">
+										<div class="m-widget16">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																Buy Mode
+															</span>
+															<span class="m-widget16__price m--align-right m--font-success" ng-bind="trident_buy">
+															</span>
+														</div>
+														<!--end::widget item-->
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="m-widget16__body">
+														<!--begin::widget item-->
+														<div class="m-widget16__item">
+															<span class="m--font-boldest">
+																Sell Mode
+															</span>
+															<span class="m-widget16__price m--align-right m--font-danger" ng-bind="trident_sell">
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-show="!$root.user_permission['MARKET_STATS']" >
+		<div class="m-portlet" m-portlet="true">
+
+			<div class="m-portlet__body">
+
+				<center><h5 ><img width="5%" height="5%" src="/static/lock.svg" alt="permissionlock">This section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5></center>
+
+				<center><em>-- Sample image to illustrate the module --</em></center>
+				<div class="row">
+					<img width="100%" src="/static/SS/Market Stats.png" alt="Market Stats">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

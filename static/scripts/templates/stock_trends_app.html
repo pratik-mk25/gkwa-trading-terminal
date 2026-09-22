@@ -1,0 +1,422 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+</style>
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+<!-- BEGIN: Subheader -->
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				Intraday Stock Trends
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="#"
+						ng-reflect-href="https://neotrader.in/index/dashboard/">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">
+					-
+				</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text">
+							Intraday Stock Trends
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear every 30minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+
+<!-- END: Subheader -->
+<div class="m-content">
+
+	
+	<div ng-show="$root.user_permission['STOCK_TRENDS']">
+		<div class="row">
+			<div class="col-xl-12 m--align-right m--margin-bottom-20">
+				<em>*Universe = FNO Stocks Only</em>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+			<div class="m-portlet__head">
+				<div class="m-portlet__head-caption">
+					<div class="m-portlet__head-title">
+						<h3 class="m-portlet__head-text">
+							How To Use
+						</h3>
+					</div>
+				</div>
+				<div class="m-portlet__head-tools">
+					<ul class="m-portlet__nav">
+					</ul>
+					<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+						data-target="#howtotoggle_1" type="button">
+						+
+					</button>
+					<a style="margin-left: 5px;" href="/static/pdf2/Intraday_Stock_trends_1.pdf" target="_blank"
+						title="Intraday pdf">
+						<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+					</a>
+				</div>
+			</div>
+
+			<div class="collapse" id="howtotoggle_1">
+				<div class="m-portlet__body">
+					<div class="row">
+						<iframe style="padding:15px;" width="560" height="315"
+							src="https://www.youtube.com/embed/XHW7I8py9pw" frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+						<iframe style="padding:15px;" width="560" height="315"
+							src="https://www.youtube.com/embed/rGFFyU-DMaY" frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-6">
+				<div class="m-widget16">
+					<div class="m-portlet  m-portlet--full-height">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 class="m-portlet__head-text m--font-success">
+										Bullish
+									</h3>
+								</div>
+							</div>
+							<div class="m-portlet__head-tools">
+								<ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+									role="tablist">
+									<li class="nav-item m-tabs__item">
+										<a class="nav-link m-tabs__link active show m--font-success" data-toggle="tab"
+											href="#candle_plus_plus" target="_self" role="tab" aria-selected="true">
+											++
+										</a>
+									</li>
+									<li class="nav-item m-tabs__item">
+										<a class="nav-link m-tabs__link m--font-success" data-toggle="tab"
+											href="#candle_plus" target="_self" role="tab" aria-selected="false">
+											+
+										</a>
+										
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="m-portlet__body">
+							<div class="tab-content">
+								<div class="tab-pane active show" id="candle_plus_plus">
+									<div class="m-widget26__chart">
+										<button type="button" ng-if='all_positive_2.length > 0'
+											ng-click="$root.watchlistModal(all_positive_2,'heatmap')"
+											data-toggle="modal" data-target="#add_to_watch_list"
+											class="btn btn-lg btn-secondary rounded-circle col-sm-1 d-flex justify-content-center align-items-center float-right"
+											style='width:2rem;height:2rem;'>+
+										</button>
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in all_positive_2"
+													style="margin-left:1px;margin-top:1px;border-radius:2px;width:120px;">
+													<div class="col-lg m--bg-success py-1" style="text-align:center;">
+														<div class="btn-group dropright">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																	class="text-white"><strong>{{script}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to
+																	Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane" id="candle_plus">
+									<div class="m-widget26__chart">
+										<button type="button" ng-if='all_positive_1.length > 0'
+											ng-click="$root.watchlistModal(all_positive_1,'heatmap')"
+											data-toggle="modal" data-target="#add_to_watch_list"
+											class="btn btn-lg btn-secondary rounded-circle col-sm-1 d-flex justify-content-center align-items-center float-right"
+											style='width:2rem;height:2rem;'>+
+										</button>
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in all_positive_1"
+													style="margin-left:1px;margin-top:1px;border-radius:2px;width:120px;">
+													<div class="col-lg m--bg-success py-1" style="text-align:center;">
+														<div class="btn-group dropright">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																	class="text-white"><strong>{{script}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to
+																	Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xl-6">
+				<div class="m-widget16">
+					<div class="m-portlet  m-portlet--full-height">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 class="m-portlet__head-text m--font-danger">
+										Bearish
+									</h3>
+								</div>
+							</div>
+							<div class="m-portlet__head-tools">
+								<ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--right m-tabs-line-danger"
+									role="tablist">
+									<li class="nav-item m-tabs__item">
+										<a class="nav-link m-tabs__link active show m--font-danger" data-toggle="tab"
+											href="#candle_minus_minus" target="_self" role="tab" aria-selected="true">
+											--
+										</a>
+									</li>
+									<li class="nav-item m-tabs__item">
+										<a class="nav-link m-tabs__link m--font-danger" data-toggle="tab"
+											href="#candle_minus" target="_self" role="tab" aria-selected="false">
+											-
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="m-portlet__body">
+							<div class="tab-content">
+								<div class="tab-pane active show" id="candle_minus_minus">
+									<div class="m-widget26__chart">
+										<button type="button" ng-if='all_negative_2.length > 0'
+											ng-click="$root.watchlistModal(all_negative_2,'heatmap')"
+											data-toggle="modal" data-target="#add_to_watch_list"
+											class="btn btn-lg btn-secondary rounded-circle col-sm-1 d-flex justify-content-center align-items-center float-right"
+											style='width:2rem;height:2rem;'>+
+										</button>
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in all_negative_2"
+													style="margin-left:1px;margin-top:1px;border-radius:2px;width:120px;">
+													<div class="col-lg m--bg-danger py-1" style="text-align:center;">
+														<div class="btn-group dropright">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																	class="text-white"><strong>{{script}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to
+																	Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane" id="candle_minus">
+									<div class="m-widget26__chart">
+										<button type="button" ng-if='all_negative_1.length > 0'
+											ng-click="$root.watchlistModal(all_negative_1,'heatmap')"
+											data-toggle="modal" data-target="#add_to_watch_list"
+											class="btn btn-lg btn-secondary rounded-circle col-sm-1 d-flex justify-content-center align-items-center float-right"
+											style='width:2rem;height:2rem;'>+
+										</button>
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in all_negative_1"
+													style="margin-left:1px;margin-top:1px;border-radius:2px;width:120px;">
+													<div class="col-lg m--bg-danger py-1" style="text-align:center;">
+														<div class="btn-group dropright">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"
+																	class="text-white"><strong>{{script}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to
+																	Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="m-portlet m-portlet--full-height  m-portlet--rounded">
+			<div class="m-portlet__body">
+				<div class="tab-content">
+					<div class="tab-pane active show" id="m_widget2_tab1_content">
+						<div class="row align-items-center">
+							<div class="col-xl-8 order-2 order-xl-1">
+								<div class="form-group m-form__group row align-items-center">
+									<div class="col-md-4">
+										<div class="m-input-icon m-input-icon--left">
+											<input type="text" class="form-control m-input" placeholder="Search..."
+												id="generalSearch"></input>
+											<span class="m-input-icon__icon m-input-icon__icon--left">
+												<span>
+													<i class="la la-search"></i>
+												</span>
+											</span>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-4 order-1 order-xl-4 m--align-right">
+								<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+								<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal"
+									style="font-weight: 500;" data-target="#add_to_watch_list"
+									ng-click="$root.watchlistModal(datatable,'table')">
+									Watchlist
+								</button>
+							</div>
+
+						</div>
+
+						<div class="m_datatable_stock_trends" id="scrolling_both">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="!$root.user_permission['STOCK_TRENDS']">
+		<div class="m-portlet" m-portlet="true">
+
+			<div class="m-portlet__body">
+
+				<center>
+					<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg" alt="permissionlock">This
+						section is available only under NeoTrader Pro Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a>
+					</h5>
+				</center>
+
+				<center><em>-- Sample image to illustrate the module --</em></center>
+				<div class="row">
+					<img width="100%" src="https://neotrader.in/static/SS/Intraday Stock Trends.png" alt="Market View">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

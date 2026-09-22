@@ -1,0 +1,2265 @@
+<style>
+	.dropdown-toggle::after {
+		display: none;
+	}
+
+	.fa-rotate-45 {
+		-ms-transform: rotate(270deg);
+		/* Internet Explorer 9 */
+		-webkit-transform: rotate(270deg);
+		/* Chrome, Safari, Opera */
+		transform: rotate(270deg);
+		/* Standard syntax */
+	}
+</style>
+<watchlist-modal name="$root.watchlist_modal_data" update-parent="$ctrl.updateParent()"></watchlist-modal>
+
+<div appunwraptag="" class="m-subheader">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title m-subheader__title--separator">
+				ADX Trends
+			</h3>
+			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a class="m-nav__link m-nav__link--icon" href="https://neotrader.in/index/dashboard/"
+						ng-reflect-href="#">
+						<i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a class="m-nav__link" href="" ng-reflect-href="">
+						<span class="m-nav__link-text"> ADX Trends </span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<span>
+				<h5 class="m--valign-middle float-right mt-4">
+					Last Refresh Date Time: <span ng-bind="lrdatetime"> </span>
+					<br>
+					New signals appear in every 30minutes.
+				</h5>
+			</span>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xl-12 m--align-right m--margin-bottom-5 float-right">
+
+	</div>
+</div>
+<div class="row">
+	<div class="col-xl-12 m--align-right m--margin-bottom-5">
+		<em>*Universe = Nifty 50,100,500, Based on Cash Data, *Universe =
+			NiftyFNO, Based on Cash Data</em>
+	</div>
+</div>
+
+<!--  Watchlist Modal starts     -->
+
+<!--  Watchlist Modal Ends -->
+
+<div class="m-content">
+	<!-- How to use section starts  -->
+	<div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true">
+		<div class="m-portlet__head">
+			<div class="m-portlet__head-caption">
+				<div class="m-portlet__head-title">
+					<h3 class="m-portlet__head-text">
+						How To Use
+					</h3>
+				</div>
+			</div>
+			<div class="m-portlet__head-tools">
+				<ul class="m-portlet__nav">
+				</ul>
+				<button class="btn btn-secondary m-btn m-btn--custom m-btn--label-info" data-toggle="collapse"
+					data-target="#howtotoggle_1" type="button">
+					+
+				</button>
+				<a style="margin-left: 5px;" href="/static/pdf2/ADX_Trends_1.pdf" target="_blank" title="Intraday pdf">
+					<img src="https://neotrader.in/static/pdf.png" alt="pdf">
+				</a>
+			</div>
+		</div>
+
+		<div class="collapse" id="howtotoggle_1">
+			<div class="m-portlet__body">
+				<div class="row">
+					<iframe class="p-3"  width="560" height="315"
+						src="https://www.youtube.com/embed/0KHA597w6Ak" frameborder="0"
+						allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen></iframe>
+
+						<iframe
+						class="p-3" 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/embed/85E3aj2oaq4" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+						allowfullscreen>
+					</iframe>
+
+						<iframe
+						class="p-3" 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/embed/L36Zp83T_6E" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+						allowfullscreen>
+					</iframe>
+
+						<iframe
+						class="p-3" 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/embed/w04jhdrD5yE" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+						allowfullscreen>
+					</iframe>
+
+						<iframe
+						class="p-3" 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/embed/JZMAWaZPJp4" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+						allowfullscreen>
+					</iframe>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- How to use section ends  -->
+
+	<div class="m-portlet m-portlet--full-height  m-portlet--rounded" ng-show="$root.user_permission['TRENDING']">
+		<div class="m-portlet__head">
+			<div class="m-portlet__head-tools">
+				<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
+					role="tablist">
+					<li class="nav-item m-tabs__item">
+						<a class="nav-link m-tabs__link active show" title="ADX Heatmap" data-toggle="tab"
+							href="#m_widget2_tab1_content" target="_self" role="tab" aria-selected="true">
+							HeatMap
+						</a>
+					</li>
+					<li class="nav-item m-tabs__item">
+						<a class="nav-link m-tabs__link" ng-click="adx()" title="ADX Levels" data-toggle="tab"
+							href="#m_widget2_tab2_content" target="_self" role="tab" aria-selected="false">
+							Levels
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="m-portlet__body">
+			<div class="tab-content">
+				<!-- Heatmap section Starts -->
+				<div class="tab-pane active show" id="m_widget2_tab1_content">
+					<div ng-show="$root.user_permission['TRENDING']">
+						<div class="m-portlet__head">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title">
+									<h3 title="CPR Heat Map" class="m-portlet__head-text">
+										ADX Heatmap
+									</h3>
+								</div>
+							</div>
+							<div class="row ">
+								<span class="mr-3 mt-4 ">
+									<h6>Trending Now</h6>
+								</span>
+								<div class="mr-3 mt-3">
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="trend_now" type="checkbox" ng-model="SelectTrendNowValue"
+												ng-change="heatmap()">
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<span class="mr-3 mt-4">
+									<h6>Auto refresh</h6>
+								</span>
+								<div class="mr-3 mt-3">
+									<span class="m-switch m-switch--icon">
+										<label>
+											<input id="auto_refresh" type="checkbox" ng-model="SelectRefreshValue"
+												ng-disabled="!autoRefreshButtonDisabledValues" />
+											<span></span>
+										</label>
+									</span>
+								</div>
+								<div class="mr-3 mt-3">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue" ng-change="heatmap()">
+									</select>
+								</div>
+								<div class="mr-3 mt-3">
+									<select class="custom-select" id="inputTimeFrameValue"
+										ng-model="SelectTimeFrameValue"
+										ng-options="value for value in TimeFrameValue | filter: '!ALL'"
+										ng-change="heatmap()">
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-show="$root.user_permission['TRENDING']">
+						<div class="row">
+							<div class="col-xl-12 mt-5">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12">
+										<div class="row">
+											<div class="col-6">
+												<div class="m-portlet">
+													<div class="m-portlet__head">
+														
+															<div class="m-portlet__head-caption">
+																<div class="m-portlet__head-title">
+																	<h3 class="m-portlet__head-text">
+																		Power Trend Bullish
+																	</h3>
+																</div>
+															</div>
+															
+														<div class="m-portlet__head-tools">
+															<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='power_trend_bullish.length >= 1'>
+																<h6>{{power_trend_bullish.length < 20 ? power_trend_bullish.length : tabLimit['powertrend_bullish_tablimit']}} /
+																	{{power_trend_bullish.length}}</h6>
+															</div>
+															<div class="btn-group" ng-if='power_trend_bullish.length > 0'>
+																<button type="button" class="btn btn-light dropdown-toggle" 
+																	data-toggle="dropdown" 
+																	aria-haspopup="true" 
+																	aria-expanded="false">
+																  Watchlist </button>
+																<div class="dropdown-menu">
+																  <li>
+																	<button  class="dropdown-item" type="button" 
+																	  ng-if='power_trend_bullish.length > 0'
+																	  ng-click="$root.watchlistModal(power_trend_bullish,'heatmap')"
+																	  data-toggle="modal" data-target="#add_to_watch_list"
+																	  class="btn">Add to watchlist</button>
+																  </li>
+																  <li>
+																	<dynamic-watchlist source-type="heatmap" 
+																	is-group="true" data="power_trend_bullish" 
+																	page-name="{{'TRENDING'}}" 
+																	strategy="{{'POWER TREND BULLISH'}}"></dynamic-watchlist>
+																  </li>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in power_trend_bullish | limitTo: tabLimit['powertrend_bullish_tablimit']"
+																style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+																<div ng-if="script.POWER_TREND == 1" >
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #239B56;">
+																	<div class="m-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em class="text-white"
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																				target="_blank">
+																				Stock Analyser
+																			</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																	</div>
+																	</div>
+																</div>
+																<div ng-if="script.POWER_TREND == 0" >
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #868b8b;">
+																	<div class="m-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;"
+																			title="Timestamp: {{script.SIGNAL_DT_PREV}}">
+																			<em class="text-white"
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item m-link"
+																			href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																			target="_blank">
+																			Stock Analyser
+																		</a>
+																		<a class="dropdown-item" href="#"
+																			class="m-link" data-toggle="modal"
+																			data-target="#add_to_watch_list"
+																			ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																			to Watchlist</a>
+																	</div>
+																</div>
+																<div>
+																	<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-if="power_trend_bullish.length > defaultLimit" class="m-portlet__foot">
+														<div class=" text-center">
+															<span
+																ng-if="power_trend_bullish.length != tabLimit['powertrend_bullish_tablimit']">
+																<span
+																	ng-click="showMore(power_trend_bullish, 'powertrend_bullish_tablimit')">
+																	<i class="fa fa-chevron-down " data-toggle="tooltip"
+																		title="show more"></i>
+																</span>
+															</span>
+															<span
+																ng-if="power_trend_bullish.length == tabLimit['powertrend_bullish_tablimit']">
+																<span ng-click="showLess('powertrend_bullish_tablimit')">
+																	<i class="fa fa-chevron-up " data-toggle="tooltip"
+																		title="show less"></i>
+																</span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="m-portlet">
+													<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<div class="m-portlet__head-title">
+																	<h3 class="m-portlet__head-text">
+																		Power Trend Bullish Exhaustion
+																	</h3>
+																</div>
+															</div>
+													
+														<div class="m-portlet__head-tools">
+															<div class="m-portlet__head-tools">
+																<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='power_trend_bullish_exhaustion.length >= 1'>
+																	<h6>{{power_trend_bullish_exhaustion.length < 20 ? power_trend_bullish_exhaustion.length : tabLimit['powertrend_bullish_exhaustion_tablimit']}} /
+																		{{power_trend_bullish_exhaustion.length}}</h6>
+																</div>
+																<div class="btn-group" ng-if='power_trend_bullish_exhaustion.length > 0'>
+																	<button type="button" class="btn btn-light dropdown-toggle" 
+																		data-toggle="dropdown" 
+																		aria-haspopup="true" 
+																		aria-expanded="false">
+																	  Watchlist </button>
+																	<div class="dropdown-menu">
+																	  <li>
+																		<button  class="dropdown-item" type="button" 
+																		  ng-if='power_trend_bullish_exhaustion.length > 0'
+																		  ng-click="$root.watchlistModal(power_trend_bullish_exhaustion,'heatmap')"
+																		  data-toggle="modal" data-target="#add_to_watch_list"
+																		  class="btn">Add to watchlist</button>
+																	  </li>
+																	  <li>
+																		<dynamic-watchlist source-type="heatmap" 
+																		is-group="true" data="power_trend_bullish_exhaustion" 
+																		page-name="{{'TRENDING'}}" 
+																		strategy="{{'POWER TREND BULLISH EXHAUSTION'}}"></dynamic-watchlist>
+																	  </li>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in power_trend_bullish_exhaustion | limitTo: tabLimit['powertrend_bullish_exhaustion_tablimit']"
+																style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+																<div class=" d-flex flex-column align-items-center col-lg py-1"
+																	style="text-align:center;background-color: #239B56;">
+																	<div class="ma-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em class="text-white"
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																				target="_blank">
+																				Stock Analyser
+																			</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-if="power_trend_bullish_exhaustion.length > defaultLimit"
+														class="m-portlet__foot">
+														<div class=" text-center">
+															<span
+																ng-if="power_trend_bullish_exhaustion.length != tabLimit['powertrend_bullish_exhaustion_tablimit']">
+																<span
+																	ng-click="showMore(power_trend_bullish_exhaustion, 'powertrend_bullish_exhaustion_tablimit')">
+																	<i class="fa fa-chevron-down " data-toggle="tooltip"
+																		title="show more"></i>
+																</span>
+															</span>
+															<span
+																ng-if="power_trend_bullish_exhaustion.length == tabLimit['powertrend_bullish_exhaustion_tablimit']">
+																<span
+																	ng-click="showLess('powertrend_bullish_exhaustion_tablimit')">
+																	<i class="fa fa-chevron-up " data-toggle="tooltip"
+																		title="show less"></i>
+																</span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="m-portlet">
+													<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<div class="m-portlet__head-title">
+																	<h3 class="m-portlet__head-text">
+																		Power Trend Bearish
+																	</h3>
+																</div>
+															</div>
+														<div class="m-portlet__head-tools">
+															<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='power_trend_bearish.length >= 1'>
+																<h6>{{power_trend_bearish.length < 20 ? power_trend_bearish.length : tabLimit['powertrend_bearish_tablimit']}} /
+																	{{power_trend_bearish.length}}</h6>
+															</div>
+															<div class="btn-group" ng-if='power_trend_bearish.length > 0'>
+																<button type="button" class="btn btn-light dropdown-toggle" 
+																	data-toggle="dropdown" 
+																	aria-haspopup="true" 
+																	aria-expanded="false">
+																  Watchlist </button>
+																<div class="dropdown-menu">
+																  <li>
+																	<button  class="dropdown-item" type="button" 
+																	  ng-if='power_trend_bearish.length > 0'
+																	  ng-click="$root.watchlistModal(power_trend_bearish,'heatmap')"
+																	  data-toggle="modal" data-target="#add_to_watch_list"
+																	  class="btn">Add to watchlist</button>
+																  </li>
+																  <li>
+																	<dynamic-watchlist source-type="heatmap" 
+																	is-group="true" data="power_trend_bearish" 
+																	page-name="{{'TRENDING'}}" 
+																	strategy="{{'POWER TREND BEARISH'}}"></dynamic-watchlist>
+																  </li>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in power_trend_bearish | limitTo: tabLimit['powertrend_bearish_tablimit']"
+																style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+																<div ng-if="script.POWER_TREND == -1" >
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color: #bc3333;">
+																		<div class="m-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary p-0"
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="border: none;background: none;">
+																			<em class="text-white"	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																				target="_blank">
+																				Stock Analyser
+																			</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																	</div>
+																	</div>
+																</div>
+																<div ng-if="script.POWER_TREND == 0" >
+																	<div class="d-flex flex-column align-items-center col-lg py-1"
+																		style="text-align:center;background-color:#868b8b;">
+																		<div class="m-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary p-0"
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="border: none;background: none;"
+																			title="Timestamp: {{script.SIGNAL_DT_PREV}}">
+																			
+																			<em class="text-white"	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																				target="_blank">
+																				Stock Analyser
+																			</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																	</div>
+																	</div>
+																</div>
+																
+															</div>
+														</div>
+													</div>
+													<div ng-if="power_trend_bearish.length > defaultLimit"
+														class="m-portlet__foot">
+														<div class=" text-center">
+															<span
+																ng-if="power_trend_bearish.length != tabLimit['powertrend_bearish_tablimit']">
+																<span
+																	ng-click="showMore(power_trend_bearish, 'powertrend_bearish_tablimit')">
+																	<i class="fa fa-chevron-down " data-toggle="tooltip"
+																		title="show more"></i>
+																</span>
+															</span>
+															<span
+																ng-if="power_trend_bearish.length == tabLimit['powertrend_bearish_tablimit']">
+																<span ng-click="showLess('powertrend_bearish_tablimit')">
+																	<i class="fa fa-chevron-up " data-toggle="tooltip"
+																		title="show less"></i>
+																</span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="m-portlet">
+													<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<div class="m-portlet__head-title">
+																	<h3 class="m-portlet__head-text">
+																		Power Trend Bearish Exhaustion
+																	</h3>
+																</div>
+															</div>
+														<div class="m-portlet__head-tools">
+															<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='power_trend_bearish_exhaustion.length >= 1'>
+																<h6>{{power_trend_bearish_exhaustion.length < 20 ? power_trend_bearish_exhaustion.length : tabLimit['powertrend_bearish_exhaustion_tablimit']}} /
+																	{{power_trend_bearish_exhaustion.length}}</h6>
+															</div>
+															<div class="btn-group" ng-if='power_trend_bearish_exhaustion.length > 0'>
+																<button type="button" class="btn btn-light dropdown-toggle" 
+																	data-toggle="dropdown" 
+																	aria-haspopup="true" 
+																	aria-expanded="false">
+																  Watchlist </button>
+																<div class="dropdown-menu">
+																  <li>
+																	<button  class="dropdown-item" type="button" 
+																	  ng-if='power_trend_bearish_exhaustion.length > 0'
+																	  ng-click="$root.watchlistModal(power_trend_bearish_exhaustion,'heatmap')"
+																	  data-toggle="modal" data-target="#add_to_watch_list"
+																	  class="btn">Add to watchlist</button>
+																  </li>
+																  <li>
+																	<dynamic-watchlist source-type="heatmap" 
+																	is-group="true" data="power_trend_bearish_exhaustion" 
+																	page-name="{{'TRENDING'}}" 
+																	strategy="{{'POWER TREND BEARISH EXHAUSTION'}}"></dynamic-watchlist>
+																  </li>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="m-portlet__body">
+														<div class="row">
+															<div ng-repeat="script in power_trend_bearish_exhaustion | limitTo: tabLimit['powertrend_bearish_exhaustion_tablimit']"
+																style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+																<div class="d-flex flex-column align-items-center col-lg"
+																	style="text-align:center;background-color: #bc3333;;">
+																	<div class="m-auto btn-group dropright">
+																		<a type="button"
+																			class="btn btn-sm btn-secondary "
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false"
+																			style="padding: 0;border: none;background: none;">
+																			<em class="text-white"
+																				style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}}</strong></em>
+																			<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																				style="font-size:12px;"></i>
+																		</a>
+																		<div class="dropdown-menu">
+																			<a class="dropdown-item m-link"
+																				href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																				target="_blank">
+																				Stock Analyser
+																			</a>
+																			<a class="dropdown-item" href="#"
+																				class="m-link" data-toggle="modal"
+																				data-target="#add_to_watch_list"
+																				ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																				to Watchlist</a>
+																		</div>
+																	</div>
+																	<div>
+																		<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-if="power_trend_bearish_exhaustion.length > defaultLimit"
+														class="m-portlet__foot">
+														<div class=" text-center">
+															<span
+																ng-if="power_trend_bearish_exhaustion.length != tabLimit['powertrend_bearish_exhaustion_tablimit']">
+																<span
+																	ng-click="showMore(power_trend_bearish_exhaustion, 'powertrend_bearish_exhaustion_tablimit')">
+																	<i class="fa fa-chevron-down " data-toggle="tooltip"
+																		title="show more"></i>
+																</span>
+															</span>
+															<span
+																ng-if="power_trend_bearish_exhaustion.length == tabLimit['powertrend_bearish_exhaustion_tablimit']">
+																<span
+																	ng-click="showLess('powertrend_bearish_exhaustion_tablimit')">
+																	<i class="fa fa-chevron-up " data-toggle="tooltip"
+																		title="show less"></i>
+																</span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<!-- ADX Bullish / Bearish  starts  -->
+										<div class="row">
+											<div class="col-6">
+												<div class="m-portlet__head align-items-center">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">ADX BULLISH</h3>
+														</div>
+													</div>
+												</div>
+												<div class="m-portlet__body">
+													<div class="m-portlet">
+														<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<h3 class="m-portlet__head-text">
+																	Level 1
+																</h3>
+															</div>
+															<div class="m-portlet__head-tools">
+																<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bullish_level_1.length >= 1'>
+																	<h6>{{bullish_level_1.length < 20 ? bullish_level_1.length : tabLimit['adx_score_bull_1']}} /
+																		{{bullish_level_1.length}}</h6>
+																</div>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-light dropdown-toggle" 
+																	data-toggle="dropdown" 
+																	aria-haspopup="true" 
+																	aria-expanded="false">
+																  Watchlist </button>
+																<div class="dropdown-menu">
+																  <li>
+																	<button  class="dropdown-item" type="button" 
+																	  ng-if='bullish_level_1.length > 0'
+																	  ng-click="$root.watchlistModal(bullish_level_1,'heatmap')"
+																	  data-toggle="modal" data-target="#add_to_watch_list"
+																	  class="btn">Add to watchlist</button>
+																  </li>
+																  <li>
+																	<dynamic-watchlist source-type="heatmap" 
+																	is-group="true" data="bullish_level_1" 
+																	page-name="{{'TRENDING'}}" 
+																	strategy="{{'BULLISH LEVELS 1'}}"></dynamic-watchlist>
+																  </li>
+																</div>
+																</div> 
+																	
+																
+															</div>
+														</div>
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in bullish_level_1  | orderBy:['-ADX']| limitTo: tabLimit['adx_score_bull_1']"
+																	style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																	<div class="col-lg"
+																		style="text-align:center;background-color: #239B56;">
+																		<div class="btn-group dropright ">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em class="text-white"
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:12px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																					target="_blank">
+																					Stock Analyser
+																				</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																					to Watchlist</a>
+																			</div>
+																		</div>
+																		<div class="">
+																			<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="dropdown-item" source="heatmap"></dhan-trading-view-charts>
+
+																		</div>
+																		
+																		
+																		<p class="text-white "
+																			style="margin-bottom: 0px;font-size: 8;font-weight: bold;">
+
+																			<strong>{{script.ADX_SCORE}}</strong>
+																		</p>
+
+																	</div>
+
+																</div>
+															</div>
+														</div>
+														<div ng-if="bullish_level_1.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class=" text-center">
+																<span
+																	ng-if="bullish_level_1.length != tabLimit['adx_score_bull_1']">
+																	<span
+																		ng-click="showMore(bullish_level_1, 'adx_score_bull_1')">
+																		<i class="fa fa-chevron-down "
+																			data-toggle="tooltip" title="show more"></i>
+																	</span>
+																</span>
+																<span
+																	ng-if="bullish_level_1.length == tabLimit['adx_score_bull_1']">
+																	<span ng-click="showLess('adx_score_bull_1')">
+																		<i class="fa fa-chevron-up "
+																			data-toggle="tooltip" title="show less"></i>
+																	</span>
+																</span>
+															</div>
+														</div>
+													</div>
+
+													<div class="m-portlet">
+														<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<h3 class="m-portlet__head-text">
+																	Level 2
+																</h3>
+															</div>
+															<div class="m-portlet__head-tools">
+																<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bullish_level_2.length >= 1'>
+																	<h6>{{bullish_level_2.length < 20 ? bullish_level_2.length : tabLimit['adx_score_bull_2']}} /
+																		{{bullish_level_2.length}}</h6>
+																</div>
+																<div class="btn-group" ng-if='bullish_level_2.length > 0'>
+																	<button type="button" class="btn btn-light dropdown-toggle" 
+																		data-toggle="dropdown" 
+																		aria-haspopup="true" 
+																		aria-expanded="false">
+																	  Watchlist </button>
+																	<div class="dropdown-menu">
+																	  <li>
+																		<button  class="dropdown-item" type="button" 
+																		  ng-if='bullish_level_2.length > 0'
+																		  ng-click="$root.watchlistModal(bullish_level_2,'heatmap')"
+																		  data-toggle="modal" data-target="#add_to_watch_list"
+																		  class="btn">Add to watchlist</button>
+																	  </li>
+																	  <li>
+																		<dynamic-watchlist source-type="heatmap" 
+																		is-group="true" data="bullish_level_2" 
+																		page-name="{{'TRENDING'}}" 
+																		strategy="{{'BULLISH LEVELS 2'}}"></dynamic-watchlist>
+																	  </li>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in bullish_level_2 | orderBy:['-ADX']| limitTo: tabLimit['adx_score_bull_2']"
+																	style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																	<div class="col-lg"
+																		style="text-align: center; background-color: #90ee90;">
+																		<div class="btn-group dropright ">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em class="text-white"
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:12px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																					target="_blank">
+																					Stock Analyser
+																				</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																					to Watchlist</a>
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																		</div>
+																		
+																		<p class="text-white"
+																			style="margin-bottom: 0px;font-size: 8;font-weight: bold;">
+
+																			<strong>{{script.ADX_SCORE}}</strong>
+																		</p>
+
+																	</div>
+
+																</div>
+															</div>
+														</div>
+														<div ng-if="bullish_level_2.length > defaultLimit"
+															class="m-portlet__foot bg-sucess">
+															<div class=" text-center">
+																<span
+																	ng-if="bullish_level_2.length != tabLimit['adx_score_bull_2']">
+																	<span
+																		ng-click="showMore(bullish_level_2, 'adx_score_bull_2')">
+																		<i class="fa fa-chevron-down "
+																			data-toggle="tooltip" title="show more"></i>
+																	</span>
+																</span>
+																<span
+																	ng-if="bullish_level_2.length == tabLimit['adx_score_bull_2']">
+																	<span ng-click="showLess('adx_score_bull_2')">
+																		<i class="fa fa-chevron-up "
+																			data-toggle="tooltip" title="show less"></i>
+																	</span>
+																</span>
+															</div>
+														</div>
+													</div>
+
+													<div class="m-portlet">
+														<div class="m-portlet__head">
+															<div class="m-portlet__head-caption">
+																<h3 class="m-portlet__head-text">
+																	Level 3
+																</h3>
+															</div>
+															<div class="m-portlet__head-tools">
+																<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bullish_level_3.length >= 1'>
+																	<h6>{{bullish_level_3.length < 20 ? bullish_level_3.length : tabLimit['adx_score_bull_3']}} /
+																		{{bullish_level_3.length}}</h6>
+																</div>
+																<div class="btn-group" ng-if='bullish_level_3.length > 0'>
+																	<button type="button" class="btn btn-light dropdown-toggle" 
+																		data-toggle="dropdown" 
+																		aria-haspopup="true" 
+																		aria-expanded="false">
+																	  Watchlist </button>
+																	<div class="dropdown-menu">
+																	  <li>
+																		<button  class="dropdown-item" type="button" 
+																		  ng-if='bullish_level_3.length > 0'
+																		  ng-click="$root.watchlistModal(bullish_level_3,'heatmap')"
+																		  data-toggle="modal" data-target="#add_to_watch_list"
+																		  class="btn">Add to watchlist</button>
+																	  </li>
+																	  <li>
+																		<dynamic-watchlist source-type="heatmap" 
+																		is-group="true" data="bullish_level_3" 
+																		page-name="{{'TRENDING'}}" 
+																		strategy="{{'BULLISH LEVELS 3'}}"></dynamic-watchlist>
+																	  </li>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="m-portlet__body">
+															<div class="row">
+																<div ng-repeat="script in bullish_level_3 | orderBy:['-ADX'] | limitTo: tabLimit['adx_score_bull_3']"
+																	style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																	<div class="col-lg"
+																		style="text-align: center; background-color: #bfe7bf;">
+																		<div class="btn-group dropright ">
+																			<a type="button"
+																				class="btn btn-sm btn-secondary "
+																				data-toggle="dropdown"
+																				aria-haspopup="true"
+																				aria-expanded="false"
+																				style="padding: 0;border: none;background: none;">
+																				<em class="text-white"
+																					style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																				<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																					style="font-size:12px;"></i>
+																			</a>
+																			<div class="dropdown-menu">
+																				<a class="dropdown-item m-link"
+																					href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																					target="_blank">
+																					Stock Analyser
+																				</a>
+																				<a class="dropdown-item" href="#"
+																					class="m-link" data-toggle="modal"
+																					data-target="#add_to_watch_list"
+																					ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																					to Watchlist</a>
+																			</div>
+																		</div>
+																		<div>
+																			<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																		</div>
+																		
+																		<p class="text-white"
+																			style="margin-bottom: 0px;font-size: 8;font-weight: bold;">
+
+																			<strong>{{script.ADX_SCORE}}</strong>
+																		</p>
+
+																	</div>
+
+																</div>
+															</div>
+														</div>
+														<div ng-if="bullish_level_3.length > defaultLimit"
+															class="m-portlet__foot">
+															<div class=" text-center">
+																<span
+																	ng-if="bullish_level_3.length != tabLimit['adx_score_bull_3']">
+																	<span
+																		ng-click="showMore(bullish_level_3, 'adx_score_bull_3')">
+																		<i class="fa fa-chevron-down "
+																			data-toggle="tooltip" title="show more"></i>
+																	</span>
+																</span>
+																<span
+																	ng-if="bullish_level_3.length == tabLimit['adx_score_bull_3']">
+																	<span ng-click="showLess('adx_score_bull_3')">
+																		<i class="fa fa-chevron-up "
+																			data-toggle="tooltip" title="show less"></i>
+																	</span>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="m-portlet__head align-items-center">
+													<div class="m-portlet__head-caption">
+														<div class="m-portlet__head-title">
+															<h3 class="m-portlet__head-text">
+																ADX BEARISH
+															</h3>
+														</div>
+													</div>
+												</div>
+												<div class="m-portlet__body">
+													<div class="m-widget26__chart">
+														<div id="m_chart_heatmap">
+															<div class="m-portlet">
+																<div class="m-portlet__head">
+																	<div class="m-portlet__head-caption">
+																		<h3 class="m-portlet__head-text">
+																			Level 1
+																		</h3>
+																	</div>
+																	<div class="m-portlet__head-tools">
+																		<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bearish_level_1.length >= 1'>
+																			<h6>{{bearish_level_1.length < 20 ? bearish_level_1.length : tabLimit['adx_score_bear_1']}} /
+																				{{bearish_level_1.length}}</h6>
+																		</div>
+																		<div class="btn-group" ng-if='bearish_level_1.length > 0'>
+																			<button type="button" class="btn btn-light dropdown-toggle" 
+																				data-toggle="dropdown" 
+																				aria-haspopup="true" 
+																				aria-expanded="false">
+																			  Watchlist </button>
+																			<div class="dropdown-menu">
+																			  <li>
+																				<button  class="dropdown-item" type="button" 
+																				  ng-if='bearish_level_1.length > 0'
+																				  ng-click="$root.watchlistModal(bearish_level_1,'heatmap')"
+																				  data-toggle="modal" data-target="#add_to_watch_list"
+																				  class="btn">Add to watchlist</button>
+																			  </li>
+																			  <li>
+																				<dynamic-watchlist source-type="heatmap" 
+																				is-group="true" data="bearish_level_1" 
+																				page-name="{{'TRENDING'}}" 
+																				strategy="{{'BEARISH LEVELS 1'}}"></dynamic-watchlist>
+																			  </li>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in bearish_level_1  | orderBy:['-ADX']| limitTo: tabLimit['adx_score_bear_1']"
+																			style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																			<div class="col-lg"
+																				style="text-align:center;background-color: #bc3333;">
+																				<div class="btn-group dropright ">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em class="text-white"
+																							style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:12px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																							target="_blank">
+																							Stock Analyser
+																						</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																							to Watchlist</a>
+																					</div>
+																				</div>
+																				<div>
+																					<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="dropdown-item" source="heatmap"></dhan-trading-view-charts>
+																				</div>
+																				<p class="text-white"
+																					style="margin-bottom: 0px;font-size: 8;font-weight: bold;">
+
+																					<strong>{{script.ADX_SCORE}}</strong>
+																				</p>
+
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="bearish_level_1.length > defaultLimit"
+																	class="m-portlet__foot">
+																	<div class=" text-center">
+																		<span
+																			ng-if="bearish_level_1.length != tabLimit['adx_score_bear_1']">
+																			<span
+																				ng-click="showMore(bearish_level_1, 'adx_score_bear_1')">
+																				<i class="fa fa-chevron-down "
+																					data-toggle="tooltip"
+																					title="show more"></i>
+																			</span>
+																		</span>
+																		<span
+																			ng-if="bearish_level_1.length == tabLimit['adx_score_bear_1']">
+																			<span ng-click="showLess('adx_score_bear_1')">
+																				<i class="fa fa-chevron-up "
+																					data-toggle="tooltip"
+																					title="show less"></i>
+																			</span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+
+															<div class="m-portlet">
+																<div class="m-portlet__head">
+																	<div class="m-portlet__head-caption">
+																		<h3 class="m-portlet__head-text">
+																			Level 2
+																		</h3>
+																	</div>
+																	<div class="m-portlet__head-tools">
+																		<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bearish_level_2.length >= 1'>
+																			<h6>{{bearish_level_2.length < 20 ? bearish_level_2.length : tabLimit['adx_score_bear_2']}} /
+																				{{bearish_level_2.length}}</h6>
+																		</div>
+																		<div class="btn-group" ng-if='bearish_level_2.length > 0'>
+																			<button type="button" class="btn btn-light dropdown-toggle" 
+																				data-toggle="dropdown" 
+																				aria-haspopup="true" 
+																				aria-expanded="false">
+																			  Watchlist </button>
+																			<div class="dropdown-menu">
+																			  <li>
+																				<button  class="dropdown-item" type="button" 
+																				  ng-if='bearish_level_2.length > 0'
+																				  ng-click="$root.watchlistModal(bearish_level_2,'heatmap')"
+																				  data-toggle="modal" data-target="#add_to_watch_list"
+																				  class="btn">Add to watchlist</button>
+																			  </li>
+																			  <li>
+																				<dynamic-watchlist source-type="heatmap" 
+																				is-group="true" data="bearish_level_2" 
+																				page-name="{{'TRENDING'}}" 
+																				strategy="{{'BEARISH LEVELS 2'}}"></dynamic-watchlist>
+																			  </li>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in bearish_level_2 | orderBy:['-ADX']| limitTo: tabLimit['adx_score_bear_2']"
+																			style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																			<div class="col-lg"
+																				style="text-align: center; background-color: #d84d4d;">
+																				<div class="btn-group dropright ">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em class="text-white"
+																							style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}} </strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:12px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																							target="_blank">
+																							Stock Analyser
+																						</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																							to Watchlist</a>
+																					</div>
+																				</div>
+																				<div>
+																					<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																				</div>
+																				
+																				<p class="text-white"
+																					style="margin-bottom: 0px;color: black;font-size: 8;font-weight: bold;">
+																					<strong>{{script.ADX_SCORE}}</strong>
+																				</p>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="bearish_level_2.length > defaultLimit"
+																	class="m-portlet__foot bg-sucess">
+																	<div class=" text-center">
+																		<span
+																			ng-if="bearish_level_2.length != tabLimit['adx_score_bear_2']">
+																			<span
+																				ng-click="showMore(bearish_level_2, 'adx_score_bear_2')">
+																				<i class="fa fa-chevron-down "
+																					data-toggle="tooltip"
+																					title="show more"></i>
+																			</span>
+																		</span>
+																		<span
+																			ng-if="bearish_level_2.length == tabLimit['adx_score_bear_2']">
+																			<span ng-click="showLess('adx_score_bear_2')">
+																				<i class="fa fa-chevron-up "
+																					data-toggle="tooltip"
+																					title="show less"></i>
+																			</span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+
+															<div class="m-portlet">
+																<div class="m-portlet__head">
+																	<div class="m-portlet__head-caption">
+																		<h3 class="m-portlet__head-text">
+																			Level 3
+																		</h3>
+																	</div>
+																	<div class="m-portlet__head-tools">
+																		<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='bearish_level_3.length >= 1'>
+																			<h6>{{bearish_level_3.length < 20 ? bearish_level_3.length : tabLimit['adx_score_bear_3']}} /
+																				{{bearish_level_3.length}}</h6>
+																		</div>
+																		<div class="btn-group" ng-if='bearish_level_3.length > 0'>
+																			<button type="button" class="btn btn-light dropdown-toggle" 
+																				data-toggle="dropdown" 
+																				aria-haspopup="true" 
+																				aria-expanded="false">
+																			  Watchlist </button>
+																			<div class="dropdown-menu">
+																			  <li>
+																				<button  class="dropdown-item" type="button" 
+																				  ng-if='bearish_level_3.length > 0'
+																				  ng-click="$root.watchlistModal(bearish_level_3,'heatmap')"
+																				  data-toggle="modal" data-target="#add_to_watch_list"
+																				  class="btn">Add to watchlist</button>
+																			  </li>
+																			  <li>
+																				<dynamic-watchlist source-type="heatmap" 
+																				is-group="true" data="bearish_level_3" 
+																				page-name="{{'TRENDING'}}" 
+																				strategy="{{'BEARISH LEVELS 3'}}"></dynamic-watchlist>
+																			  </li>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="m-portlet__body">
+																	<div class="row">
+																		<div ng-repeat="script in bearish_level_3 | orderBy:['-ADX'] | limitTo: tabLimit['adx_score_bear_3']"
+																			style="margin-left:3px;margin-top:2px;border-radius:3px;width:150px;">
+																			<div class="col-lg"
+																				style="text-align: center; background-color: #ef8394;">
+																				<div class="btn-group dropright ">
+																					<a type="button"
+																						class="btn btn-sm btn-secondary "
+																						data-toggle="dropdown"
+																						aria-haspopup="true"
+																						aria-expanded="false"
+																						style="padding: 0;border: none;background: none;">
+																						<em class="text-white"
+																							style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																						<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																							style="font-size:12px;"></i>
+																					</a>
+																					<div class="dropdown-menu">
+																						<a class="dropdown-item m-link"
+																							href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																							target="_blank">
+																							Stock Analyser
+																						</a>
+																						<a class="dropdown-item"
+																							href="#" class="m-link"
+																							data-toggle="modal"
+																							data-target="#add_to_watch_list"
+																							ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																							to Watchlist</a>
+																					</div>
+																				</div>
+																				<div>
+																					<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+																				</div>
+																				
+																				<p class="text-white"
+																					style="margin-bottom: 0px;font-size: 8;font-weight: bold;">
+																					<strong>{{script.ADX_SCORE}}</strong>
+																				</p>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div ng-if="bearish_level_3.length > defaultLimit"
+																	class="m-portlet__foot">
+																	<div class=" text-center">
+																		<span
+																			ng-if="bearish_level_3.length != tabLimit['adx_score_bear_3']">
+																			<span
+																				ng-click="showMore(bearish_level_3, 'adx_score_bear_3')">
+																				<i class="fa fa-chevron-down "
+																					data-toggle="tooltip"
+																					title="show more"></i>
+																			</span>
+																		</span>
+																		<span
+																			ng-if="bearish_level_3.length == tabLimit['adx_score_bear_3']">
+																			<span ng-click="showLess('adx_score_bear_3')">
+																				<i class="fa fa-chevron-up "
+																					data-toggle="tooltip"
+																					title="show less"></i>
+																			</span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- ADX Bullish / Bearish ends  -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--  -->
+					</div>
+
+					<!-- Bullish starts  -->
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+								style="height: auto;">
+								<div class="m-portlet__head align-items-center">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+												DI Bullish
+											</h3>
+										</div>
+									</div>
+									<div class="m-portlet__head-tools">
+										<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='heatmap_data_green.length >= 1'>
+											<h6>{{heatmap_data_green.length < 20 ? heatmap_data_green.length : tabLimit['di_bullish_tablimit']}} /
+												{{heatmap_data_green.length}}</h6>
+										</div>
+										
+										<div class="btn-group" ng-if='heatmap_data_green.length > 0'>
+											<button type="button" class="btn btn-light dropdown-toggle" 
+												data-toggle="dropdown" 
+												aria-haspopup="true" 
+												aria-expanded="false">
+											  Watchlist </button>
+											<div class="dropdown-menu">
+											  <li>
+												<button  class="dropdown-item" type="button" 
+												  ng-if='heatmap_data_green.length > 0'
+												  ng-click="$root.watchlistModal(heatmap_data_green,'heatmap')"
+												  data-toggle="modal" data-target="#add_to_watch_list"
+												  class="btn">Add to watchlist</button>
+											  </li>
+											  <li>
+												<dynamic-watchlist source-type="heatmap" 
+												is-group="true" data="heatmap_data_green" 
+												page-name="{{'TRENDING'}}" 
+												strategy="{{'DI BULLISH'}}"></dynamic-watchlist>
+											  </li>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="m-portlet__body">
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in heatmap_data_green | limitTo: tabLimit['di_bullish_tablimit'];"
+													style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+													<div class="col-lg" 
+														ng-style="getStyleForBullish(script.FD)"
+														style="text-align:center;">
+														<div class="btn-group dropright ">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em class="text-white"
+																	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.FD}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:12px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+														
+														<span style="width: 110px;"
+															ng-bind-html="script.ALERT_html"></span>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div ng-if="heatmap_data_green.length > defaultLimit"
+									class="m-portlet__foot bg-sucess">
+									<div class=" text-center">
+										<span
+											ng-if="heatmap_data_green.length != tabLimit['di_bullish_tablimit']">
+											<span
+												ng-click="showMore(heatmap_data_green, 'di_bullish_tablimit')">
+												<i class="fa fa-chevron-down "
+													data-toggle="tooltip"
+													title="show more"></i>
+											</span>
+										</span>
+										<span
+											ng-if="heatmap_data_green.length == tabLimit['di_bullish_tablimit']">
+											<span ng-click="showLess('di_bullish_tablimit')">
+												<i class="fa fa-chevron-up "
+													data-toggle="tooltip"
+													title="show less"></i>
+											</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Bullish Ends -->
+
+					<!-- Bearish starts -->
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+								style="height: auto;">
+								<div class="m-portlet__head align-items-center">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+												DI Bearish
+											</h3>
+										</div>
+									</div>
+									<div class="m-portlet__head-tools">
+										<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='heatmap_data_red.length >= 1'>
+											<h6>{{heatmap_data_red.length < 20 ? heatmap_data_red.length : tabLimit['di_bearish_tablimit']}} /
+												{{heatmap_data_red.length}}</h6>
+										</div>
+										
+										<div class="btn-group" ng-if='heatmap_data_red.length > 0'>
+											<button type="button" class="btn btn-light dropdown-toggle" 
+												data-toggle="dropdown" 
+												aria-haspopup="true" 
+												aria-expanded="false">
+											  Watchlist </button>
+											<div class="dropdown-menu">
+											  <li>
+												<button  class="dropdown-item" type="button" 
+												  ng-if='heatmap_data_red.length > 0'
+												  ng-click="$root.watchlistModal(heatmap_data_red,'heatmap')"
+												  data-toggle="modal" data-target="#add_to_watch_list"
+												  class="btn">Add to watchlist</button>
+											  </li>
+											  <li>
+												<dynamic-watchlist source-type="heatmap" 
+												is-group="true" data="heatmap_data_red" 
+												page-name="{{'TRENDING'}}" 
+												strategy="{{'DI BEARISH'}}"></dynamic-watchlist>
+											  </li>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="m-portlet__body">
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in heatmap_data_red | limitTo: tabLimit['di_bearish_tablimit'];"
+													style="margin-left:3px;margin-top:2px;border-radius:3px;width:160px;">
+													<div class="col-lg"
+														ng-style="getStyleForBearish(script.FD)"
+														style="text-align:center;">
+														<div class="btn-group dropright ">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em class="text-white"
+																	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.FD}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:12px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+														<span style="width: 110px;"
+															ng-bind-html="script.ALERT_html"></span>
+
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<div ng-if="heatmap_data_red.length > defaultLimit"
+									class="m-portlet__foot bg-sucess">
+									<div class=" text-center">
+										<span
+											ng-if="heatmap_data_red.length != tabLimit['di_bearish_tablimit']">
+											<span
+												ng-click="showMore(heatmap_data_red, 'di_bearish_tablimit')">
+												<i class="fa fa-chevron-down "
+													data-toggle="tooltip"
+													title="show more"></i>
+											</span>
+										</span>
+										<span
+											ng-if="heatmap_data_red.length == tabLimit['di_bearish_tablimit']">
+											<span ng-click="showLess('di_bearish_tablimit')">
+												<i class="fa fa-chevron-up "
+													data-toggle="tooltip"
+													title="show less"></i>
+											</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Bearish Ends -->
+
+					<!-- Neutral Starts -->
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="m-portlet m-portlet--bordered-semi m-portlet--half-height m-portlet--fit m-portlet--border-bottom-success  m-portlet--rounded"
+								style="height: auto;">
+								<div class="m-portlet__head align-items-center">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+												DI Neutral
+											</h3>
+										</div>
+									</div>
+									<div class="m-portlet__head-tools">
+										<div class="btn-group" ng-if='group_1.length > 0'>
+											<button type="button" class="btn btn-light dropdown-toggle" 
+												data-toggle="dropdown" 
+												aria-haspopup="true" 
+												aria-expanded="false">
+											  Watchlist </button>
+											<div class="dropdown-menu">
+											  <li>
+												<button  class="dropdown-item" type="button" 
+												  ng-if='heatmap_data_white.length > 0'
+												  ng-click="$root.watchlistModal(heatmap_data_white,'heatmap')"
+												  data-toggle="modal" data-target="#add_to_watch_list"
+												  class="btn">Add to watchlist</button>
+											  </li>
+											  <li>
+												<dynamic-watchlist source-type="heatmap" 
+												is-group="true" data="heatmap_data_white" 
+												page-name="{{'TRENDING'}}" 
+												strategy="{{'DI NEUTRAL'}}"></dynamic-watchlist>
+											  </li>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet__body" ng-if="group_1.length > 0">
+										<div class="m-portlet__head align-items-center">
+											<div class="m-portlet__head-caption">
+												<div class="m-portlet__head-title">
+													<h3 class="m-portlet__head-text">
+														Group-1
+													</h3>
+												</div>
+											</div>
+											<div class="m-portlet__head-tools">
+												<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='group_1.length >= 1'>
+													<h6>{{group_1.length < 20 ? group_1.length : tabLimit['neutral_group_1']}} /
+														{{group_1.length}}</h6>
+												</div>
+											</div>
+										</div>
+									
+										<div class="m-widget26__chart">
+											<div id="m_chart_heatmap">
+												<div class="row">
+													<div ng-repeat="script in group_1 | limitTo: tabLimit['neutral_group_1'] "
+														style="margin-left:1px;margin-top:1px;margin-bottom: 1px; border-radius:5px;width:160px;">
+														<div class="col-lg" ng-if="script.FD == 0"
+															style="text-align:center;background-color: #EEEEEE;">
+															<div class="btn-group dropright ">
+																<a type="button" class="btn btn-sm btn-secondary "
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false"
+																	style="padding: 0;border: none;background: none;">
+																	<em
+																		style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																	<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																		style="font-size:14px;"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<a class="dropdown-item m-link"
+																		href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																		target="_blank">
+																		Stock Analyser
+																	</a>
+																	<a class="dropdown-item" href="#" class="m-link"
+																		data-toggle="modal" data-target="#add_to_watch_list"
+																		ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																		to Watchlist</a>
+																</div>
+															</div>
+															<div>
+																<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+															</div>
+															<span style="width: 110px;"
+																ng-bind-html="script.ALERT_html"></span>
+														</div>
+													</div>
+												</div>
+
+												<div ng-if="group_1.length > defaultLimit" class="m-portlet__foot">
+													<div class=" text-center">
+														<span ng-if="group_1.length != tabLimit['neutral_group_1']">
+															<span ng-click="showMore(group_1, 'neutral_group_1')">
+																<i class="fa fa-chevron-down " data-toggle="tooltip"
+																	title="show more"></i>
+															</span>
+														</span>
+														<span ng-if="group_1.length == tabLimit['neutral_group_1']">
+															<span ng-click="showLess('neutral_group_1')">
+																<i class="fa fa-chevron-up " data-toggle="tooltip"
+																	title="show less"></i>
+															</span>
+														</span>
+													</div>
+												</div>
+
+											</div>
+										</div>
+								</div>
+
+								<div class="m-portlet__body" ng-if="group_2.length > 0">
+									<div class="m-portlet__head align-items-center">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Group-2
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='group_2.length >= 1'>
+												<h6>{{group_2.length < 20 ? group_2.length : tabLimit['neutral_group_2']}} /
+													{{group_2.length}}</h6>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in group_2 | limitTo: tabLimit['neutral_group_2']"
+													style="margin-left:1px;margin-top:1px;margin-bottom: 1px;border-radius:5px;width:160px;">
+
+													<div class="col-lg" ng-if="script.FD == 0"
+														style="text-align:center;background-color: #EEEEEE;">
+														<div class="btn-group dropright ">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em
+																	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+														<span style="width: 110px;"
+															ng-bind-html="script.ALERT_html"></span>
+													</div>
+												</div>
+											</div>
+
+											<div ng-if="group_2.length > defaultLimit" class="m-portlet__foot">
+												<div class=" text-center">
+													<span ng-if="group_2.length != tabLimit['neutral_group_2']">
+														<span ng-click="showMore(group_2, 'neutral_group_2')">
+															<i class="fa fa-chevron-down " data-toggle="tooltip"
+																title="show more"></i>
+														</span>
+													</span>
+													<span ng-if="group_2.length == tabLimit['neutral_group_2']">
+														<span ng-click="showLess('neutral_group_2')">
+															<i class="fa fa-chevron-up " data-toggle="tooltip"
+																title="show less"></i>
+														</span>
+													</span>
+												</div>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet__body" ng-if="group_3.length > 0">
+									<div class="m-portlet__head align-items-center">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Group-3
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='group_3.length >= 1'>
+												<h6>{{group_3.length < 20 ? group_3.length : tabLimit['neutral_group_3']}} /
+													{{group_3.length}}</h6>
+											</div>
+										</div>
+									</div>
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in group_3 | limitTo: tabLimit['neutral_group_3']"
+													style="margin-left:1px;margin-top:1px;margin-bottom: 1px;border-radius:5px;width:160px;">
+													<div class="col-lg" ng-if="script.FD == 0"
+														style="text-align:center;background-color: #EEEEEE;">
+
+														<div class="btn-group dropright ">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em
+																	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;color: black!important;"><strong>{{script.SYMBOL}} : {{script.ADX}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to Watchlist</a>
+															</div>
+														</div>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+														<span style="width: 110px;"
+															ng-bind-html="script.ALERT_html"></span>
+													</div>
+												</div>
+											</div>
+											<div ng-if="group_3.length > defaultLimit" class="m-portlet__foot">
+												<div class=" text-center">
+													<span ng-if="group_3.length != tabLimit['neutral_group_3']">
+														<span ng-click="showMore(group_3, 'neutral_group_3')">
+															<i class="fa fa-chevron-down " data-toggle="tooltip"
+																title="show more"></i>
+														</span>
+													</span>
+													<span ng-if="group_3.length == tabLimit['neutral_group_3']">
+														<span ng-click="showLess('neutral_group_3')">
+															<i class="fa fa-chevron-up " data-toggle="tooltip"
+																title="show less"></i>
+														</span>
+													</span>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+								<div class="m-portlet__body" ng-if="group_4.length > 0">
+									<div class="m-portlet__head align-items-center">
+										<div class="m-portlet__head-caption">
+											<div class="m-portlet__head-title">
+												<h3 class="m-portlet__head-text">
+													Group-4
+												</h3>
+											</div>
+										</div>
+										<div class="m-portlet__head-tools">
+											<div style="margin-top: 1rem ;margin-right: 3px ;" ng-if='group_4.length >= 1'>
+												<h6>{{group_4.length < 20 ? group_4.length : tabLimit['neutral_group_4']}} /
+													{{group_4.length}}</h6>
+											</div>
+										</div>
+									</div>
+									
+									<div class="m-widget26__chart">
+										<div id="m_chart_heatmap">
+											<div class="row">
+												<div ng-repeat="script in group_4 | limitTo: tabLimit['neutral_group_4']"
+													style="margin-left:1px;margin-top:1px;border-radius:5px;width:160px;">
+													<div class="col-lg" ng-if="script.FD == 0"
+														style="text-align:center;background-color: #EEEEEE;">
+														<div class="btn-group dropright ">
+															<a type="button" class="btn btn-sm btn-secondary "
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"
+																style="padding: 0;border: none;background: none;">
+																<em
+																	style="margin-bottom: 0px;font-size: 12px;font-weight: bold;color: black!important;"><strong>{{script.SYMBOL}}</strong></em>
+																<i class="fa fa-caret-down  text-dark ml-2 fa-rotate-45"
+																	style="font-size:14px;"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item m-link"
+																	href="/index/stock_analyser/{{script.SYMBOL}}/INTRADAY"
+																	target="_blank">
+																	Stock Analyser
+																</a>
+																<a class="dropdown-item" href="#" class="m-link"
+																	data-toggle="modal" data-target="#add_to_watch_list"
+																	ng-click='$root.watchlistModal([script], "heatmap")'>Add
+																	to Watchlist</a>
+															</div>
+														</div>
+														
+														<p
+															style="margin-bottom: 0px;color: black;font-size: 10;font-weight: bold;">
+															<strong>{{script.ADX}}</strong>
+														</p>
+														<div>
+															<dhan-trading-view-charts symbol-name="script.SYMBOL" asset-class="eq" class-value="" source="heatmap"></dhan-trading-view-charts>
+
+														</div>
+														<span style="width: 110px;"
+															ng-bind-html="script.ALERT_html"></span>
+													</div>
+												</div>
+											</div>
+											<div ng-if="group_4.length > defaultLimit" class="m-portlet__foot">
+												<div class=" text-center">
+													<span ng-if="group_4.length != tabLimit['neutral_group_4']">
+														<span ng-click="showMore(group_4, 'neutral_group_4')">
+															<i class="fa fa-chevron-down " data-toggle="tooltip"
+																title="show more"></i>
+														</span>
+													</span>
+													<span ng-if="group_4.length == tabLimit['neutral_group_4']">
+														<span ng-click="showLess('neutral_group_4')">
+															<i class="fa fa-chevron-up " data-toggle="tooltip"
+																title="show less"></i>
+														</span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- Neutral Ends -->
+
+				</div>
+				<!-- Heatmap Section Ends -->
+
+				<!-- Levels Tab Starts  -->
+				<div class="tab-pane" id="m_widget2_tab2_content">
+					<div ng-show="$root.user_permission['TRENDING']">
+						<div class="m-subheader row">
+							<div class="col-lg-8 d-flex align-items-center">
+								<div class="col-md-8 col-lg-4">
+									<select class="custom-select" id="inputIndexValue" ng-model="SelectIndexValue"
+										ng-options="value.Name for value in IndexValue" ng-change="adx()">
+									</select>
+								</div>
+
+								<div class="col-md-8 col-lg-4">
+									<select class="custom-select" id="inputTimeFrameValue"
+										ng-model="SelectTimeFrameValue" ng-options="value for value in TimeFrameValue"
+										ng-change="adx()">
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="m-portlet__body">
+							<div class="tab-content">
+								<div class="tab-pane active show" id="m_widget2_tab1_content">
+									<div class="m-portlet__head-caption">
+										<div class="row">
+											<div class="col-md-4 m--margin-top-20">
+												<div class="m-portlet__head-title">
+													<h5>ADX DI SIGNALS</h5>
+												</div>
+											</div>
+											<div class="col-md-4 m--margin-top-20">
+												<div class="m-portlet__head-title">
+													<h5>ADX DI FILTERS</h5>
+												</div>
+											</div>
+											<div class="col-md-4 m--margin-top-20">
+												<div class="m-portlet__head-title">
+													<h5>VALUE PICKER</h5>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4 m--margin-top-20">
+											<div class="m-checkbox-list">
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_CROSS_VALUES"
+														id="ADX_CROSS_VALUES" ng-change="adx();">ADX cross
+
+													<select class="custom-select" id="inputLineValue"
+														ng-model="SelectedAdxValue"
+														ng-options="value for value in AdxValues" ng-change="adx()"
+														style="width: 65px; height: auto;  
+														scroll-behavior: smooth;margin-left: 15px;">
+													</select>
+
+													<span></span>
+												</label>
+
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="PDI_CROSS_VALUES"
+														id="PDI_CROSS_VALUES" ng-change="adx();">PDI cross
+													<select class="custom-select" id="inputLineValue"
+														ng-model="SelectedPdiValue"
+														ng-options="value for value in PdiValues" ng-change="adx()"
+														style="width: 65px; height: auto;  
+														scroll-behavior: smooth;margin-left: 21px;">
+													</select>
+													<span></span>
+												</label>
+
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="MDI_CROSS_VALUES"
+														id="MDI_CROSS_VALUES" ng-change="adx();">MDI cross
+													<select class="custom-select" id="inputLineValue"
+														ng-model="SelectedMdiValue"
+														ng-options="value for value in MdiValues" ng-change="adx()"
+														style="width: 65px; height: auto;  
+														scroll-behavior: smooth;margin-left: 17px;">
+													</select>
+													<span></span>
+												</label>
+
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="DI_WIDENING_3_BARS"
+														id="di_lines_widening_3_bars" ng-change="adx();">DI lines
+													widening 3 bars
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="FALLING_FROM_HIGH_ABOVE_50"
+														id="falling_from_high_above_50" ng-change="adx();">ADX falling
+													from high
+													<span></span>
+												</label>
+											</div>
+										</div>
+										<div class="col-md-4 m--margin-top-20">
+											<div class="m-checkbox-list">
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_RISING_3_BARS"
+														id="adx_rising_3_bars" ng-change="adx();">ADX rising 3 bars
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_RISING_5_BARS"
+														id="adx_rising_5_bars" ng-change="adx();">ADX rising 5 bars
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="PDI_GREATER_THAN_MDI" id="DIP>DIM"
+														ng-change="adx();">PDI greater than MDI
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="MDI_GREATER_THAN_PDI" id="DIM>DIP"
+														ng-change="adx();">MDI greater than PDI
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_BETN_PDI_MDI"
+														id="adx_betn_PDI_MDI" ng-change="adx();">ADX between PDI & MDI
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_ABOVE_PDI_MDI"
+														id="adx_above_PDI_MDI" ng-change="adx();">ADX above PDI & MDI
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_LESS_THAN_20"
+														id="adx_less_than_20" ng-change="adx();">ADX less than 20
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_GREATER_THAN_40"
+														id="adx_greater_than_40" ng-change="adx();">ADX greater than 40
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="DI_LESS_THAN_20"
+														id="di_less_than_40" ng-change="adx();">DI lines less than 20
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_PDI_MDI_LESS_THAN_22"
+														id="adx_pdi_mdi_less_than_22" ng-change="adx();">ADX PDI MDI
+													less than 22
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_RISING_NEG_DI"
+														id="adx_rising_neg_di" ng-change="adx();">ADX rising with Di
+													negative
+													<span></span>
+												</label>
+												<label class="m-checkbox m-checkbox--solid m-checkbox--state-info">
+													<input type="checkbox" ng-model="ADX_RISING_POS_DI"
+														id="adx_rising_pos_di" ng-change="adx();">ADX rising with Di
+													positive
+													<span></span>
+												</label>
+
+
+
+											</div>
+										</div>
+
+										<div class="col-md-4 m--margin-top-20">
+
+											<div>
+												ADX between X and Y :
+											</div>
+											<div class="row mb-3">
+												<div class="col-md-4 m--margin-top-0">
+
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of X" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_x_of_adx"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of Y" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_y_of_adx"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+													<button class="btn btn-info" type="button"
+														ng-click="adx()">Go</button>
+												</div>
+											</div>
+
+
+											<div>
+												PDI between X and Y :
+											</div>
+
+											<div class="row mb-3">
+												<div class="col-md-4 m--margin-top-0">
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of X" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_x_of_pdi"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of Y" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_y_of_pdi"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+													<button class="btn btn-info" type="button"
+														ng-click="adx()">Go</button>
+												</div>
+											</div>
+											<div>
+												MDI between X and Y :
+											</div>
+
+											<div class="row mb-3">
+												<div class="col-md-4 m--margin-top-0">
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of X" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_x_of_mdi"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+
+													<input class="form-control m-input tt-input"
+														id="m_typeahead_stockanalyzer" type="number"
+														placeholder="Enter value of Y" autocomplete="off"
+														spellcheck="false" dir="auto" ng-model="value_y_of_mdi"
+														style="position: relative; vertical-align: top; background-color: transparent;">
+												</div>
+												<div class="col-md-4 m--margin-top-0">
+													<button class="btn btn-info" type="button"
+														ng-click="adx()">Go</button>
+												</div>
+											</div>
+										</div>
+
+
+									</div>
+
+									<div class="row">
+										<div
+											class="col-md-4 col-sm-2 m--margin-bottom-20 m--margin-top-20 m-input-icon m-input-icon--left">
+											<input type="text" class="form-control m-input" placeholder="Search..."
+												id="generalSearch"></input>
+											<span class="m-input-icon__icon m-input-icon__icon--left">
+												<span>
+													<i class="la la-search"></i>
+												</span>
+											</span>
+										</div>
+
+										<div class="col-md-4 order-1 order-xl-4 m--align-right"
+											style="margin-left:30rem!important;">
+											<dhan-trading-view-charts symbol-name="datatable" asset-class="eq" class-value="btn btn-outline-info ml-2" source="table"></dhan-trading-view-charts>
+											<button type="button" class="btn btn-outline-info ml-2" data-toggle="modal"
+												style="font-weight: 500;" data-target="#add_to_watch_list"
+												ng-click="$root.watchlistModal(datatable,'table')">
+												Watchlist
+											</button>
+										</div>
+									</div>
+									<div class="m_datatable_adx" id="scrolling_both">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- Levels Tab Ends -->
+			</div>
+		</div>
+	</div>
+	<div ng-show="!$root.user_permission['TRENDING']">
+		<div class="m-portlet" m-portlet="true">
+			<div class="m-portlet__body">
+				<center>
+					<h5><img width="5%" height="5%" src="https://neotrader.in/static/lock.svg"
+							alt="permissionlock">This
+						section is available only under NeoTrader Pro
+						Subscription.<a href="https://rajavenkatraman.com/service"> Subscribe Now</a></h5>
+				</center>
+				<center><em>-- Sample image to illustrate the module --</em></center>
+				<div class="row">
+					<img width="100%" src="https://neotrader.in/static/SS/ADX Trends.png" alt="Market View">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
