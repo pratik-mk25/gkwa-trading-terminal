@@ -1,7 +1,7 @@
 [project]
-name = "neotrader-clone"
-version = "1.0.0"
-description = "NeoTrader Web Platform and Trading Software Replica"
+name = "gkwa-trading-terminal"
+version = "3.0.0"
+description = "GKWA Trading Terminal - Full Replica Platform with 2560+ NSE Companies and Realtime Feed"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -17,3 +17,6 @@ dependencies = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.uv]
+package = false

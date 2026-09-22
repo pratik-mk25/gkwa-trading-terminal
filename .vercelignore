@@ -1,5 +1,5 @@
 # Development binaries and virtual environments
-uv
+/uv
 .venv
 .venv/
 
