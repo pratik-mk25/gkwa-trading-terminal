@@ -22,4 +22,4 @@ build-backend = "hatchling.build"
 package = false
 
 [tool.vercel]
-entrypoint = "main.py:app"
+entrypoint = "main:app"
