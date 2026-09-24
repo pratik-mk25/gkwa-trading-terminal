@@ -246,12 +246,29 @@ async def api_dashboard_refresh_time():
 
 @app.get("/api/live_feed_delta")
 @app.get("/api/live_feed_delta/")
-async def api_live_feed_delta():
+async def api_live_feed_delta(interval: Optional[str] = "5s"):
     """Returns the latest market tick delta packet (REST fallback for real-time pipeline)"""
     if not feed_manager.latest_tick_data or os.environ.get("VERCEL"):
         delta = market_sim.step_simulation_tick()
         feed_manager.latest_tick_data = delta
-    return feed_manager.latest_tick_data or market_sim.get_latest_snapshot()
+    resp = dict(feed_manager.latest_tick_data or market_sim.get_latest_snapshot())
+    resp["feed_interval"] = interval
+    return resp
+
+@app.get("/api/feed-intervals")
+async def api_feed_intervals():
+    """Returns available feed intervals (5s, 30s, 1m, 5m, 30m, 45m)"""
+    return {
+        "intervals": [
+            {"key": "5s", "label": "5 Seconds", "ms": 5000},
+            {"key": "30s", "label": "30 Seconds", "ms": 30000},
+            {"key": "1m", "label": "1 Minute", "ms": 60000},
+            {"key": "5m", "label": "5 Minutes", "ms": 300000},
+            {"key": "30m", "label": "30 Minutes", "ms": 1800000},
+            {"key": "45m", "label": "45 Minutes", "ms": 2700000}
+        ],
+        "default": "5s"
+    }
 
 @app.get("/app/day_trader_stocks/")
 @app.get("/app/day_trader_stocks")
