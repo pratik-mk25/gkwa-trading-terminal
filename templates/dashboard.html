@@ -88,47 +88,112 @@ Replicated for GKWA Web Trading Terminal
             color: #00c5dc;
             font-weight: 700;
         }
-        .divergence-axis-wrapper {
-            flex: 1;
+        /* amCharts Authentic Divergence Bar Charts Layout */
+        .amchart-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .amchart-plot-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .amchart-row {
             display: flex;
             align-items: center;
-            height: 18px;
-            background: #f8fafc;
-            border-radius: 2px;
             position: relative;
+            border-bottom: 1px solid #f8fafc;
         }
-        .divergence-center-line {
+        .amchart-row-broad {
+            height: 40px;
+        }
+        .amchart-row-sector {
+            height: 18px;
+        }
+        .amchart-label {
+            width: 115px;
+            text-align: right;
+            padding-right: 12px;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: #475569;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            user-select: none;
+        }
+        .amchart-label:hover {
+            color: #00c5dc;
+            font-weight: 700;
+        }
+        .amchart-axis-track {
+            flex: 1;
+            height: 100%;
+            position: relative;
+            background: #ffffff;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+        }
+        .amchart-grid-line {
             position: absolute;
-            left: 50%;
             top: 0;
             bottom: 0;
             width: 1px;
-            background: #cbd5e1;
+            background: #f1f5f9;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .amchart-zero-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #94a3b8;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .amchart-bar {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 0;
+            transition: width 0.3s ease, left 0.3s ease;
+            cursor: pointer;
             z-index: 2;
         }
-        .divergence-bar {
-            height: 14px;
-            border-radius: 2px;
+        .amchart-bar:hover {
+            filter: brightness(1.08);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+        }
+        .amchart-bar-pos {
+            background-color: #26c296;
+        }
+        .amchart-bar-neg {
+            background-color: #f5365c;
+        }
+        .amchart-scale-bar {
+            display: flex;
+            align-items: center;
+            margin-left: 115px;
+            border-top: 1px solid #94a3b8;
+            height: 22px;
+            position: relative;
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 500;
+            user-select: none;
+        }
+        .amchart-scale-tick {
             position: absolute;
-            transition: width 0.3s ease;
-            cursor: pointer;
+            transform: translateX(-50%);
+            top: 2px;
         }
-        .divergence-bar-pos {
-            left: 50%;
-            background: #00CC99;
-        }
-        .divergence-bar-neg {
-            right: 50%;
-            background: #FF0033;
-        }
-        .divergence-val-text {
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-            width: 50px;
-        }
-        .val-pos { color: #00CC99; }
-        .val-neg { color: #FF0033; }
 
         /* Realtime Live Pipeline & Pulsing Indicator */
         .live-dot-pulse {
@@ -456,6 +521,12 @@ Replicated for GKWA Web Trading Terminal
                         </div>
                     </div>
 
+                    <!-- Agent Swarm Sandbox Link -->
+                    <a href="javascript:;" onclick="switchModule('sandbox')" class="btn btn-link text-primary text-decoration-none px-3 py-2 font-weight-bold font-13 d-flex align-items-center mr-2" style="border: 1px solid rgba(0, 197, 220, 0.4); border-radius: 20px; background: rgba(0, 197, 220, 0.08);">
+                        <i class="fa fa-robot mr-1" style="color: #00c5dc;"></i>
+                        Agent Swarm
+                    </a>
+
                     <!-- Connect Your Broker -->
                     <a href="javascript:;" onclick="openBrokerModal()" class="btn btn-link text-dark text-decoration-none px-3 py-2 font-weight-500 font-13 d-flex align-items-center">
                         <img src="/static/apptrade-canvas/img/high-school.png" style="width: 20px;" class="mr-2" />
@@ -627,6 +698,21 @@ Replicated for GKWA Web Trading Terminal
                         <ul class="m-menu__subnav">
                             <li><a href="/index/my_trades/" onclick="switchModule('my_trades'); return false;"><i class="fa fa-chevron-right"></i> My Trades</a></li>
                             <li><a href="/index/watchlist/" onclick="switchModule('watchlist'); return false;"><i class="fa fa-chevron-right"></i> Watchlist</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- 11. Autonomous Agent Swarm Sandbox -->
+                <li class="m-menu__item" id="nav-sandbox">
+                    <a href="/index/sandbox/" class="m-menu__link" title="Agent Swarm Sandbox" onclick="switchModule('sandbox'); return false;">
+                        <i class="fa fa-robot" style="color: #00c5dc;"></i>
+                    </a>
+                    <div class="m-menu__submenu">
+                        <div class="m-menu__subitem-title">Autonomous Swarm</div>
+                        <ul class="m-menu__subnav">
+                            <li><a href="/index/sandbox/" onclick="switchModule('sandbox'); return false;"><i class="fa fa-chevron-right"></i> Swarm Sandbox</a></li>
+                            <li><a href="/api/sandbox/state" target="_blank"><i class="fa fa-chevron-right"></i> Live State API</a></li>
+                            <li><a href="/api/sandbox/stream" target="_blank"><i class="fa fa-chevron-right"></i> Real-Time SSE Feed</a></li>
                         </ul>
                     </div>
                 </li>
@@ -1773,6 +1859,148 @@ Replicated for GKWA Web Trading Terminal
                 </div>
             </div>
 
+            <!-- ========================================== -->
+            <!-- AGENT SWARM REAL-TIME SANDBOX VIEW         -->
+            <!-- ========================================== -->
+            <div id="view-sandbox" class="module-view" style="display: none;">
+                <!-- Telemetry Banner -->
+                <div class="row mb-3">
+                    <div class="col-md-3 mb-2">
+                        <div class="m-portlet p-3 border-0 shadow-sm" style="border-left: 4px solid #00c5dc !important;">
+                            <div class="text-muted font-11 font-weight-bold text-uppercase">Swarm Stream Status</div>
+                            <div class="d-flex align-items-center mt-1">
+                                <span class="live-dot-pulse mr-2"></span>
+                                <span class="font-weight-bold font-15 text-success" id="sandboxStreamStatus">LIVE SSE CONNECTED</span>
+                            </div>
+                            <div class="font-11 text-muted mt-1" id="sandboxLatency">1.0s low-latency tick rate</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="m-portlet p-3 border-0 shadow-sm" style="border-left: 4px solid #26c296 !important;">
+                            <div class="text-muted font-11 font-weight-bold text-uppercase">Net Swarm P&amp;L</div>
+                            <div class="font-weight-bold font-20 text-success mt-1" id="sandboxNetPnl">+₹31,520.00</div>
+                            <div class="font-11 text-muted mt-1">Realized: <span id="sandboxRealizedPnl" class="text-dark font-weight-600">₹28,400</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="m-portlet p-3 border-0 shadow-sm" style="border-left: 4px solid #716aca !important;">
+                            <div class="text-muted font-11 font-weight-bold text-uppercase">Active Autonomous Agents</div>
+                            <div class="font-weight-bold font-20 text-purple mt-1" id="sandboxActiveAgentsCount">4 Agents</div>
+                            <div class="font-11 text-muted mt-1">Total Executed: <span id="sandboxTotalTradesCount" class="text-dark font-weight-600">68 Trades</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="m-portlet p-3 border-0 shadow-sm" style="border-left: 4px solid #ffb822 !important;">
+                            <div class="text-muted font-11 font-weight-bold text-uppercase">Open Positions</div>
+                            <div class="font-weight-bold font-20 text-dark mt-1" id="sandboxOpenPositionsCount">3 Positions</div>
+                            <div class="font-11 text-muted mt-1">Avg Win Rate: <span id="sandboxAvgWinRate" class="text-success font-weight-bold">78.5%</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Left: Open Positions Table & Swarm Activity Log -->
+                    <div class="col-lg-8 mb-4">
+                        <!-- Open Positions -->
+                        <div class="m-portlet mb-4">
+                            <div class="m-portlet__head d-flex justify-content-between align-items-center py-2 px-3 border-bottom">
+                                <h5 class="m-portlet__head-text font-weight-bold text-dark font-14 mb-0">
+                                    <i class="fa fa-briefcase text-primary mr-2"></i> Active Swarm Positions
+                                </h5>
+                                <button class="btn btn-xs btn-outline-danger font-weight-bold" onclick="resetSandbox()">
+                                    <i class="fa fa-redo mr-1"></i> Reset Sandbox
+                                </button>
+                            </div>
+                            <div class="table-responsive p-0">
+                                <table class="table table-sm table-hover font-12 mb-0" id="sandboxPositionsTable">
+                                    <thead class="bg-light text-muted">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>SUBAGENT</th>
+                                            <th>SYMBOL</th>
+                                            <th>ACTION</th>
+                                            <th>QTY</th>
+                                            <th>ENTRY</th>
+                                            <th>LTP</th>
+                                            <th>P&amp;L</th>
+                                            <th>REASON</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sandboxPositionsTbody">
+                                        <tr><td colspan="10" class="text-center py-4 text-muted"><i class="fa fa-spinner fa-spin mr-2"></i> Loading sandbox positions...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Live Swarm Terminal Audit Log -->
+                        <div class="m-portlet">
+                            <div class="m-portlet__head d-flex justify-content-between align-items-center py-2 px-3 border-bottom bg-dark text-white rounded-top">
+                                <span class="font-weight-bold font-13"><i class="fa fa-terminal mr-2 text-success"></i> Autonomous Swarm Activity Log</span>
+                                <span class="badge badge-success px-2 py-1 font-11">LIVE TELEMETRY</span>
+                            </div>
+                            <div class="p-3 bg-dark text-light font-12 font-mono" id="sandboxAuditLogConsole" style="height: 260px; overflow-y: auto; font-family: monospace; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
+                                <div class="text-success">[01:38:09] Agent Swarm Sandbox initialized. Listening to real-time market ticks...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Swarm Agents Roster & Manual Dispatcher -->
+                    <div class="col-lg-4 mb-4">
+                        <!-- Manual Action Dispatcher -->
+                        <div class="m-portlet mb-4 p-3 border-0 shadow-sm">
+                            <h6 class="font-weight-bold text-dark font-13 mb-3">
+                                <i class="fa fa-paper-plane text-info mr-1"></i> Dispatch Swarm Action
+                            </h6>
+                            <div class="form-group mb-2">
+                                <label class="font-11 font-weight-bold text-muted mb-1">Target Agent</label>
+                                <select id="sandboxDispatchAgent" class="custom-select custom-select-sm">
+                                    <option value="alpha_momentum_01">Alpha Momentum Scalper</option>
+                                    <option value="options_greeks_02">Options Delta-Neutral Bot</option>
+                                    <option value="sector_divergence_03">Sector Rotation Arbitrageur</option>
+                                    <option value="cpr_camarilla_sentinel_04">Pivot Breakout Sentinel</option>
+                                </select>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <label class="font-11 font-weight-bold text-muted mb-1">Action</label>
+                                    <select id="sandboxDispatchAction" class="custom-select custom-select-sm">
+                                        <option value="BUY">BUY</option>
+                                        <option value="SELL">SELL</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="font-11 font-weight-bold text-muted mb-1">Quantity</label>
+                                    <input type="number" id="sandboxDispatchQty" class="form-control form-control-sm" value="50" min="1">
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="font-11 font-weight-bold text-muted mb-1">Symbol (Stock or Option)</label>
+                                <input type="text" id="sandboxDispatchSymbol" class="form-control form-control-sm" value="PATANJALI" placeholder="e.g. RELIANCE, NIFTY 26 SEP 24850 CE">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="font-11 font-weight-bold text-muted mb-1">Algorithmic Reasoning</label>
+                                <input type="text" id="sandboxDispatchReason" class="form-control form-control-sm" value="Breakout above resistance with heavy volume surge">
+                            </div>
+                            <button class="btn btn-sm btn-primary btn-block font-weight-bold py-2" onclick="dispatchManualAgentAction()">
+                                <i class="fa fa-bolt mr-1"></i> Execute Swarm Action
+                            </button>
+                        </div>
+
+                        <!-- Active Swarm Agents Roster -->
+                        <div class="m-portlet p-3 border-0 shadow-sm">
+                            <h6 class="font-weight-bold text-dark font-13 mb-3">
+                                <i class="fa fa-robot text-purple mr-1"></i> Registered Subagents
+                            </h6>
+                            <div id="sandboxAgentsRosterList">
+                                <!-- Populated dynamically by loadSandboxModule() -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
         <!-- END: Main Content Area -->
     </div>
@@ -1927,7 +2155,8 @@ Replicated for GKWA Web Trading Terminal
             "my_trades": { title: "My Paper Trades", breadcrumbs: ["User Workspace", "My Trades"] },
             "watchlist": { title: "Watchlist Matrix", breadcrumbs: ["User Workspace", "Watchlist"] },
             "realtime_charts": { title: "Live Realtime Charts", breadcrumbs: ["Analysis Tools", "Realtime Charts"] },
-            "user_profile": { title: "My User Profile", breadcrumbs: ["User Workspace", "Profile & Settings"] }
+            "user_profile": { title: "My User Profile", breadcrumbs: ["User Workspace", "Profile & Settings"] },
+            "sandbox": { title: "Agent Swarm Sandbox", breadcrumbs: ["Autonomous Swarm", "Real-Time Sandbox"] }
         };
 
         // Format Indian Standard Time (IST) strictly for Indian Stock Market
@@ -2133,95 +2362,169 @@ Replicated for GKWA Web Trading Terminal
             }
         }
 
-        // Render Broad Market Divergence Bars
+        // Render Broad Market Divergence Bars (Authentic amCharts: X-axis -0.5 to 1.0, zero line at 33.333%)
         function renderBroadMarket(data) {
             const container = document.getElementById("broadMarketBars");
             if (!container) return;
-            let html = "";
+            const span = 1.5; // -0.5 to 1.0
+            const zeroPct = (0.5 / span) * 100; // 33.3333%
+
+            let html = `
+                <div class="amchart-wrapper">
+                    <div class="amchart-plot-container">
+            `;
             data.forEach(item => {
                 const pct = item.CHGPCT;
                 const isPos = pct >= 0;
-                const widthPct = Math.min(Math.abs(pct) * 26, 48);
+                let leftPct, widthPct;
+                if (isPos) {
+                    leftPct = zeroPct;
+                    widthPct = Math.min((pct / span) * 100, 100 - zeroPct);
+                } else {
+                    widthPct = Math.min((Math.abs(pct) / span) * 100, zeroPct);
+                    leftPct = zeroPct - widthPct;
+                }
+                const tooltip = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+
                 html += `
-                    <div class="divergence-bar-row broad-bar-row" data-name="${item.NAME}">
-                        <div class="divergence-label" title="${item.NAME}">${item.NAME}</div>
-                        <div class="divergence-axis-wrapper">
-                            <div class="divergence-center-line"></div>
-                            <div class="divergence-bar ${isPos ? 'divergence-bar-pos' : 'divergence-bar-neg'}" style="width: ${widthPct}%;" title="${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)"></div>
-                        </div>
-                        <div class="divergence-val-text ${isPos ? 'val-pos' : 'val-neg'}">
-                            ${pct > 0 ? '+' : ''}${pct}%
+                    <div class="amchart-row amchart-row-broad broad-bar-row" data-name="${item.NAME}">
+                        <div class="amchart-label" title="${tooltip}">${item.NAME}</div>
+                        <div class="amchart-axis-track">
+                            <div class="amchart-grid-line" style="left: 0%;"></div>
+                            <div class="amchart-grid-line" style="left: 66.6667%;"></div>
+                            <div class="amchart-grid-line" style="left: 100%;"></div>
+                            <div class="amchart-zero-line" style="left: ${zeroPct}%;"></div>
+                            <div class="amchart-bar ${isPos ? 'amchart-bar-pos' : 'amchart-bar-neg'}" 
+                                 style="left: ${leftPct}%; width: ${widthPct}%; height: 18px;" 
+                                 title="${tooltip}"></div>
                         </div>
                     </div>
                 `;
             });
+            html += `
+                    </div>
+                    <div class="amchart-scale-bar">
+                        <span class="amchart-scale-tick" style="left: 0%; transform: translateX(0);">-0.5</span>
+                        <span class="amchart-scale-tick" style="left: 33.3333%;">0.0</span>
+                        <span class="amchart-scale-tick" style="left: 66.6667%;">0.5</span>
+                        <span class="amchart-scale-tick" style="left: 100%; transform: translateX(-100%);">1.0</span>
+                    </div>
+                </div>
+            `;
             container.innerHTML = html;
         }
 
         function updateBroadMarketLive(data) {
+            const span = 1.5;
+            const zeroPct = (0.5 / span) * 100;
             data.forEach(item => {
                 const row = document.querySelector(`.broad-bar-row[data-name="${item.NAME}"]`);
                 if (row) {
-                    const bar = row.querySelector('.divergence-bar');
-                    const val = row.querySelector('.divergence-val-text');
+                    const bar = row.querySelector('.amchart-bar');
+                    const label = row.querySelector('.amchart-label');
                     const pct = item.CHGPCT;
                     const isPos = pct >= 0;
-                    const widthPct = Math.min(Math.abs(pct) * 26, 48);
-                    if (bar) {
-                        bar.className = `divergence-bar ${isPos ? 'divergence-bar-pos' : 'divergence-bar-neg'}`;
-                        bar.style.width = `${widthPct}%`;
-                        bar.title = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+                    let leftPct, widthPct;
+                    if (isPos) {
+                        leftPct = zeroPct;
+                        widthPct = Math.min((pct / span) * 100, 100 - zeroPct);
+                    } else {
+                        widthPct = Math.min((Math.abs(pct) / span) * 100, zeroPct);
+                        leftPct = zeroPct - widthPct;
                     }
-                    if (val) {
-                        val.className = `divergence-val-text ${isPos ? 'val-pos' : 'val-neg'}`;
-                        val.innerText = `${pct > 0 ? '+' : ''}${pct}%`;
+                    const tooltip = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+                    if (bar) {
+                        bar.className = `amchart-bar ${isPos ? 'amchart-bar-pos' : 'amchart-bar-neg'}`;
+                        bar.style.left = `${leftPct}%`;
+                        bar.style.width = `${widthPct}%`;
+                        bar.title = tooltip;
+                    }
+                    if (label) {
+                        label.title = tooltip;
                     }
                 }
             });
         }
 
-        // Render Sector Performance Divergence Bars
+        // Render Sector Performance Divergence Bars (Authentic amCharts: X-axis -1.0 to 2.0, zero line at 33.333%, 17 sectors in fixed categorical order)
         function renderSectorPerformance(data) {
             const container = document.getElementById("sectorPerformanceBars");
             if (!container) return;
-            let html = "";
+            const span = 3.0; // -1.0 to 2.0
+            const zeroPct = (1.0 / span) * 100; // 33.3333%
+
+            let html = `
+                <div class="amchart-wrapper">
+                    <div class="amchart-plot-container">
+            `;
             data.forEach(item => {
                 const pct = item.CHGPCT;
                 const isPos = pct >= 0;
-                const widthPct = Math.min(Math.abs(pct) * 26, 48);
+                let leftPct, widthPct;
+                if (isPos) {
+                    leftPct = zeroPct;
+                    widthPct = Math.min((pct / span) * 100, 100 - zeroPct);
+                } else {
+                    widthPct = Math.min((Math.abs(pct) / span) * 100, zeroPct);
+                    leftPct = zeroPct - widthPct;
+                }
+                const tooltip = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+
                 html += `
-                    <div class="divergence-bar-row sector-bar-row" data-name="${item.NAME}">
-                        <div class="divergence-label" title="${item.NAME}" onclick="selectSectorDetail('${item.NAME}')">${item.NAME}</div>
-                        <div class="divergence-axis-wrapper">
-                            <div class="divergence-center-line"></div>
-                            <div class="divergence-bar ${isPos ? 'divergence-bar-pos' : 'divergence-bar-neg'}" style="width: ${widthPct}%;" title="${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)" onclick="selectSectorDetail('${item.NAME}')"></div>
-                        </div>
-                        <div class="divergence-val-text ${isPos ? 'val-pos' : 'val-neg'}">
-                            ${pct > 0 ? '+' : ''}${pct}%
+                    <div class="amchart-row amchart-row-sector sector-bar-row" data-name="${item.NAME}">
+                        <div class="amchart-label" title="${tooltip}" onclick="selectSectorDetail('${item.NAME}')">${item.NAME}</div>
+                        <div class="amchart-axis-track" onclick="selectSectorDetail('${item.NAME}')">
+                            <div class="amchart-grid-line" style="left: 0%;"></div>
+                            <div class="amchart-grid-line" style="left: 66.6667%;"></div>
+                            <div class="amchart-grid-line" style="left: 100%;"></div>
+                            <div class="amchart-zero-line" style="left: ${zeroPct}%;"></div>
+                            <div class="amchart-bar ${isPos ? 'amchart-bar-pos' : 'amchart-bar-neg'}" 
+                                 style="left: ${leftPct}%; width: ${widthPct}%; height: 11px;" 
+                                 title="${tooltip}"></div>
                         </div>
                     </div>
                 `;
             });
+            html += `
+                    </div>
+                    <div class="amchart-scale-bar">
+                        <span class="amchart-scale-tick" style="left: 0%; transform: translateX(0);">-1</span>
+                        <span class="amchart-scale-tick" style="left: 33.3333%;">0</span>
+                        <span class="amchart-scale-tick" style="left: 66.6667%;">1</span>
+                        <span class="amchart-scale-tick" style="left: 100%; transform: translateX(-100%);">2</span>
+                    </div>
+                </div>
+            `;
             container.innerHTML = html;
         }
 
         function updateSectorPerformanceLive(data) {
+            const span = 3.0;
+            const zeroPct = (1.0 / span) * 100;
             data.forEach(item => {
                 const row = document.querySelector(`.sector-bar-row[data-name="${item.NAME}"]`);
                 if (row) {
-                    const bar = row.querySelector('.divergence-bar');
-                    const val = row.querySelector('.divergence-val-text');
+                    const bar = row.querySelector('.amchart-bar');
+                    const label = row.querySelector('.amchart-label');
                     const pct = item.CHGPCT;
                     const isPos = pct >= 0;
-                    const widthPct = Math.min(Math.abs(pct) * 26, 48);
-                    if (bar) {
-                        bar.className = `divergence-bar ${isPos ? 'divergence-bar-pos' : 'divergence-bar-neg'}`;
-                        bar.style.width = `${widthPct}%`;
-                        bar.title = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+                    let leftPct, widthPct;
+                    if (isPos) {
+                        leftPct = zeroPct;
+                        widthPct = Math.min((pct / span) * 100, 100 - zeroPct);
+                    } else {
+                        widthPct = Math.min((Math.abs(pct) / span) * 100, zeroPct);
+                        leftPct = zeroPct - widthPct;
                     }
-                    if (val) {
-                        val.className = `divergence-val-text ${isPos ? 'val-pos' : 'val-neg'}`;
-                        val.innerText = `${pct > 0 ? '+' : ''}${pct}%`;
+                    const tooltip = `${item.NAME}: ₹${item.LTP} (${pct > 0 ? '+' : ''}${pct}%)`;
+                    if (bar) {
+                        bar.className = `amchart-bar ${isPos ? 'amchart-bar-pos' : 'amchart-bar-neg'}`;
+                        bar.style.left = `${leftPct}%`;
+                        bar.style.width = `${widthPct}%`;
+                        bar.title = tooltip;
+                    }
+                    if (label) {
+                        label.title = tooltip;
                     }
                 }
             });
@@ -2842,6 +3145,11 @@ Replicated for GKWA Web Trading Terminal
                 document.getElementById("nav-pivots")?.classList.add("active");
                 window.history.pushState({}, "", `/index/${moduleName}/`);
                 loadPivotsModule(moduleName);
+            } else if (moduleName === "sandbox") {
+                document.getElementById("view-sandbox").style.display = "block";
+                document.getElementById("nav-sandbox")?.classList.add("active");
+                window.history.pushState({}, "", "/index/sandbox/");
+                loadSandboxModule();
             } else {
                 // Show generic strategy module
                 document.getElementById("view-generic-module").style.display = "block";
@@ -2856,6 +3164,263 @@ Replicated for GKWA Web Trading Terminal
                 }
 
                 loadGenericModule(moduleName, meta);
+            }
+        }
+
+        // ==========================================
+        // REAL-TIME AGENT SWARM SANDBOX CONTROLLER
+        // ==========================================
+        let sandboxEventSource = null;
+        let sandboxPollingInterval = null;
+
+        async function loadSandboxModule() {
+            try {
+                // 1. Initial snapshot fetch
+                const resp = await fetch('/api/sandbox/state');
+                const data = await resp.json();
+                renderSandboxState(data);
+
+                // 2. Setup Real-time SSE Stream with automatic fallback
+                initSandboxStream();
+            } catch (err) {
+                console.error("Error loading sandbox:", err);
+            }
+        }
+
+        function initSandboxStream() {
+            if (sandboxEventSource) {
+                sandboxEventSource.close();
+            }
+            if (sandboxPollingInterval) {
+                clearInterval(sandboxPollingInterval);
+            }
+
+            if (window.EventSource) {
+                try {
+                    sandboxEventSource = new EventSource('/api/sandbox/stream');
+                    sandboxEventSource.onopen = () => {
+                        const statusEl = document.getElementById("sandboxStreamStatus");
+                        if (statusEl) {
+                            statusEl.innerText = "LIVE SSE CONNECTED";
+                            statusEl.className = "font-weight-bold font-15 text-success";
+                        }
+                    };
+                    sandboxEventSource.onmessage = (event) => {
+                        try {
+                            const packet = JSON.parse(event.data);
+                            if (packet.swarm_state) {
+                                updateSandboxTelemetry(packet.swarm_state);
+                            }
+                            if (packet.broad_market) {
+                                updateBroadMarketLive(packet.broad_market);
+                            }
+                            if (packet.sectors) {
+                                updateSectorPerformanceLive(packet.sectors);
+                            }
+                        } catch (e) {}
+                    };
+                    sandboxEventSource.onerror = () => {
+                        // Fallback to polling every 2s if SSE disconnected
+                        const statusEl = document.getElementById("sandboxStreamStatus");
+                        if (statusEl) {
+                            statusEl.innerText = "POLLING SYNC (2.0s)";
+                            statusEl.className = "font-weight-bold font-15 text-primary";
+                        }
+                        if (sandboxEventSource) sandboxEventSource.close();
+                        if (!sandboxPollingInterval) {
+                            sandboxPollingInterval = setInterval(async () => {
+                                try {
+                                    const resp = await fetch('/api/sandbox/state');
+                                    const data = await resp.json();
+                                    renderSandboxState(data);
+                                } catch (e) {}
+                            }, 2000);
+                        }
+                    };
+                } catch (e) {
+                    startSandboxPollingFallback();
+                }
+            } else {
+                startSandboxPollingFallback();
+            }
+        }
+
+        function startSandboxPollingFallback() {
+            if (!sandboxPollingInterval) {
+                sandboxPollingInterval = setInterval(async () => {
+                    try {
+                        const resp = await fetch('/api/sandbox/state');
+                        const data = await resp.json();
+                        renderSandboxState(data);
+                    } catch (e) {}
+                }, 2000);
+            }
+        }
+
+        function renderSandboxState(data) {
+            if (!data) return;
+            const swarm = data.swarm_telemetry || {};
+
+            // 1. Telemetry Top Badges
+            const netPnl = swarm.net_swarm_pnl || 0;
+            const netPnlEl = document.getElementById("sandboxNetPnl");
+            if (netPnlEl) {
+                netPnlEl.innerText = (netPnl >= 0 ? '+₹' : '-₹') + Math.abs(netPnl).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                netPnlEl.className = `font-weight-bold font-20 ${netPnl >= 0 ? 'text-success' : 'text-danger'} mt-1`;
+            }
+
+            const realPnlEl = document.getElementById("sandboxRealizedPnl");
+            if (realPnlEl) realPnlEl.innerText = '₹' + (swarm.total_realized_pnl || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+            const actAgEl = document.getElementById("sandboxActiveAgentsCount");
+            if (actAgEl) actAgEl.innerText = `${swarm.active_agents_count || 4} Agents`;
+
+            const opCountEl = document.getElementById("sandboxOpenPositionsCount");
+            if (opCountEl) opCountEl.innerText = `${swarm.total_positions_count || 0} Positions`;
+
+            // 2. Active Positions Table
+            const posTbody = document.getElementById("sandboxPositionsTbody");
+            if (posTbody) {
+                const positions = swarm.active_positions || [];
+                if (positions.length === 0) {
+                    posTbody.innerHTML = `<tr><td colspan="10" class="text-center py-4 text-muted font-13">No open positions. Swarm agents are scanning live signals...</td></tr>`;
+                } else {
+                    let html = "";
+                    positions.forEach(p => {
+                        const pnl = p.unrealized_pnl || 0;
+                        const isPos = pnl >= 0;
+                        const isBuy = p.action === "BUY" || p.action === "LONG";
+                        html += `
+                            <tr>
+                                <td class="font-weight-bold">#${p.position_id}</td>
+                                <td><span class="badge badge-light border text-purple font-weight-bold">${p.agent_id}</span></td>
+                                <td class="font-weight-bold text-dark">${p.symbol}</td>
+                                <td><span class="badge ${isBuy ? 'badge-success' : 'badge-danger'} px-2 py-1 font-weight-bold">${p.action}</span></td>
+                                <td class="font-weight-600">${p.qty}</td>
+                                <td>₹${parseFloat(p.entry_price).toFixed(2)}</td>
+                                <td>₹${parseFloat(p.current_price).toFixed(2)}</td>
+                                <td class="font-weight-bold ${isPos ? 'text-success' : 'text-danger'}">
+                                    ${isPos ? '+' : ''}₹${parseFloat(pnl).toFixed(2)}
+                                </td>
+                                <td class="text-muted font-11" title="${p.reason || ''}">${(p.reason || '').substring(0, 32)}...</td>
+                                <td>
+                                    <button class="btn btn-xs btn-outline-danger font-weight-bold" onclick="closeSandboxPosition(${p.position_id}, '${p.agent_id}')">Close</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    posTbody.innerHTML = html;
+                }
+            }
+
+            // 3. Swarm Agents Roster
+            const rosterEl = document.getElementById("sandboxAgentsRosterList");
+            if (rosterEl) {
+                const agents = swarm.agents || [];
+                let rHtml = "";
+                agents.forEach(ag => {
+                    rHtml += `
+                        <div class="card border p-2 mb-2 rounded bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="font-weight-bold font-12 text-dark">${ag.name}</span>
+                                <span class="badge badge-success px-2 py-1 font-10">ACTIVE</span>
+                            </div>
+                            <div class="text-muted font-11 font-italic mt-1">${ag.strategy}</div>
+                            <div class="d-flex justify-content-between mt-2 pt-1 border-top font-11">
+                                <span>Trades: <strong>${ag.trades_count}</strong></span>
+                                <span>Win Rate: <strong class="text-success">${ag.win_rate || 75}%</strong></span>
+                                <span>Realized: <strong class="text-primary">+₹${(ag.realized_pnl || 0).toFixed(0)}</strong></span>
+                            </div>
+                        </div>
+                    `;
+                });
+                rosterEl.innerHTML = rHtml;
+            }
+
+            // 4. Audit Log
+            renderSandboxAuditLog(swarm.recent_actions || []);
+        }
+
+        function updateSandboxTelemetry(telemetry) {
+            const netPnl = telemetry.net_swarm_pnl || 0;
+            const netPnlEl = document.getElementById("sandboxNetPnl");
+            if (netPnlEl) {
+                netPnlEl.innerText = (netPnl >= 0 ? '+₹' : '-₹') + Math.abs(netPnl).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                netPnlEl.className = `font-weight-bold font-20 ${netPnl >= 0 ? 'text-success' : 'text-danger'} mt-1`;
+            }
+        }
+
+        function renderSandboxAuditLog(actions) {
+            const consoleEl = document.getElementById("sandboxAuditLogConsole");
+            if (!consoleEl) return;
+            let logHtml = "";
+            actions.forEach(a => {
+                const isBuy = a.action === "BUY" || a.action === "LONG";
+                const isClose = a.action === "CLOSE";
+                const color = isClose ? "#00c5dc" : (isBuy ? "#26c296" : "#f5365c");
+                logHtml += `
+                    <div class="py-1 border-bottom border-secondary">
+                        <span class="text-muted">[${a.timestamp || ''}]</span>
+                        <span style="color: ${color}; font-weight: bold;">[${a.action}]</span>
+                        <span class="text-warning">[${a.agent_id}]</span>
+                        <span>${a.summary || a.reason || ''}</span>
+                    </div>
+                `;
+            });
+            consoleEl.innerHTML = logHtml || `<div class="text-muted">No recent events.</div>`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        async function dispatchManualAgentAction() {
+            const agent_id = document.getElementById("sandboxDispatchAgent").value;
+            const action = document.getElementById("sandboxDispatchAction").value;
+            const symbol = document.getElementById("sandboxDispatchSymbol").value.trim().toUpperCase();
+            const qty = parseInt(document.getElementById("sandboxDispatchQty").value) || 10;
+            const reason = document.getElementById("sandboxDispatchReason").value;
+
+            if (!symbol) {
+                alert("Please enter a valid stock or option symbol.");
+                return;
+            }
+
+            try {
+                const resp = await fetch('/api/sandbox/act', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ agent_id, action, symbol, qty, reason })
+                });
+                const res = await resp.json();
+                if (res.status === "FILLED") {
+                    loadSandboxModule();
+                } else {
+                    alert("Action result: " + JSON.stringify(res));
+                }
+            } catch (err) {
+                alert("Error dispatching action: " + err);
+            }
+        }
+
+        async function closeSandboxPosition(position_id, agent_id) {
+            try {
+                const resp = await fetch('/api/sandbox/act', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'CLOSE', position_id, agent_id })
+                });
+                const res = await resp.json();
+                loadSandboxModule();
+            } catch (err) {
+                alert("Error closing position: " + err);
+            }
+        }
+
+        async function resetSandbox() {
+            if (!confirm("Are you sure you want to reset all sandbox positions?")) return;
+            try {
+                await fetch('/api/sandbox/reset', { method: 'POST' });
+                loadSandboxModule();
+            } catch (err) {
+                alert("Error resetting sandbox: " + err);
             }
         }
 
@@ -4056,6 +4621,9 @@ Replicated for GKWA Web Trading Terminal
                         <th>SIGNAL DT ↓</th>
                         <th>STATUS</th>
                         <th>ENTRY</th>
+                        <th>LTP</th>
+                        <th>P&amp;L</th>
+                        <th>DELTA</th>
                         <th>T1</th>
                         <th>T2</th>
                         <th>T3</th>
@@ -4068,22 +4636,28 @@ Replicated for GKWA Web Trading Terminal
                 let tbodyHtml = "";
                 pageRows.forEach(r => {
                     const isLong = r.ALERT === 'LONG' || r.ALERT === 'BUY';
-                    const statusClass = r.STATUS === 'ACTIVE' ? 'badge badge-info' : (r.STATUS === 'T1 MET' ? 'badge badge-success' : (r.STATUS === 'SL MET' ? 'badge badge-danger' : 'badge badge-secondary'));
-                    const tradeClass = r.TRADE === 'OPEN' ? 'badge badge-success' : 'badge badge-secondary';
+                    const statusClass = r.STATUS === 'ACTIVE' ? 'badge badge-info' : (r.STATUS.includes('T') ? 'badge badge-success' : (r.STATUS.includes('SL') ? 'badge badge-danger' : 'badge badge-secondary'));
+                    const ltp = parseFloat(r.LTP || r.ENTRY);
+                    const entry = parseFloat(r.ENTRY || ltp);
+                    const pnl = ((ltp - entry) * (isLong ? 1 : -1) * 50);
+                    const isPos = pnl >= 0;
                     tbodyHtml += `
                         <tr>
                             <td class="font-weight-600 text-dark">${r.STRATEGY}</td>
-                            <td><span class="text-option-symbol" style="color: #e55353; font-weight: 700; cursor: pointer;" onclick="openPaperTradeModal('${r.SYMBOL}', ${r.ENTRY || 100}, '${isLong ? 'BUY' : 'SELL'}', 'OPTION_TRADE')">${r.SYMBOL}</span></td>
+                            <td><span class="text-option-symbol" style="color: #e55353; font-weight: 700; cursor: pointer;" onclick="openPaperTradeModal('${r.SYMBOL}', ${ltp}, '${isLong ? 'BUY' : 'SELL'}', 'OPTION_TRADE')">${r.SYMBOL}</span></td>
                             <td><span class="badge ${isLong ? 'badge-success' : 'badge-danger'} px-2 py-1">${r.ALERT}</span></td>
                             <td class="text-muted font-12">${r.SIGNAL_DT}</td>
                             <td><span class="${statusClass} px-2 py-1">${r.STATUS}</span></td>
-                            <td class="font-weight-600">₹${parseFloat(r.ENTRY).toFixed(2)}</td>
+                            <td class="font-weight-600">₹${entry.toFixed(2)}</td>
+                            <td class="font-weight-bold text-dark font-13">₹${ltp.toFixed(2)}</td>
+                            <td class="font-weight-bold ${isPos ? 'text-success' : 'text-danger'} font-13">${isPos ? '+' : ''}₹${pnl.toFixed(1)}</td>
+                            <td><span class="badge badge-light border text-purple font-weight-bold">${r.DELTA ? parseFloat(r.DELTA).toFixed(2) : '0.50'}</span></td>
                             <td>₹${parseFloat(r.T1).toFixed(2)}</td>
                             <td>₹${parseFloat(r.T2).toFixed(2)}</td>
                             <td>₹${parseFloat(r.T3).toFixed(2)}</td>
                             <td class="text-danger font-weight-600">₹${parseFloat(r.SL).toFixed(2)}</td>
                             <td>
-                                <button class="btn btn-xs ${isLong ? 'btn-success' : 'btn-danger'} px-2 py-1 font-weight-bold" onclick="openPaperTradeModal('${r.SYMBOL}', ${r.ENTRY}, '${isLong ? 'BUY' : 'SELL'}', 'OPTION_TRADE')">
+                                <button class="btn btn-xs ${isLong ? 'btn-success' : 'btn-danger'} px-2 py-1 font-weight-bold" onclick="openPaperTradeModal('${r.SYMBOL}', ${ltp}, '${isLong ? 'BUY' : 'SELL'}', 'OPTION_TRADE')">
                                     ${r.TRADE || 'TRADE'}
                                 </button>
                             </td>

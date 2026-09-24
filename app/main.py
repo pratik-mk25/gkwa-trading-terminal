@@ -1,7 +1,8 @@
 import os
+import json
 import asyncio
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -17,6 +18,7 @@ from app.database import (
     get_universes_summary
 )
 from app.market_simulator import market_sim, get_ist_now
+from app.sandbox import sandbox_manager
 from app.signals import (
     generate_options_trades,
     generate_intraday_trades,
@@ -110,10 +112,14 @@ async def start_background_tick_stream():
     asyncio.create_task(run_continuous_ticker())
 
 async def run_continuous_ticker():
-    """Perpetual background worker ticking the market every 1.0s with zero errors"""
+    """Perpetual background worker ticking the market and autonomous quant swarm every 1.0s"""
+    tick_counter = 0
     while True:
         try:
             delta = market_sim.step_simulation_tick()
+            tick_counter += 1
+            if tick_counter % 3 == 0:
+                sandbox_manager.step_swarm_cycle()
             await feed_manager.broadcast(delta)
         except Exception as e:
             print("Background tick worker error:", e)
@@ -174,7 +180,8 @@ ROUTE_TAB_MAP = {
     "query_window": "query",
     "watchlist": "watchlist",
     "my_trades": "my-trades",
-    "realtime_charts": "charts"
+    "realtime_charts": "charts",
+    "sandbox": "sandbox"
 }
 
 @app.get("/index/{route_name}/", response_class=HTMLResponse)
@@ -430,6 +437,83 @@ async def api_turning_times():
 @app.get("/api/changed_now")
 async def api_changed_now():
     return generate_changed_now()
+
+# --- AGENT SWARM REAL-TIME SANDBOX APIS ---
+
+class AgentActionModel(BaseModel):
+    agent_id: str
+    action: str  # BUY, SELL, CLOSE, HEDGE, MODIFY_SL
+    symbol: str
+    qty: int = 10
+    price: Optional[float] = None
+    sl: Optional[float] = None
+    target: Optional[float] = None
+    reason: Optional[str] = "Autonomous trigger from Agent Swarm"
+    position_id: Optional[int] = None
+
+class AgentRegisterModel(BaseModel):
+    agent_id: str
+    name: str
+    role: str = "QUANT_AGENT"
+    strategy: str = "Market Momentum & Mean-Reversion"
+
+@app.get("/api/sandbox/state")
+async def api_sandbox_state():
+    """Returns complete real-time sandbox state for the agent swarm and terminal UI"""
+    return sandbox_manager.get_state()
+
+@app.get("/api/sandbox/ticks")
+async def api_sandbox_ticks():
+    """Returns real-time tick delta packet for agents polling low-latency updates"""
+    return market_sim.step_simulation_tick()
+
+@app.post("/api/sandbox/act")
+async def api_sandbox_act(action: AgentActionModel):
+    """Executes a real-time trading action from an autonomous agent in the swarm"""
+    return sandbox_manager.execute_action(action.dict())
+
+@app.post("/api/sandbox/register")
+async def api_sandbox_register(agent: AgentRegisterModel):
+    """Registers a new autonomous subagent into the active swarm sandbox"""
+    return sandbox_manager.register_agent(
+        agent_id=agent.agent_id,
+        name=agent.name,
+        role=agent.role,
+        strategy=agent.strategy
+    )
+
+@app.post("/api/sandbox/reset")
+async def api_sandbox_reset():
+    """Resets the sandbox trades and re-initializes swarm positions"""
+    return sandbox_manager.reset_sandbox()
+
+@app.get("/api/sandbox/stream")
+async def api_sandbox_stream():
+    """
+    Server-Sent Events (SSE) stream for real-time Agent Swarm consumption.
+    Emits continuous live ticks, sector updates, and option Greeks every 1.0s.
+    """
+    async def event_generator():
+        while True:
+            try:
+                delta = market_sim.step_simulation_tick()
+                event_data = {
+                    "type": "sandbox_tick",
+                    "timestamp": delta["timestamp"],
+                    "broad_market": delta["broad_market"],
+                    "sectors": delta["sectors"],
+                    "breadth": delta["breadth"],
+                    "options_trades": delta.get("options_trades", []),
+                    "intraday_trades": delta.get("intraday_trades", []),
+                    "bullets": delta.get("bullets", []),
+                    "swarm_state": sandbox_manager.get_state()["swarm_telemetry"]
+                }
+                yield f"data: {json.dumps(event_data)}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+            await asyncio.sleep(1.0)
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 # --- LEAD CAPTURE & DEMO BOOKING ---
 

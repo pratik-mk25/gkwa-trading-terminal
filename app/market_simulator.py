@@ -291,6 +291,53 @@ UNIVERSE_MAP = {
     ]
 }
 
+def black_scholes_pricing(S: float, K: float, T: float, r: float, sigma: float, option_type: str = "CE") -> dict:
+    """
+    Standard Open-Source Black-Scholes-Merton option pricing & Greeks formula.
+    Pure Python with zero external dependencies (uses standard math.erf for Normal CDF).
+    """
+    if T <= 0.0001:
+        intrinsic = max(0.0, S - K) if option_type == "CE" else max(0.0, K - S)
+        return {
+            "price": max(0.05, round(intrinsic, 2)),
+            "delta": 1.0 if option_type == "CE" else -1.0,
+            "gamma": 0.0,
+            "theta": 0.0,
+            "vega": 0.0,
+            "iv": f"{round(sigma * 100, 1)}%"
+        }
+    
+    d1 = (math.log(max(0.01, S) / max(0.01, K)) + (r + 0.5 * (sigma ** 2)) * T) / (sigma * math.sqrt(T))
+    d2 = d1 - sigma * math.sqrt(T)
+    
+    # Standard normal cumulative distribution function N(x)
+    N = lambda x: 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+    # Standard normal probability density function phi(x)
+    phi = lambda x: (1.0 / math.sqrt(2.0 * math.pi)) * math.exp(-0.5 * (x ** 2))
+    
+    pdf_d1 = phi(d1)
+    
+    if option_type == "CE":
+        price = S * N(d1) - K * math.exp(-r * T) * N(d2)
+        delta = N(d1)
+        theta = (- (S * pdf_d1 * sigma) / (2.0 * math.sqrt(T)) - r * K * math.exp(-r * T) * N(d2)) / 365.0
+    else:
+        price = K * math.exp(-r * T) * N(-d2) - S * N(-d1)
+        delta = N(d1) - 1.0
+        theta = (- (S * pdf_d1 * sigma) / (2.0 * math.sqrt(T)) + r * K * math.exp(-r * T) * N(-d2)) / 365.0
+        
+    gamma = pdf_d1 / (max(0.01, S) * sigma * math.sqrt(T))
+    vega = (S * math.sqrt(T) * pdf_d1) / 100.0
+    
+    return {
+        "price": max(0.05, round(price, 2)),
+        "delta": round(delta, 3),
+        "gamma": round(gamma, 5),
+        "theta": round(theta, 2),
+        "vega": round(vega, 2),
+        "iv": f"{round(sigma * 100, 1)}%"
+    }
+
 class MarketSimulator:
     def __init__(self):
         self.stocks = {}
@@ -298,30 +345,27 @@ class MarketSimulator:
         UNIVERSE_MAP["NIFTY FNO"] = sorted(list(self.fno_symbols))
         self.latest_snapshot = None
 
-        # Dynamic live sectors matching authentic session baselines
+        # Dynamic live sectors matching authentic NeoTrader session baselines (media_1790013706126.png)
         self.sectors = {
-            "NIFTY REALTY": {"price": 1045.20, "prev_close": 1022.20, "ltp": 1045.20, "chg_pct": 2.25},
-            "NIFTY PHARMA": {"price": 22840.10, "prev_close": 22425.20, "ltp": 22840.10, "chg_pct": 1.85},
-            "NIFTY FMCG": {"price": 61250.40, "prev_close": 60392.80, "ltp": 61250.40, "chg_pct": 1.42},
-            "NIFTY HEALTHCARE": {"price": 14120.30, "prev_close": 13932.20, "ltp": 14120.30, "chg_pct": 1.35},
-            "NIFTY CONSUMPTION": {"price": 10980.50, "prev_close": 10855.65, "ltp": 10980.50, "chg_pct": 1.15},
-            "NIFTY IT": {"price": 41850.70, "prev_close": 41498.00, "ltp": 41850.70, "chg_pct": 0.85},
-            "NIFTY AUTO": {"price": 25890.30, "prev_close": 25723.10, "ltp": 25890.30, "chg_pct": 0.65},
-            "NIFTY PVT BANK": {"price": 26140.80, "prev_close": 26023.70, "ltp": 26140.80, "chg_pct": 0.45},
-            "NIFTY BANK": {"price": 52140.20, "prev_close": 51942.80, "ltp": 52140.20, "chg_pct": 0.38},
-            "NIFTY FINANCIAL SERVICES": {"price": 23980.10, "prev_close": 23927.45, "ltp": 23980.10, "chg_pct": 0.22},
-            "NIFTY SERVICES SECTOR": {"price": 29840.50, "prev_close": 29795.80, "ltp": 29840.50, "chg_pct": 0.15},
-            "NIFTY COMMODITIES": {"price": 9850.20, "prev_close": 9874.90, "ltp": 9850.20, "chg_pct": -0.25},
-            "NIFTY INFRA": {"price": 8940.60, "prev_close": 8978.30, "ltp": 8940.60, "chg_pct": -0.42},
-            "NIFTY OIL & GAS": {"price": 11850.30, "prev_close": 11927.80, "ltp": 11850.30, "chg_pct": -0.65},
-            "NIFTY METAL": {"price": 9450.80, "prev_close": 9534.70, "ltp": 9450.80, "chg_pct": -0.88},
-            "NIFTY PSU BANK": {"price": 6780.40, "prev_close": 6859.30, "ltp": 6780.40, "chg_pct": -1.15},
-            "NIFTY MEDIA": {"price": 2150.20, "prev_close": 2181.85, "ltp": 2150.20, "chg_pct": -1.45},
-            "NIFTY ENERGY": {"price": 38940.20, "prev_close": 39155.55, "ltp": 38940.20, "chg_pct": -0.55},
-            "NIFTY MNC": {"price": 28450.10, "prev_close": 28182.35, "ltp": 28450.10, "chg_pct": 0.95},
-            "NIFTY CPSE": {"price": 6890.30, "prev_close": 6914.50, "ltp": 6890.30, "chg_pct": -0.35},
-            "NIFTY IND DEFENCE": {"price": 7890.60, "prev_close": 7831.85, "ltp": 7890.60, "chg_pct": 0.75}
+            "NIFTY AUTO": {"price": 25820.50, "prev_close": 25807.60, "ltp": 25820.50, "chg_pct": 0.05, "base_pct": 0.05},
+            "NIFTY FMCG": {"price": 60750.00, "prev_close": 60417.70, "ltp": 60750.00, "chg_pct": 0.55, "base_pct": 0.55},
+            "NIFTY PVT BANK": {"price": 26180.00, "prev_close": 26101.70, "ltp": 26180.00, "chg_pct": 0.30, "base_pct": 0.30},
+            "FINNIFTY": {"price": 23410.80, "prev_close": 23410.80, "ltp": 23410.80, "chg_pct": 0.00, "base_pct": 0.00},
+            "NIFTY PSU BANK": {"price": 6815.00, "prev_close": 6818.40, "ltp": 6815.00, "chg_pct": -0.05, "base_pct": -0.05},
+            "NIFTY IT": {"price": 41920.00, "prev_close": 41899.05, "ltp": 41920.00, "chg_pct": 0.05, "base_pct": 0.05},
+            "NIFTY INFRA": {"price": 8965.00, "prev_close": 8975.75, "ltp": 8965.00, "chg_pct": -0.12, "base_pct": -0.12},
+            "NIFTY METAL": {"price": 9480.00, "prev_close": 9532.40, "ltp": 9480.00, "chg_pct": -0.55, "base_pct": -0.55},
+            "NIFTY PHARMA": {"price": 22890.00, "prev_close": 22629.75, "ltp": 22890.00, "chg_pct": 1.15, "base_pct": 1.15},
+            "NIFTY REALTY": {"price": 1035.00, "prev_close": 1023.23, "ltp": 1035.00, "chg_pct": 1.15, "base_pct": 1.15},
+            "NIFTY COMMODITIES": {"price": 9860.00, "prev_close": 9884.70, "ltp": 9860.00, "chg_pct": -0.25, "base_pct": -0.25},
+            "NIFTY CONSUMPTION": {"price": 10920.00, "prev_close": 10874.30, "ltp": 10920.00, "chg_pct": 0.42, "base_pct": 0.42},
+            "NIFTY ENERGY": {"price": 39180.00, "prev_close": 39148.68, "ltp": 39180.00, "chg_pct": 0.08, "base_pct": 0.08},
+            "NIFTY CPSE": {"price": 6920.00, "prev_close": 6891.05, "ltp": 6920.00, "chg_pct": 0.42, "base_pct": 0.42},
+            "NIFTY PSE": {"price": 7120.00, "prev_close": 7114.30, "ltp": 7120.00, "chg_pct": 0.08, "base_pct": 0.08},
+            "NIFTY MEDIA": {"price": 2165.00, "prev_close": 2163.27, "ltp": 2165.00, "chg_pct": 0.08, "base_pct": 0.08},
+            "NIFTY IND DEFENCE": {"price": 7920.00, "prev_close": 7861.04, "ltp": 7920.00, "chg_pct": 0.75, "base_pct": 0.75}
         }
+        self.init_options_trades()
 
         # 1. Initialize benchmark indices + authentic 185 F&O stocks
         for sym, data in STOCKS_BASE.items():
@@ -431,13 +475,25 @@ class MarketSimulator:
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         changed_stocks = []
 
-        # 1. Tick indices
-        watch_indices = ["NIFTY 50", "BANK NIFTY", "FINNIFTY", "SENSEX", "INDIA VIX", "MIDCAP 100", "SMLCAP 100", "NIFTY 500"]
-        for sym in watch_indices:
+        # 1. Tick indices with gentle mean-reversion to authentic NeoTrader baselines
+        watch_indices = {
+            "NIFTY 50": 0.28,
+            "BANK NIFTY": 0.20,
+            "MIDCAP 100": -0.28,
+            "SMLCAP 100": -0.14,
+            "NIFTY 500": 0.08,
+            "FINNIFTY": 0.06,
+            "SENSEX": 0.76,
+            "INDIA VIX": 2.05
+        }
+        for sym, base_pct in watch_indices.items():
             if sym in self.stocks:
                 st = self.stocks[sym]
                 old_p = st["ltp"]
-                drift = random.choice([-0.0004, -0.0002, 0.0, 0.0002, 0.0004]) + random.uniform(-0.0001, 0.0001)
+                cur_pct = st["chg_pct"]
+                # Mean-revert softly so it stays true to authentic screenshot
+                reversion = (base_pct - cur_pct) * 0.05
+                drift = random.choice([-0.0002, 0.0, 0.0002]) + (reversion / 100.0)
                 new_p = round(round(old_p * (1 + drift) / 0.05) * 0.05, 2)
                 if sym == "INDIA VIX":
                     new_p = max(9.0, min(35.0, round(new_p, 2)))
@@ -457,13 +513,15 @@ class MarketSimulator:
                     "volume": st.get("volume", 1000000)
                 })
 
-        # 2. Tick dynamic sectors
+        # 2. Tick dynamic sectors with gentle mean-reversion around authentic NeoTrader base
         for sec_name, sec_data in self.sectors.items():
-            drift = random.choice([-0.0003, -0.0001, 0.0, 0.0001, 0.0003])
-            new_p = round(round(sec_data["ltp"] * (1 + drift) / 0.05) * 0.05, 2)
-            sec_data["ltp"] = new_p
-            chg = round(new_p - sec_data["prev_close"], 2)
-            sec_data["chg_pct"] = round((chg / sec_data["prev_close"]) * 100, 2)
+            base_p = sec_data.get("base_pct", sec_data["chg_pct"])
+            cur_pct = sec_data["chg_pct"]
+            reversion = (base_p - cur_pct) * 0.08
+            drift_pct = random.choice([-0.01, 0.0, 0.01]) + reversion
+            new_pct = round(cur_pct + drift_pct, 2)
+            sec_data["chg_pct"] = new_pct
+            sec_data["ltp"] = round(sec_data["prev_close"] * (1 + new_pct / 100.0), 2)
 
         # 3. Tick active stocks (35 random stocks + always tick top bullets)
         bullet_syms = ["PATANJALI", "MANKIND", "KAYNES", "SOLARINDS", "LICHSGFIN", "NAUKRI", "ICICIGI", "LAURUSLABS", "RELIANCE", "HDFCBANK", "OFSS", "UNOMINDA", "APLAPOLLO", "KFINTECH", "BHARTIARTL", "BSE"]
@@ -516,7 +574,9 @@ class MarketSimulator:
             "sectors": self.get_sector_market_indices(),
             "breadth": self.get_advance_decline(universe="NIFTY FNO", mode="Close"),
             "changed_stocks": changed_stocks,
-            "bullets": self.get_day_trader_bullets()[:12]
+            "bullets": self.get_day_trader_bullets()[:12],
+            "options_trades": self.get_options_trades(),
+            "intraday_trades": self.get_intraday_trades()
         }
         self.latest_snapshot = snapshot
         return snapshot
@@ -569,13 +629,25 @@ class MarketSimulator:
         return results
 
     def get_sector_market_indices(self):
-        """Returns the 17 sector performance indices matching Screenshot 23-50-54"""
+        """Returns the 17 sector performance indices matching Screenshot media_1790013706126.png in exact fixed categorical order"""
         order = [
-            "NIFTY REALTY", "NIFTY PHARMA", "NIFTY FMCG", "NIFTY HEALTHCARE",
-            "NIFTY CONSUMPTION", "NIFTY IT", "NIFTY AUTO", "NIFTY PVT BANK",
-            "NIFTY BANK", "NIFTY FINANCIAL SERVICES", "NIFTY SERVICES SECTOR",
-            "NIFTY COMMODITIES", "NIFTY INFRA", "NIFTY OIL & GAS", "NIFTY METAL",
-            "NIFTY PSU BANK", "NIFTY MEDIA"
+            "NIFTY AUTO",
+            "NIFTY FMCG",
+            "NIFTY PVT BANK",
+            "FINNIFTY",
+            "NIFTY PSU BANK",
+            "NIFTY IT",
+            "NIFTY INFRA",
+            "NIFTY METAL",
+            "NIFTY PHARMA",
+            "NIFTY REALTY",
+            "NIFTY COMMODITIES",
+            "NIFTY CONSUMPTION",
+            "NIFTY ENERGY",
+            "NIFTY CPSE",
+            "NIFTY PSE",
+            "NIFTY MEDIA",
+            "NIFTY IND DEFENCE"
         ]
         results = []
         for name in order:
@@ -589,17 +661,385 @@ class MarketSimulator:
                 })
         return results
 
-    def get_sector_performance(self):
-        """Detailed sector analysis view data"""
+    def init_options_trades(self):
+        """Initializes realistic active option trade contracts linked dynamically to live underlying market prices"""
+        now = get_ist_now()
+        date_str = now.strftime("%Y-%m-%d")
+        self.options_contracts = [
+            {
+                "RecordID": 1,
+                "STRATEGY": "IDX-OPT",
+                "UNDERLYING": "NIFTY 50",
+                "STRIKE": 24850,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.52,
+                "BASE_UNDERLYING": 24825.50,
+                "ENTRY": 148.50,
+                "SL": 74.25,
+                "T1": 193.05,
+                "T2": 230.20,
+                "T3": 267.30,
+                "SIGNAL_DT": f"{date_str} 09:35:12",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 2,
+                "STRATEGY": "IDX-OPT",
+                "UNDERLYING": "BANK NIFTY",
+                "STRIKE": 52200,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.50,
+                "BASE_UNDERLYING": 52140.20,
+                "ENTRY": 485.00,
+                "SL": 242.50,
+                "T1": 630.50,
+                "T2": 751.75,
+                "T3": 873.00,
+                "SIGNAL_DT": f"{date_str} 09:42:18",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 3,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "PATANJALI",
+                "STRIKE": 1820,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.55,
+                "BASE_UNDERLYING": 1800.00,
+                "ENTRY": 42.50,
+                "SL": 21.25,
+                "T1": 55.25,
+                "T2": 65.90,
+                "T3": 76.50,
+                "SIGNAL_DT": f"{date_str} 10:05:40",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 4,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "MANKIND",
+                "STRIKE": 2580,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.52,
+                "BASE_UNDERLYING": 2550.00,
+                "ENTRY": 68.00,
+                "SL": 34.00,
+                "T1": 88.40,
+                "T2": 105.40,
+                "T3": 122.40,
+                "SIGNAL_DT": f"{date_str} 10:15:22",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 5,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "KAYNES",
+                "STRIKE": 4950,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.54,
+                "BASE_UNDERLYING": 4900.00,
+                "ENTRY": 125.00,
+                "SL": 62.50,
+                "T1": 162.50,
+                "T2": 193.75,
+                "T3": 225.00,
+                "SIGNAL_DT": f"{date_str} 10:28:15",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 6,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "SOLARINDS",
+                "STRIKE": 10500,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.50,
+                "BASE_UNDERLYING": 10400.00,
+                "ENTRY": 280.00,
+                "SL": 140.00,
+                "T1": 364.00,
+                "T2": 434.00,
+                "T3": 504.00,
+                "SIGNAL_DT": f"{date_str} 10:45:00",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 7,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "LICHSGFIN",
+                "STRIKE": 690,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.52,
+                "BASE_UNDERLYING": 680.00,
+                "ENTRY": 18.20,
+                "SL": 9.10,
+                "T1": 23.65,
+                "T2": 28.20,
+                "T3": 32.75,
+                "SIGNAL_DT": f"{date_str} 11:02:18",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 8,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "NAUKRI",
+                "STRIKE": 7250,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.51,
+                "BASE_UNDERLYING": 7200.00,
+                "ENTRY": 185.00,
+                "SL": 92.50,
+                "T1": 240.50,
+                "T2": 286.75,
+                "T3": 333.00,
+                "SIGNAL_DT": f"{date_str} 11:20:30",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 9,
+                "STRATEGY": "IDX-OPT",
+                "UNDERLYING": "FINNIFTY",
+                "STRIKE": 23450,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.50,
+                "BASE_UNDERLYING": 23400.00,
+                "ENTRY": 120.00,
+                "SL": 60.00,
+                "T1": 156.00,
+                "T2": 186.00,
+                "T3": 216.00,
+                "SIGNAL_DT": f"{date_str} 11:45:10",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 10,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "RELIANCE",
+                "STRIKE": 3020,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.53,
+                "BASE_UNDERLYING": 3000.00,
+                "ENTRY": 64.50,
+                "SL": 32.25,
+                "T1": 83.85,
+                "T2": 100.00,
+                "T3": 116.10,
+                "SIGNAL_DT": f"{date_str} 12:10:45",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 11,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "HDFCBANK",
+                "STRIKE": 1540,
+                "TYPE": "CE",
+                "ALERT": "LONG",
+                "DELTA": 0.50,
+                "BASE_UNDERLYING": 1530.00,
+                "ENTRY": 28.50,
+                "SL": 14.25,
+                "T1": 37.05,
+                "T2": 44.20,
+                "T3": 51.30,
+                "SIGNAL_DT": f"{date_str} 12:35:12",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 12,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "OFSS",
+                "STRIKE": 11500,
+                "TYPE": "PE",
+                "ALERT": "SHORT",
+                "DELTA": 0.50,
+                "BASE_UNDERLYING": 11600.00,
+                "ENTRY": 340.00,
+                "SL": 170.00,
+                "T1": 442.00,
+                "T2": 527.00,
+                "T3": 612.00,
+                "SIGNAL_DT": f"{date_str} 13:05:50",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 13,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "UNOMINDA",
+                "STRIKE": 980,
+                "TYPE": "PE",
+                "ALERT": "SHORT",
+                "DELTA": 0.48,
+                "BASE_UNDERLYING": 1000.00,
+                "ENTRY": 24.50,
+                "SL": 12.25,
+                "T1": 31.85,
+                "T2": 37.95,
+                "T3": 44.10,
+                "SIGNAL_DT": f"{date_str} 13:20:18",
+                "TRADE": "OPEN"
+            },
+            {
+                "RecordID": 14,
+                "STRATEGY": "OPT-1",
+                "UNDERLYING": "BHARTIARTL",
+                "STRIKE": 1520,
+                "TYPE": "PE",
+                "ALERT": "SHORT",
+                "DELTA": 0.51,
+                "BASE_UNDERLYING": 1540.00,
+                "ENTRY": 38.00,
+                "SL": 19.00,
+                "T1": 49.40,
+                "T2": 58.90,
+                "T3": 68.40,
+                "SIGNAL_DT": f"{date_str} 13:45:30",
+                "TRADE": "OPEN"
+            }
+        ]
+
+    def get_options_trades(self):
+        """Returns live, real-time option trades dynamically tracking underlying stock ticks"""
+        now = get_ist_now()
+        month_str = now.strftime("%b").upper()
+        expiry_label = f"26 {month_str}"
+
         results = []
-        for name, d in self.sectors.items():
+        for opt in self.options_contracts:
+            underlying = opt["UNDERLYING"]
+            st = self.stocks.get(underlying)
+            cur_ltp = st["ltp"] if st else opt["BASE_UNDERLYING"]
+            diff = cur_ltp - opt["BASE_UNDERLYING"]
+            
+            # Real-time Black-Scholes Greeks calculation
+            greeks = black_scholes_pricing(
+                S=cur_ltp,
+                K=opt["STRIKE"],
+                T=max(1, (26 - now.day)) / 365.0,
+                r=0.065,
+                sigma=0.18 if "NIFTY" in underlying else 0.28,
+                option_type=opt["TYPE"]
+            )
+
+            # Delta movement: CE benefits from up moves, PE benefits from down moves
+            move = diff if opt["TYPE"] == "CE" else -diff
+            eff_delta = max(0.20, min(0.95, abs(greeks["delta"]) if greeks["delta"] != 0 else opt.get("DELTA", 0.50)))
+            option_ltp = round(max(0.50, opt["ENTRY"] + (move * eff_delta)), 2)
+            
+            # Dynamic status evaluation
+            status = "ACTIVE"
+            exit_price = 0.0
+            trade_state = "OPEN"
+            if option_ltp >= opt["T3"]:
+                status = "T3 MET"
+                trade_state = "CLOSED"
+                exit_price = opt["T3"]
+            elif option_ltp >= opt["T2"]:
+                status = "T2 MET"
+            elif option_ltp >= opt["T1"]:
+                status = "T1 MET"
+            elif option_ltp <= opt["SL"]:
+                status = "SL MET"
+                trade_state = "CLOSED"
+                exit_price = opt["SL"]
+
+            # Display symbol format matching NeoTrader: "NIFTY 26 SEP 24850 CE"
+            display_sym = f"{underlying.replace(' 50', '')} {expiry_label} {opt['STRIKE']} {opt['TYPE']}"
+            update_dt = now.strftime("%Y-%m-%d %H:%M:%S")
+
             results.append({
-                "NAME": name,
-                "LTP": d["ltp"],
-                "CHGPCT": d["chg_pct"],
-                "BULL_BEAR": 1 if d["chg_pct"] >= 0 else -1
+                "RecordID": opt["RecordID"],
+                "STRATEGY": opt["STRATEGY"],
+                "SYMBOL": display_sym,
+                "UNDERLYING": underlying,
+                "ALERT": opt["ALERT"],
+                "SIGNAL_DT": opt["SIGNAL_DT"],
+                "STATUS": status,
+                "ENTRY": opt["ENTRY"],
+                "LTP": option_ltp,
+                "T1": opt["T1"],
+                "T2": opt["T2"],
+                "T3": opt["T3"],
+                "SL": opt["SL"],
+                "TRADE": trade_state,
+                "EXIT": exit_price,
+                "UPDATE_DT": update_dt,
+                "DELTA": greeks["delta"],
+                "GAMMA": greeks["gamma"],
+                "THETA": greeks["theta"],
+                "VEGA": greeks["vega"],
+                "IV": greeks["iv"]
             })
         return results
+
+    def get_intraday_trades(self):
+        """Returns live intraday trades dynamically synced with current live stock prices"""
+        now = get_ist_now()
+        date_str = now.strftime("%Y-%m-%d")
+        candidates = [
+            ("PATANJALI", "REVERSAL-3", "OVERNIGHT", "SHORT", 1820.50, 1845.0, 1780.0, 1750.0, 1720.0, [0, 0, 0, 0]),
+            ("POLICYBZR", "DAWN", "INTRADAY", "LONG", 1725.00, 1690.0, 1760.0, 1790.0, 1820.0, [1, 0, 0, 0]),
+            ("MANKIND", "REVERSAL-3", "OVERNIGHT", "SHORT", 2580.40, 2620.0, 2530.0, 2490.0, 2440.0, [0, 0, 0, 0]),
+            ("CHOLAFIN", "DAWN", "INTRADAY", "SHORT", 1480.00, 1515.0, 1445.0, 1415.0, 1380.0, [1, 0, 0, 0]),
+            ("SIEMENS", "BREAKOUT-1", "INTRADAY", "LONG", 6850.00, 6780.0, 6940.0, 7020.0, 7150.0, [1, 0, 0, 0]),
+            ("HCLTECH", "BREAKOUT-1", "INTRADAY", "LONG", 1780.00, 1745.0, 1820.0, 1855.0, 1890.0, [1, 1, 0, 0]),
+            ("KAYNES", "MOMENTUM-1", "INTRADAY", "LONG", 4920.00, 4820.0, 5030.0, 5140.0, 5280.0, [1, 0, 1, 0]),
+            ("SOLARINDS", "MOMENTUM-1", "OVERNIGHT", "LONG", 10450.00, 10250.0, 10700.0, 10920.0, 11200.0, [1, 1, 1, 0]),
+        ]
+        results = []
+        for idx, (sym, strat, timeplay, alert, base_entry, sl, t1, t2, t3, summary) in enumerate(candidates, start=1):
+            st = self.stocks.get(sym, {})
+            cur_p = st.get("ltp", base_entry)
+            
+            is_long = alert == "LONG"
+            status = "ACTIVE"
+            trade_state = "OPEN"
+            exit_p = 0.0
+            if (is_long and cur_p >= t3) or (not is_long and cur_p <= t3):
+                status = "T3 MET"
+                trade_state = "CLOSED"
+                exit_p = t3
+            elif (is_long and cur_p >= t2) or (not is_long and cur_p <= t2):
+                status = "T2 MET"
+            elif (is_long and cur_p >= t1) or (not is_long and cur_p <= t1):
+                status = "T1 MET"
+            elif (is_long and cur_p <= sl) or (not is_long and cur_p >= sl):
+                status = "SL MET"
+                trade_state = "CLOSED"
+                exit_p = sl
+
+            results.append({
+                "RecordID": idx,
+                "STRATEGY": strat,
+                "TIMEPLAY": timeplay,
+                "SYMBOL": sym,
+                "RECENT_VALUE": cur_p,
+                "ALERT": alert,
+                "ENTRY": base_entry,
+                "SIGNAL_DT": f"{date_str} {9 + (idx % 5):02d}:{15 + (idx * 7) % 45:02d}:30",
+                "SL": sl,
+                "STATUS": status,
+                "T1": t1,
+                "T2": t2,
+                "T3": t3,
+                "TRADE": trade_state,
+                "EXIT": exit_p,
+                "UPDATE_DT": now.strftime("%Y-%m-%d %H:%M:%S"),
+                "SUMMARY": summary
+            })
+        return results
+
+    def get_sector_performance(self):
+        """Detailed sector analysis view data matching exact fixed NeoTrader order"""
+        return self.get_sector_market_indices()
 
     def get_heatmap_stocks(self, universe="NIFTY FNO", mode="Close"):
         """
