@@ -193,7 +193,8 @@ class AgentSwarmSandbox:
                 "agents": agents_list,
                 "active_positions": list(self.active_positions.values()),
                 "recent_actions": self.audit_log[-30:]
-            }
+            },
+            "agents": agents_list
         }
 
     def execute_action(self, payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -386,7 +387,7 @@ class AgentSwarmSandbox:
             elif chosen_agent == "sector_divergence_03":
                 sec = market_sim.get_sector_performance()
                 if sec:
-                    top_sec = sec[0]["sector"]
+                    top_sec = sec[0].get("NAME") or sec[0].get("sector") or "NIFTY AUTO"
                     constituents = market_sim.stocks
                     syms = [s for s, d in constituents.items() if d.get("sector") == top_sec or top_sec.endswith(d.get("sector", ""))]
                     existing_syms = {p["symbol"] for p in self.active_positions.values()}

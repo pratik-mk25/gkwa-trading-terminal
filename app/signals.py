@@ -913,15 +913,15 @@ def generate_camarilla_heatmap():
         h2 = C + (rng * 1.1 / 6)
         h3 = C + (rng * 1.1 / 4)
         h4 = C + (rng * 1.1 / 2)
-        h5 = (H / max(L, 1.0)) * C
-        h6 = C + (h5 - C) * 1.3
+        h5 = max((H / max(L, 1.0)) * C, h4 + (h4 - h3))
+        h6 = max(C + (h5 - C) * 1.3, h5 + (h5 - h4))
 
         l1 = C - (rng * 1.1 / 12)
         l2 = C - (rng * 1.1 / 6)
         l3 = C - (rng * 1.1 / 4)
         l4 = C - (rng * 1.1 / 2)
-        l5 = C - (h5 - C)
-        l6 = C - (h6 - C)
+        l5 = min(C - (h5 - C), l4 - (l3 - l4))
+        l6 = min(C - (h6 - C), l5 - (l4 - l5))
 
         score = min(16, max(0, int(abs(st["chg_pct"]) * 4)))
         dots = [1, 1, 1] if st["chg_pct"] >= 0 else [-1, -1, -1]

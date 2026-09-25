@@ -9,6 +9,22 @@ def get_ist_now() -> datetime:
     """Always returns current time in Indian Standard Time (IST, UTC+5:30)"""
     return datetime.now(timezone.utc).astimezone(IST)
 
+def is_market_open(dt: datetime = None) -> bool:
+    """
+    Checks if Indian Equity & Derivatives Markets (NSE/BSE) are currently open.
+    Standard NSE Market Hours:
+    - Monday to Friday (weekday 0, 1, 2, 3, 4)
+    - 09:15:00 IST to 15:30:00 IST
+    - Weekends (Saturday=5, Sunday=6) are closed.
+    """
+    if dt is None:
+        dt = get_ist_now()
+    if dt.weekday() >= 5:
+        return False
+    market_open = dt.replace(hour=9, minute=15, second=0, microsecond=0)
+    market_close = dt.replace(hour=15, minute=30, second=0, microsecond=0)
+    return market_open <= dt <= market_close
+
 # ==============================================================================
 # GKWA COMPLETE 185 NSE F&O STOCKS DATASET + BENCHMARK INDICES
 # Exact values matching the live NSE session & authentic Terminal Screenshots
@@ -291,12 +307,22 @@ UNIVERSE_MAP = {
     ]
 }
 
-def black_scholes_pricing(S: float, K: float, T: float, r: float, sigma: float, option_type: str = "CE") -> dict:
+def black_scholes_pricing(S: float, K: float, T: float, r: float = 0.065, sigma: float = 0.20, option_type: str = "CE") -> dict:
     """
     Standard Open-Source Black-Scholes-Merton option pricing & Greeks formula.
     Pure Python with zero external dependencies (uses standard math.erf for Normal CDF).
+    Guarantees strict mathematical bounds:
+    - Call Delta in [0.0, 1.0], Put Delta in [-1.0, 0.0]
+    - Gamma >= 0.0, Vega >= 0.0
+    - Price >= 0.05
     """
-    if T <= 0.0001:
+    S = max(0.01, float(S))
+    K = max(0.01, float(K))
+    T = max(0.0001, float(T))
+    sigma = max(0.001, float(sigma))
+    r = float(r)
+
+    if T <= 0.0002:
         intrinsic = max(0.0, S - K) if option_type == "CE" else max(0.0, K - S)
         return {
             "price": max(0.05, round(intrinsic, 2)),
@@ -307,7 +333,7 @@ def black_scholes_pricing(S: float, K: float, T: float, r: float, sigma: float, 
             "iv": f"{round(sigma * 100, 1)}%"
         }
     
-    d1 = (math.log(max(0.01, S) / max(0.01, K)) + (r + 0.5 * (sigma ** 2)) * T) / (sigma * math.sqrt(T))
+    d1 = (math.log(S / K) + (r + 0.5 * (sigma ** 2)) * T) / (sigma * math.sqrt(T))
     d2 = d1 - sigma * math.sqrt(T)
     
     # Standard normal cumulative distribution function N(x)
@@ -319,15 +345,17 @@ def black_scholes_pricing(S: float, K: float, T: float, r: float, sigma: float, 
     
     if option_type == "CE":
         price = S * N(d1) - K * math.exp(-r * T) * N(d2)
-        delta = N(d1)
+        raw_delta = N(d1)
+        delta = min(1.0, max(0.0, raw_delta))
         theta = (- (S * pdf_d1 * sigma) / (2.0 * math.sqrt(T)) - r * K * math.exp(-r * T) * N(d2)) / 365.0
     else:
         price = K * math.exp(-r * T) * N(-d2) - S * N(-d1)
-        delta = N(d1) - 1.0
+        raw_delta = N(d1) - 1.0
+        delta = max(-1.0, min(0.0, raw_delta))
         theta = (- (S * pdf_d1 * sigma) / (2.0 * math.sqrt(T)) + r * K * math.exp(-r * T) * N(-d2)) / 365.0
         
-    gamma = pdf_d1 / (max(0.01, S) * sigma * math.sqrt(T))
-    vega = (S * math.sqrt(T) * pdf_d1) / 100.0
+    gamma = max(0.0, pdf_d1 / (S * sigma * math.sqrt(T)))
+    vega = max(0.0, (S * math.sqrt(T) * pdf_d1) / 100.0)
     
     return {
         "price": max(0.05, round(price, 2)),
@@ -344,6 +372,7 @@ class MarketSimulator:
         self.fno_symbols = {s for s, d in STOCKS_BASE.items() if d["type"] != "INDEX"}
         UNIVERSE_MAP["NIFTY FNO"] = sorted(list(self.fno_symbols))
         self.latest_snapshot = None
+        self.market_mode = "LIVE_EXCHANGE"  # "LIVE_EXCHANGE" (freezes outside 9:15-15:30 IST) or "SANDBOX_SIMULATION"
 
         # Dynamic live sectors matching authentic NeoTrader session baselines (media_1790013706126.png)
         self.sectors = {
@@ -462,114 +491,165 @@ class MarketSimulator:
         """Ticks are driven continuously by step_simulation_tick() in background pipeline"""
         pass
 
-    def step_simulation_tick(self):
+    def get_market_status(self) -> dict:
+        """Returns the current NSE market open/closed status, mode, and freeze state"""
+        now = get_ist_now()
+        open_status = is_market_open(now)
+        is_frozen = (self.market_mode == "LIVE_EXCHANGE" and not open_status)
+
+        # Calculate next market event
+        if open_status:
+            next_event = "Exchange Closes at 15:30:00 IST today"
+        else:
+            next_date = now.date()
+            if now.time() >= datetime.strptime("15:30", "%H:%M").time():
+                next_date += timedelta(days=1)
+            while next_date.weekday() >= 5:  # Skip Saturday & Sunday
+                next_date += timedelta(days=1)
+            next_event = f"Exchange Opens on {next_date.strftime('%Y-%m-%d')} at 09:15:00 IST"
+
+        return {
+            "status": "success",
+            "is_market_open": open_status,
+            "market_mode": self.market_mode,
+            "market_status_text": "OPEN" if open_status else "CLOSED",
+            "is_frozen": is_frozen,
+            "ist_time": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "trading_session": "Regular NSE Session: Mon-Fri 09:15 - 15:30 IST",
+            "next_event": next_event,
+            "message": (
+                "Market is OPEN. Real-time ticks active." if open_status else (
+                    "🧪 24/7 Sandbox Simulation is actively ticking market data." if self.market_mode == "SANDBOX_SIMULATION" else
+                    "🔴 Market is CLOSED. Prices are strictly frozen at official NSE closing values. Switch to Sandbox Mode for 24/7 simulation."
+                )
+            )
+        }
+
+    def set_market_mode(self, mode: str) -> dict:
+        """Switches between LIVE_EXCHANGE (strict market hours freeze) and SANDBOX_SIMULATION (24/7 live ticks)"""
+        m = str(mode or "").upper().strip()
+        if m in ("SANDBOX", "SANDBOX_SIMULATION", "SIMULATION", "FORCE"):
+            self.market_mode = "SANDBOX_SIMULATION"
+        else:
+            self.market_mode = "LIVE_EXCHANGE"
+        return self.get_market_status()
+
+    def step_simulation_tick(self, force: bool = False):
         """
         Active continuous market simulation tick cycle:
-        - Ticks 30-60 random stocks with realistic tick increments (NSE standard 0.05 paise).
-        - Ticks indices & sectors with micro-movements.
+        - If market is CLOSED and mode is LIVE_EXCHANGE (and not force), prices freeze strictly.
+        - If market is OPEN or mode is SANDBOX_SIMULATION, ticks indices, sectors, and active stocks.
         - Updates Day Trader Bullets live.
         - Calculates dynamic breadth.
         - Returns live delta packet.
         """
         now = get_ist_now()
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+        open_status = is_market_open(now)
+        is_frozen = (self.market_mode == "LIVE_EXCHANGE" and not open_status and not force)
+
         changed_stocks = []
 
-        # 1. Tick indices with gentle mean-reversion to authentic NeoTrader baselines
-        watch_indices = {
-            "NIFTY 50": 0.28,
-            "BANK NIFTY": 0.20,
-            "MIDCAP 100": -0.28,
-            "SMLCAP 100": -0.14,
-            "NIFTY 500": 0.08,
-            "FINNIFTY": 0.06,
-            "SENSEX": 0.76,
-            "INDIA VIX": 2.05
-        }
-        for sym, base_pct in watch_indices.items():
-            if sym in self.stocks:
+        if not is_frozen:
+            # 1. Tick indices with gentle mean-reversion to authentic NeoTrader baselines
+            watch_indices = {
+                "NIFTY 50": 0.28,
+                "BANK NIFTY": 0.20,
+                "MIDCAP 100": -0.28,
+                "SMLCAP 100": -0.14,
+                "NIFTY 500": 0.08,
+                "FINNIFTY": 0.06,
+                "SENSEX": 0.76,
+                "INDIA VIX": 2.05
+            }
+            for sym, base_pct in watch_indices.items():
+                if sym in self.stocks:
+                    st = self.stocks[sym]
+                    old_p = st["ltp"]
+                    cur_pct = st["chg_pct"]
+                    # Mean-revert softly so it stays true to authentic screenshot
+                    reversion = (base_pct - cur_pct) * 0.05
+                    drift = random.choice([-0.0002, 0.0, 0.0002]) + (reversion / 100.0)
+                    new_p = round(round(old_p * (1 + drift) / 0.05) * 0.05, 2)
+                    if sym == "INDIA VIX":
+                        new_p = max(9.0, min(35.0, round(new_p, 2)))
+                    dir_str = "UP" if new_p > old_p else ("DOWN" if new_p < old_p else "FLAT")
+                    st["ltp"] = new_p
+                    st["chg"] = round(new_p - st["prev_close"], 2)
+                    st["chg_pct"] = round((st["chg"] / st["prev_close"]) * 100, 2)
+                    st["high"] = max(st["high"], new_p)
+                    st["low"] = min(st["low"], new_p)
+                    st["timestamp"] = now_str
+                    changed_stocks.append({
+                        "symbol": sym,
+                        "ltp": new_p,
+                        "chg": st["chg"],
+                        "chg_pct": st["chg_pct"],
+                        "dir": dir_str,
+                        "volume": st.get("volume", 1000000)
+                    })
+
+            # 2. Tick dynamic sectors with gentle mean-reversion around authentic NeoTrader base
+            for sec_name, sec_data in self.sectors.items():
+                base_p = sec_data.get("base_pct", sec_data["chg_pct"])
+                cur_pct = sec_data["chg_pct"]
+                reversion = (base_p - cur_pct) * 0.08
+                drift_pct = random.choice([-0.01, 0.0, 0.01]) + reversion
+                new_pct = round(cur_pct + drift_pct, 2)
+                sec_data["chg_pct"] = new_pct
+                sec_data["ltp"] = round(sec_data["prev_close"] * (1 + new_pct / 100.0), 2)
+
+            # 3. Tick active stocks (35 random stocks + always tick top bullets)
+            bullet_syms = ["PATANJALI", "MANKIND", "KAYNES", "SOLARINDS", "LICHSGFIN", "NAUKRI", "ICICIGI", "LAURUSLABS", "RELIANCE", "HDFCBANK", "OFSS", "UNOMINDA", "APLAPOLLO", "KFINTECH", "BHARTIARTL", "BSE"]
+            active_candidates = list(self.fno_symbols) if self.fno_symbols else list(self.stocks.keys())
+            sample_pool = list(set(bullet_syms + random.sample(active_candidates, min(35, len(active_candidates)))))
+
+            for sym in sample_pool:
+                if sym not in self.stocks:
+                    continue
                 st = self.stocks[sym]
-                old_p = st["ltp"]
-                cur_pct = st["chg_pct"]
-                # Mean-revert softly so it stays true to authentic screenshot
-                reversion = (base_pct - cur_pct) * 0.05
-                drift = random.choice([-0.0002, 0.0, 0.0002]) + (reversion / 100.0)
-                new_p = round(round(old_p * (1 + drift) / 0.05) * 0.05, 2)
-                if sym == "INDIA VIX":
-                    new_p = max(9.0, min(35.0, round(new_p, 2)))
-                dir_str = "UP" if new_p > old_p else ("DOWN" if new_p < old_p else "FLAT")
-                st["ltp"] = new_p
-                st["chg"] = round(new_p - st["prev_close"], 2)
+                if st.get("type") == "INDEX":
+                    continue
+
+                old_ltp = st["ltp"]
+                base_p = STOCKS_BASE.get(sym, {}).get("price", st["prev_close"])
+                rel_diff = (old_ltp - base_p) / base_p
+                reversion = -rel_diff * 0.05
+                pct_move = (random.choice([-0.12, -0.08, -0.05, 0.0, 0.05, 0.08, 0.12]) + reversion)
+                step_cents = round(old_ltp * (pct_move / 100.0) / 0.05) * 0.05
+                if step_cents == 0 and random.random() < 0.6:
+                    step_cents = random.choice([-0.05, 0.05])
+
+                new_ltp = round(max(0.05, old_ltp + step_cents), 2)
+                direction = "UP" if new_ltp > old_ltp else ("DOWN" if new_ltp < old_ltp else "FLAT")
+
+                st["ltp"] = new_ltp
+                st["chg"] = round(new_ltp - st["prev_close"], 2)
                 st["chg_pct"] = round((st["chg"] / st["prev_close"]) * 100, 2)
-                st["high"] = max(st["high"], new_p)
-                st["low"] = min(st["low"], new_p)
+                st["high"] = max(st["high"], new_ltp)
+                st["low"] = min(st["low"], new_ltp)
+                st["volume"] += random.randint(500, 10000)
                 st["timestamp"] = now_str
+                st["last_direction"] = direction
+
                 changed_stocks.append({
                     "symbol": sym,
-                    "ltp": new_p,
+                    "ltp": new_ltp,
                     "chg": st["chg"],
                     "chg_pct": st["chg_pct"],
-                    "dir": dir_str,
-                    "volume": st.get("volume", 1000000)
+                    "dir": direction,
+                    "volume": st["volume"]
                 })
-
-        # 2. Tick dynamic sectors with gentle mean-reversion around authentic NeoTrader base
-        for sec_name, sec_data in self.sectors.items():
-            base_p = sec_data.get("base_pct", sec_data["chg_pct"])
-            cur_pct = sec_data["chg_pct"]
-            reversion = (base_p - cur_pct) * 0.08
-            drift_pct = random.choice([-0.01, 0.0, 0.01]) + reversion
-            new_pct = round(cur_pct + drift_pct, 2)
-            sec_data["chg_pct"] = new_pct
-            sec_data["ltp"] = round(sec_data["prev_close"] * (1 + new_pct / 100.0), 2)
-
-        # 3. Tick active stocks (35 random stocks + always tick top bullets)
-        bullet_syms = ["PATANJALI", "MANKIND", "KAYNES", "SOLARINDS", "LICHSGFIN", "NAUKRI", "ICICIGI", "LAURUSLABS", "RELIANCE", "HDFCBANK", "OFSS", "UNOMINDA", "APLAPOLLO", "KFINTECH", "BHARTIARTL", "BSE"]
-        active_candidates = list(self.fno_symbols) if self.fno_symbols else list(self.stocks.keys())
-        sample_pool = list(set(bullet_syms + random.sample(active_candidates, min(35, len(active_candidates)))))
-
-        for sym in sample_pool:
-            if sym not in self.stocks:
-                continue
-            st = self.stocks[sym]
-            if st.get("type") == "INDEX":
-                continue
-
-            old_ltp = st["ltp"]
-            base_p = STOCKS_BASE.get(sym, {}).get("price", st["prev_close"])
-            rel_diff = (old_ltp - base_p) / base_p
-            reversion = -rel_diff * 0.05
-            pct_move = (random.choice([-0.12, -0.08, -0.05, 0.0, 0.05, 0.08, 0.12]) + reversion)
-            step_cents = round(old_ltp * (pct_move / 100.0) / 0.05) * 0.05
-            if step_cents == 0 and random.random() < 0.6:
-                step_cents = random.choice([-0.05, 0.05])
-
-            new_ltp = round(max(0.05, old_ltp + step_cents), 2)
-            direction = "UP" if new_ltp > old_ltp else ("DOWN" if new_ltp < old_ltp else "FLAT")
-
-            st["ltp"] = new_ltp
-            st["chg"] = round(new_ltp - st["prev_close"], 2)
-            st["chg_pct"] = round((st["chg"] / st["prev_close"]) * 100, 2)
-            st["high"] = max(st["high"], new_ltp)
-            st["low"] = min(st["low"], new_ltp)
-            st["volume"] += random.randint(500, 10000)
-            st["timestamp"] = now_str
-            st["last_direction"] = direction
-
-            changed_stocks.append({
-                "symbol": sym,
-                "ltp": new_ltp,
-                "chg": st["chg"],
-                "chg_pct": st["chg_pct"],
-                "dir": direction,
-                "volume": st["volume"]
-            })
 
         # 4. Generate snapshot
         snapshot = {
             "type": "live_tick",
             "timestamp": now_str,
             "formatted_time": now.strftime("%d-%b-%Y %H:%M:%S"),
+            "is_market_open": open_status,
+            "market_mode": self.market_mode,
+            "market_status": "OPEN" if open_status else ("SANDBOX_SIMULATION" if self.market_mode == "SANDBOX_SIMULATION" else "CLOSED"),
+            "is_frozen": is_frozen,
             "broad_market": self.get_broad_market_indices(),
             "sectors": self.get_sector_market_indices(),
             "breadth": self.get_advance_decline(universe="NIFTY FNO", mode="Close"),
@@ -1122,12 +1202,16 @@ class MarketSimulator:
             "dark_red": dark_red
         }
 
-    def get_dashboard_stats(self):
-        """Returns calculated stats for Stock Change and Pivots Change as shown in Dashboard_1.pdf"""
+    def get_dashboard_stats(self, universe="NIFTY FNO"):
+        """Returns dynamically calculated stats for Stock Change and Pivots Change matching authentic terminal methodology"""
         self.update_ticks()
-        fno_stocks = [s for s in self.stocks.values() if s["type"] != "INDEX"]
+        target_symbols = set(UNIVERSE_MAP.get(universe, self.fno_symbols)) if universe in UNIVERSE_MAP else self.fno_symbols
+        fno_stocks = [
+            st for sym, st in self.stocks.items()
+            if st["type"] != "INDEX" and (universe == "ALL" or sym in target_symbols)
+        ]
         
-        # Stock Change buckets
+        # Stock Change buckets (Exact live counts)
         g_gt_4 = sum(1 for s in fno_stocks if s["chg_pct"] >= 4.0)
         g_3_4 = sum(1 for s in fno_stocks if 3.0 <= s["chg_pct"] < 4.0)
         g_2_3 = sum(1 for s in fno_stocks if 2.0 <= s["chg_pct"] < 3.0)
@@ -1140,48 +1224,86 @@ class MarketSimulator:
         l_1_2 = sum(1 for s in fno_stocks if -2.0 < s["chg_pct"] <= -1.0)
         l_0_1 = sum(1 for s in fno_stocks if -1.0 < s["chg_pct"] < 0.0)
 
+        # Dynamic Fibonacci Pivot distribution
+        r4_plus, r3_r4, r2_r3, r1_r2, p_r1 = 0, 0, 0, 0, 0
+        p_s1, s1_s2, s2_s3, s3_s4, s4_minus = 0, 0, 0, 0, 0
+
+        for s in fno_stocks:
+            H, L, C = s["high"], s["low"], s["ltp"]
+            rng = max(H - L, 0.05)
+            P = (H + L + C) / 3.0
+            r1 = P + 0.382 * rng
+            r2 = P + 0.618 * rng
+            r3 = P + 1.000 * rng
+            r4 = P + 1.618 * rng
+            s1 = P - 0.382 * rng
+            s2 = P - 0.618 * rng
+            s3 = P - 1.000 * rng
+            s4 = P - 1.618 * rng
+
+            if C >= r4: r4_plus += 1
+            elif C >= r3: r3_r4 += 1
+            elif C >= r2: r2_r3 += 1
+            elif C >= r1: r1_r2 += 1
+            elif C >= P: p_r1 += 1
+            elif C >= s1: p_s1 += 1
+            elif C >= s2: s1_s2 += 1
+            elif C >= s3: s2_s3 += 1
+            elif C >= s4: s3_s4 += 1
+            else: s4_minus += 1
+
         return {
             "stock_change": {
                 "gainers": [
-                    {"type": "> 4%", "count": max(g_gt_4, 2)},
-                    {"type": "3 to 4%", "count": max(g_3_4, 6)},
-                    {"type": "2 to 3%", "count": max(g_2_3, 16)},
-                    {"type": "1 to 2%", "count": max(g_1_2, 22)},
-                    {"type": "0 to 1%", "count": max(g_0_1, 65)}
+                    {"type": "> 4%", "count": g_gt_4},
+                    {"type": "3 to 4%", "count": g_3_4},
+                    {"type": "2 to 3%", "count": g_2_3},
+                    {"type": "1 to 2%", "count": g_1_2},
+                    {"type": "0 to 1%", "count": g_0_1}
                 ],
                 "losers": [
-                    {"type": "<-4%", "count": max(l_lt_4, 2)},
-                    {"type": "-3 to -4%", "count": max(l_3_4, 7)},
-                    {"type": "-2 to -3%", "count": max(l_2_3, 19)},
-                    {"type": "-1 to -2%", "count": max(l_1_2, 24)},
-                    {"type": "0 to -1%", "count": max(l_0_1, 22)}
+                    {"type": "<-4%", "count": l_lt_4},
+                    {"type": "-3 to -4%", "count": l_3_4},
+                    {"type": "-2 to -3%", "count": l_2_3},
+                    {"type": "-1 to -2%", "count": l_1_2},
+                    {"type": "0 to -1%", "count": l_0_1}
                 ]
             },
             "pivots_change": {
                 "resistance": [
-                    {"type": "R4 +", "count": 6},
-                    {"type": "R3-R4", "count": 14},
-                    {"type": "R2-R3", "count": 27},
-                    {"type": "R1-R2", "count": 27},
-                    {"type": "P-R1", "count": 49}
+                    {"type": "R4 +", "count": r4_plus},
+                    {"type": "R3-R4", "count": r3_r4},
+                    {"type": "R2-R3", "count": r2_r3},
+                    {"type": "R1-R2", "count": r1_r2},
+                    {"type": "P-R1", "count": p_r1}
                 ],
                 "support": [
-                    {"type": "S4 -", "count": 1},
-                    {"type": "S3-S4", "count": 2},
-                    {"type": "S2-S3", "count": 6},
-                    {"type": "S1-S2", "count": 20},
-                    {"type": "P-S1", "count": 33}
+                    {"type": "S4 -", "count": s4_minus},
+                    {"type": "S3-S4", "count": s3_s4},
+                    {"type": "S2-S3", "count": s2_s3},
+                    {"type": "S1-S2", "count": s1_s2},
+                    {"type": "P-S1", "count": p_s1}
                 ]
             }
         }
 
-    def get_gap_summary(self):
-        """Returns Gap Up/Down with follow-through statistics matching Dashboard_1.pdf"""
+    def get_gap_summary(self, universe="NIFTY FNO"):
+        """Returns live Gap Up/Down with follow-through statistics dynamically computed from active stocks"""
+        target_symbols = set(UNIVERSE_MAP.get(universe, self.fno_symbols)) if universe in UNIVERSE_MAP else self.fno_symbols
+        fno_stocks = [
+            st for sym, st in self.stocks.items()
+            if st["type"] != "INDEX" and (universe == "ALL" or sym in target_symbols)
+        ]
+        gu_ft = sum(1 for s in fno_stocks if s["open"] > s["prev_close"] * 1.002 and s["ltp"] > s["open"])
+        gd_nft = sum(1 for s in fno_stocks if s["open"] < s["prev_close"] * 0.998 and s["ltp"] >= s["open"])
+        gd_ft = sum(1 for s in fno_stocks if s["open"] < s["prev_close"] * 0.998 and s["ltp"] < s["open"])
+        gu_nft = sum(1 for s in fno_stocks if s["open"] > s["prev_close"] * 1.002 and s["ltp"] <= s["open"])
+
         return [
-            {"title": "Gap Up With Follow Through", "count": 2, "is_positive": True},
-            {"title": "Gap Down With No Follow Through", "count": 0, "is_positive": False},
-            {"title": "Gap Down With Follow Through", "count": 0, "is_positive": False},
-            {"title": "Gap Up With No Follow Through", "count": 0, "is_positive": False}
+            {"title": "Gap Up With Follow Through", "count": gu_ft, "is_positive": True},
+            {"title": "Gap Down With No Follow Through", "count": gd_nft, "is_positive": False},
+            {"title": "Gap Down With Follow Through", "count": gd_ft, "is_positive": False},
+            {"title": "Gap Up With No Follow Through", "count": gu_nft, "is_positive": False}
         ]
 
     def get_day_trader_bullets(self, chng_by="CLOSE", min_chg=0.75, expect=1.0, risk=1.0, search_query=""):
@@ -1333,15 +1455,15 @@ class MarketSimulator:
             h2 = round(C + (rng * 1.1 / 6), 2)
             h3 = round(C + (rng * 1.1 / 4), 2)
             h4 = round(C + (rng * 1.1 / 2), 2)
-            h5 = round((H / max(L, 1.0)) * C, 2)
-            h6 = round(C + (h5 - C) * 1.3, 2)
+            h5 = round(max((H / max(L, 1.0)) * C, h4 + (h4 - h3)), 2)
+            h6 = round(max(C + (h5 - C) * 1.3, h5 + (h5 - h4)), 2)
 
             l1 = round(C - (rng * 1.1 / 12), 2)
             l2 = round(C - (rng * 1.1 / 6), 2)
             l3 = round(C - (rng * 1.1 / 4), 2)
             l4 = round(C - (rng * 1.1 / 2), 2)
-            l5 = round(C - (h5 - C), 2)
-            l6 = round(C - (h6 - C), 2)
+            l5 = round(min(C - (h5 - C), l4 - (l3 - l4)), 2)
+            l6 = round(min(C - (h6 - C), l5 - (l4 - l5)), 2)
 
             signal = "NEUTRAL"
             if C >= h4: signal = "H4 BREAKOUT (BULLISH)"

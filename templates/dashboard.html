@@ -740,11 +740,20 @@ Replicated for GKWA Web Trading Terminal
                     </ul>
                 </div>
                 <div class="text-right">
-                    <div class="d-flex align-items-center justify-content-end mb-1">
+                    <div class="d-flex align-items-center justify-content-end mb-1 flex-wrap">
+                        <!-- Market Session Status & Sandbox Mode Control -->
+                        <div class="d-flex align-items-center mr-2 bg-white px-2 py-1 border rounded shadow-sm" style="font-size: 11px;">
+                            <span id="marketStatusBadge" class="badge badge-secondary px-2 py-1 mr-1" style="font-size: 10px; font-weight: 700; border-radius: 4px;">
+                                <i class="fa fa-circle-o-notch fa-spin mr-1"></i> CHECKING SESSION...
+                            </span>
+                            <button id="btnToggleMarketMode" class="btn btn-xs btn-outline-primary px-2 py-0" style="height: 22px; font-size: 10px; font-weight: 600;" onclick="toggleMarketSimulationMode()">
+                                <i class="fa fa-flask"></i> 24/7 Sandbox
+                            </button>
+                        </div>
                         <!-- Feed Interval Selector -->
-                        <div class="d-flex align-items-center mr-3 bg-white px-2 py-1 border rounded shadow-sm" style="font-size: 11px;">
+                        <div class="d-flex align-items-center mr-2 bg-white px-2 py-1 border rounded shadow-sm" style="font-size: 11px;">
                             <label for="feedIntervalSelect" class="text-muted mr-1 mb-0 font-weight-bold" style="white-space: nowrap;">
-                                <i class="fa fa-clock-o text-primary"></i> Feed Rate:
+                                <i class="fa fa-clock-o text-primary"></i> Feed:
                             </label>
                             <select id="feedIntervalSelect" class="form-control form-control-sm px-1 py-0 font-11 font-weight-bold border-0 bg-transparent" style="height: 22px; width: 62px; cursor: pointer; color: #1e293b;" onchange="setFeedInterval(this.value)">
                                 <option value="5000" selected>5s</option>
@@ -758,15 +767,15 @@ Replicated for GKWA Web Trading Terminal
                                 <i class="fa fa-refresh text-dark" id="manualRefreshIcon"></i>
                             </button>
                         </div>
-                        <h6 class="m-0 font-weight-bold font-13 text-dark">
-                            Last Refresh: <span id="subheaderRefreshTime" class="text-primary font-weight-bold">--:--:--</span>
+                        <h6 class="m-0 font-weight-bold font-13 text-dark mr-2">
+                            Refresh: <span id="subheaderRefreshTime" class="text-primary font-weight-bold">--:--:--</span>
                         </h6>
-                        <span id="pipelineStatusBadge" class="badge badge-success ml-2 px-2 py-1" style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px; border-radius: 4px;">
+                        <span id="pipelineStatusBadge" class="badge badge-success px-2 py-1" style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px; border-radius: 4px;">
                             <span class="live-dot-pulse mr-1"></span><span id="pipelineStatusText">FEED (5s)</span>
                         </span>
                     </div>
                     <small class="text-muted font-11">
-                        <b>Active Realtime Pipeline</b> <span class="text-success font-weight-bold ml-1"><i class="fa fa-bolt"></i> Live Feed</span> &bull; <span id="pipelineFeedRateDesc">Refreshes every 5s</span> &bull; <span id="feedCountdownText" class="text-info font-weight-bold">Next in 5s</span>
+                        <b>Market Pipeline</b>: <span id="marketSessionDesc" class="text-dark font-weight-bold">Mon-Fri 09:15-15:30 IST</span> &bull; <span id="pipelineFeedRateDesc">Refreshes every 5s</span> &bull; <span id="feedCountdownText" class="text-info font-weight-bold">Next in 5s</span>
                     </small>
                 </div>
             </div>
@@ -2198,6 +2207,81 @@ Replicated for GKWA Web Trading Terminal
             }
         }
 
+        // Market Session State & 24/7 Sandbox Simulation Controller
+        let currentMarketState = {
+            is_market_open: false,
+            market_mode: 'LIVE_EXCHANGE',
+            is_frozen: true
+        };
+
+        async function fetchMarketStatus() {
+            try {
+                const res = await fetch(`/api/market-status?t=${Date.now()}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                currentMarketState = data;
+                updateMarketStatusUI(data);
+            } catch (e) {
+                console.warn("Market status fetch error:", e);
+            }
+        }
+
+        function updateMarketStatusUI(data) {
+            const badge = document.getElementById("marketStatusBadge");
+            const btn = document.getElementById("btnToggleMarketMode");
+            const desc = document.getElementById("marketSessionDesc");
+
+            if (!badge) return;
+
+            if (data.market_mode === "SANDBOX_SIMULATION") {
+                badge.className = "badge badge-warning text-dark px-2 py-1 mr-1";
+                badge.innerHTML = `<i class="fa fa-flask mr-1"></i> SANDBOX (24/7 ACTIVE)`;
+                if (btn) {
+                    btn.className = "btn btn-xs btn-outline-secondary px-2 py-0";
+                    btn.innerHTML = `<i class="fa fa-snowflake-o"></i> Freeze to Real Close`;
+                    btn.title = "Revert to strict NSE hours and freeze prices";
+                }
+                if (desc) desc.innerHTML = `<span class="text-warning font-weight-bold">🧪 24/7 Sandbox Simulation Active</span> &bull; Full Ticks Enabled`;
+            } else if (data.is_market_open) {
+                badge.className = "badge badge-success px-2 py-1 mr-1";
+                badge.innerHTML = `<i class="fa fa-circle mr-1"></i> NSE OPEN (LIVE)`;
+                if (btn) {
+                    btn.className = "btn btn-xs btn-outline-info px-2 py-0";
+                    btn.innerHTML = `<i class="fa fa-flask"></i> Sandbox Mode`;
+                    btn.title = "Switch to 24/7 sandbox simulation";
+                }
+                if (desc) desc.innerHTML = `<span class="text-success font-weight-bold">🟢 Regular Session Active</span> &bull; 09:15 - 15:30 IST`;
+            } else {
+                badge.className = "badge badge-danger px-2 py-1 mr-1";
+                badge.innerHTML = `<i class="fa fa-snowflake-o mr-1"></i> NSE CLOSED (PRICES FROZEN)`;
+                if (btn) {
+                    btn.className = "btn btn-xs btn-primary px-2 py-0";
+                    btn.innerHTML = `<i class="fa fa-play mr-1"></i> Enable 24/7 Sandbox`;
+                    btn.title = "Enable continuous simulation ticks outside market hours";
+                }
+                if (desc) desc.innerHTML = `<span class="text-danger font-weight-bold">🔴 Prices Frozen at Session Close</span> &bull; ${data.next_event || 'Next Open 09:15 IST'}`;
+            }
+        }
+
+        async function toggleMarketSimulationMode() {
+            const newMode = (currentMarketState.market_mode === "SANDBOX_SIMULATION") ? "LIVE_EXCHANGE" : "SANDBOX_SIMULATION";
+            try {
+                const res = await fetch("/api/market-mode", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mode: newMode })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    currentMarketState = data;
+                    updateMarketStatusUI(data);
+                    manualRefreshFeed();
+                }
+            } catch (e) {
+                console.error("Toggle market mode error:", e);
+            }
+        }
+
         // Realtime Streaming WebSocket & Configurable Feed Interval Pipeline
         let currentFeedIntervalMs = parseInt(localStorage.getItem('gkwa_feed_interval') || '5000', 10);
         let currentFeedLabel = localStorage.getItem('gkwa_feed_label') || '5s';
@@ -2300,6 +2384,8 @@ Replicated for GKWA Web Trading Terminal
         function initRealtimePipeline() {
             const savedMs = localStorage.getItem('gkwa_feed_interval') || '5000';
             setFeedInterval(savedMs, true);
+            fetchMarketStatus();
+            setInterval(fetchMarketStatus, 30000);
             connectLiveFeedWebSocket();
             startCountdownWorker();
         }
@@ -2382,6 +2468,14 @@ Replicated for GKWA Web Trading Terminal
 
         function processLiveFeedDelta(data) {
             if (!data) return;
+
+            // 0. Update market status badge if included in delta
+            if (data.market_mode) {
+                currentMarketState.market_mode = data.market_mode;
+                currentMarketState.is_market_open = data.is_market_open;
+                currentMarketState.is_frozen = data.is_frozen;
+                updateMarketStatusUI(data);
+            }
 
             // 1. Update subheader timestamp with live server IST time
             const rfEl = document.getElementById("subheaderRefreshTime");

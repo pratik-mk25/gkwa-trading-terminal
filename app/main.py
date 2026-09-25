@@ -17,7 +17,7 @@ from app.database import (
     get_sectors_summary,
     get_universes_summary
 )
-from app.market_simulator import market_sim, get_ist_now
+from app.market_simulator import market_sim, get_ist_now, is_market_open
 from app.sandbox import sandbox_manager
 from app.signals import (
     generate_options_trades,
@@ -248,10 +248,9 @@ async def api_dashboard_refresh_time():
 @app.get("/api/live_feed_delta/")
 async def api_live_feed_delta(interval: Optional[str] = "5s"):
     """Returns the latest market tick delta packet (REST fallback for real-time pipeline)"""
-    if not feed_manager.latest_tick_data or os.environ.get("VERCEL"):
-        delta = market_sim.step_simulation_tick()
-        feed_manager.latest_tick_data = delta
-    resp = dict(feed_manager.latest_tick_data or market_sim.get_latest_snapshot())
+    delta = market_sim.step_simulation_tick()
+    feed_manager.latest_tick_data = delta
+    resp = dict(delta)
     resp["feed_interval"] = interval
     return resp
 
@@ -269,6 +268,23 @@ async def api_feed_intervals():
         ],
         "default": "5s"
     }
+
+class MarketModeModel(BaseModel):
+    mode: str
+
+@app.get("/api/market-status")
+@app.get("/api/market-status/")
+async def api_get_market_status():
+    """Returns official NSE market session status, IST timestamp, and freeze state"""
+    return market_sim.get_market_status()
+
+@app.post("/api/market-mode")
+@app.post("/api/market-mode/")
+async def api_set_market_mode(data: MarketModeModel):
+    """Switches between LIVE_EXCHANGE (market hours freeze) and SANDBOX_SIMULATION (24/7 live ticks)"""
+    res = market_sim.set_market_mode(data.mode)
+    feed_manager.latest_tick_data = market_sim.step_simulation_tick()
+    return res
 
 @app.get("/app/day_trader_stocks/")
 @app.get("/app/day_trader_stocks")
